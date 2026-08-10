@@ -24,15 +24,15 @@ export const KeywordSelector: React.FC<KeywordSelectorProps> = ({
   const subList = getSubKeywords(primaryKeyword.id);
 
   return (
-    <div className="space-y-6 bg-white border border-stone-200/80 rounded-2xl p-4 sm:p-6 shadow-sm">
+    <div className="space-y-6 bg-white border border-[#2C2621]/15 rounded-2xl p-4 sm:p-6 shadow-md shadow-[#2C2621]/5">
       {/* 1. Category Selector */}
       <div>
-        <div className="text-xs font-bold text-stone-500 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-amber-600"></span>
+        <div className="text-xs font-sans font-bold text-[#2C2621]/60 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-amber-700"></span>
           STEP 1. 경조사 대분류 선택
         </div>
 
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-2 gap-3 font-sans">
           {/* 경사 */}
           <button
             type="button"
@@ -45,31 +45,31 @@ export const KeywordSelector: React.FC<KeywordSelectorProps> = ({
             }}
             className={`p-4 rounded-2xl border text-left transition-all flex items-center justify-between cursor-pointer ${
               category === '경사'
-                ? 'bg-amber-50/80 border-amber-400 text-amber-950 shadow-xs ring-1 ring-amber-400/30'
-                : 'bg-stone-50/60 border-stone-200 text-stone-600 hover:bg-stone-50 hover:text-stone-900'
+                ? 'bg-amber-100/60 border-amber-600 text-[#2C2621] shadow-xs ring-2 ring-amber-600/20'
+                : 'bg-[#FAF6F0] border-[#2C2621]/10 text-stone-600 hover:bg-[#F2ECE1] hover:text-[#2C2621]'
             }`}
           >
             <div className="flex items-center gap-3">
               <div
                 className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg ${
                   category === '경사'
-                    ? 'bg-amber-600 text-white'
-                    : 'bg-stone-200 text-stone-600'
+                    ? 'bg-[#2C2621] text-[#FAF6F0] shadow-2xs font-serif'
+                    : 'bg-stone-200/80 text-stone-600'
                 }`}
               >
                 🎉
               </div>
               <div>
-                <div className="font-bold text-sm sm:text-base text-stone-900">
+                <div className="font-bold text-sm sm:text-base text-[#2C2621]">
                   경사 (축하)
                 </div>
-                <div className="text-xs text-stone-500">
+                <div className="text-xs text-[#2C2621]/60">
                   결혼 · 출산 · 승진 · 개업 · 수연
                 </div>
               </div>
             </div>
             {category === '경사' && (
-              <div className="w-6 h-6 rounded-full bg-amber-600 text-white flex items-center justify-center">
+              <div className="w-6 h-6 rounded-full bg-amber-700 text-white flex items-center justify-center">
                 <Check className="w-3.5 h-3.5 stroke-[3]" />
               </div>
             )}
@@ -87,31 +87,31 @@ export const KeywordSelector: React.FC<KeywordSelectorProps> = ({
             }}
             className={`p-4 rounded-2xl border text-left transition-all flex items-center justify-between cursor-pointer ${
               category === '조사'
-                ? 'bg-slate-100/90 border-slate-400 text-slate-900 shadow-xs ring-1 ring-slate-400/30'
-                : 'bg-stone-50/60 border-stone-200 text-stone-600 hover:bg-stone-50 hover:text-stone-900'
+                ? 'bg-[#2C2621] border-[#2C2621] text-[#FAF6F0] shadow-md ring-2 ring-[#2C2621]/20'
+                : 'bg-[#FAF6F0] border-[#2C2621]/10 text-stone-600 hover:bg-[#F2ECE1] hover:text-[#2C2621]'
             }`}
           >
             <div className="flex items-center gap-3">
               <div
                 className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg ${
                   category === '조사'
-                    ? 'bg-slate-800 text-white'
-                    : 'bg-stone-200 text-stone-600'
+                    ? 'bg-stone-800 text-[#FAF6F0] shadow-2xs border border-stone-700 font-serif'
+                    : 'bg-stone-200/80 text-stone-600'
                 }`}
               >
                 🌿
               </div>
               <div>
-                <div className="font-bold text-sm sm:text-base text-stone-900">
+                <div className={`font-bold text-sm sm:text-base ${category === '조사' ? 'text-[#FAF6F0]' : 'text-[#2C2621]'}`}>
                   조사 (애도/위로)
                 </div>
-                <div className="text-xs text-stone-500">
+                <div className={`text-xs ${category === '조사' ? 'text-amber-100/80' : 'text-[#2C2621]/60'}`}>
                   부고(상가) · 입원/문병 · 쾌유 기원
                 </div>
               </div>
             </div>
             {category === '조사' && (
-              <div className="w-6 h-6 rounded-full bg-slate-800 text-white flex items-center justify-center">
+              <div className="w-6 h-6 rounded-full bg-stone-700 text-[#FAF6F0] flex items-center justify-center border border-stone-600">
                 <Check className="w-3.5 h-3.5 stroke-[3]" />
               </div>
             )}
@@ -121,12 +121,12 @@ export const KeywordSelector: React.FC<KeywordSelectorProps> = ({
 
       {/* 2. Primary Keyword Selector */}
       <div>
-        <div className="text-xs font-bold text-stone-500 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-amber-600"></span>
+        <div className="text-xs font-sans font-bold text-[#2C2621]/60 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-amber-700"></span>
           STEP 2. 주요 경조사 항목 선택
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 font-sans">
           {primaryList.map((pk) => {
             const isSelected = primaryKeyword.id === pk.id;
             return (
@@ -137,12 +137,12 @@ export const KeywordSelector: React.FC<KeywordSelectorProps> = ({
                 className={`p-3 rounded-xl border text-center transition-all flex flex-col items-center justify-center gap-1 cursor-pointer ${
                   isSelected
                     ? category === '경사'
-                      ? 'bg-amber-600 border-amber-600 text-white font-bold shadow-xs'
-                      : 'bg-slate-800 border-slate-800 text-white font-bold shadow-xs'
-                    : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-amber-50/50 hover:border-amber-300'
+                      ? 'bg-[#2C2621] border-[#2C2621] text-[#FAF6F0] font-bold shadow-2xs'
+                      : 'bg-stone-800 border-stone-800 text-white font-bold shadow-2xs'
+                    : 'bg-[#FAF6F0] border-[#2C2621]/10 text-[#2C2621] hover:bg-[#F2ECE1] hover:border-[#2C2621]/20'
                 }`}
               >
-                <span className="text-sm">{pk.keywordLabel}</span>
+                <span className="text-sm font-serif">{pk.keywordLabel}</span>
               </button>
             );
           })}
@@ -152,17 +152,17 @@ export const KeywordSelector: React.FC<KeywordSelectorProps> = ({
       {/* 3. Sub Keywords Selector */}
       {subList.length > 0 && (
         <div>
-          <div className="text-xs font-bold text-stone-500 uppercase tracking-wider mb-2.5 flex items-center justify-between">
+          <div className="text-xs font-sans font-bold text-[#2C2621]/60 uppercase tracking-wider mb-2.5 flex items-center justify-between">
             <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-amber-600"></span>
+              <span className="w-2 h-2 rounded-full bg-amber-700"></span>
               STEP 3. 세부 구체적 상황 태그 (복수 선택 가능)
             </div>
-            <span className="text-[11px] text-stone-400 font-normal">
+            <span className="text-[11px] text-[#2C2621]/50 font-normal">
               선택됨: {selectedSubKeywords.length}개
             </span>
           </div>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 font-sans">
             {subList.map((sk) => {
               const isSelected = selectedSubKeywords.some((s) => s.id === sk.id);
               return (
@@ -170,12 +170,12 @@ export const KeywordSelector: React.FC<KeywordSelectorProps> = ({
                   type="button"
                   key={sk.id}
                   onClick={() => onToggleSubKeyword(sk)}
-                  className={`px-3.5 py-2 rounded-xl border text-xs font-medium transition-all flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-3.5 py-2 rounded-xl border text-xs transition-all flex items-center gap-1.5 cursor-pointer ${
                     isSelected
                       ? category === '경사'
-                        ? 'bg-amber-700 text-white border-amber-700 font-bold shadow-xs'
-                        : 'bg-slate-800 text-white border-slate-800 font-bold shadow-xs'
-                      : 'bg-stone-50 border-stone-200 text-stone-700 hover:bg-stone-100'
+                        ? 'bg-[#2C2621] text-[#FAF6F0] border-[#2C2621] font-bold shadow-2xs'
+                        : 'bg-stone-800 text-white border-stone-800 font-bold shadow-2xs'
+                      : 'bg-[#FAF6F0] border-[#2C2621]/10 text-[#2C2621] hover:bg-[#F2ECE1]'
                   }`}
                 >
                   {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}

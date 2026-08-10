@@ -22,6 +22,7 @@ import { CustomPromptInput } from './components/occasion/CustomPromptInput';
 import { MessageCandidates } from './components/occasion/MessageCandidates';
 import { DeliveryCard } from './components/shared/DeliveryCard';
 import { HistoryDrawer } from './components/occasion/HistoryDrawer';
+import { EtiquetteModal } from './components/shared/EtiquetteModal';
 import { Sparkles, ArrowRight, UserCheck, Check, RefreshCw } from 'lucide-react';
 
 export default function App() {
@@ -48,6 +49,7 @@ export default function App() {
   // 4. History state
   const [historyRecords, setHistoryRecords] = useState<GeneratedMessageRecord[]>([]);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+  const [isEtiquetteOpen, setIsEtiquetteOpen] = useState(false);
 
   // Load initial data from localStorage
   useEffect(() => {
@@ -183,43 +185,44 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans antialiased selection:bg-amber-500/30 selection:text-amber-200">
+    <div className="min-h-screen bg-[#FAF6F0] text-[#2C2621] font-serif antialiased selection:bg-amber-200 selection:text-amber-950">
       {/* Top Header Navigation */}
       <Header
         currentRelationship={selectedRelationship}
         onOpenRelationshipPicker={() => setIsRelationshipPickerOpen(true)}
         onOpenHistory={() => setIsHistoryOpen(true)}
+        onOpenEtiquette={() => setIsEtiquetteOpen(true)}
         historyCount={historyRecords.length}
       />
 
       {/* Main Container */}
       <main className="max-w-4xl mx-auto px-4 py-8 space-y-8">
-        {/* Banner Section */}
-        <section className="text-center space-y-3 py-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs text-amber-400 font-semibold shadow-inner">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>관계와 예법을 아우르는 AI 경조사 메시지 카피라이터</span>
+        {/* Banner Section - Proposal 1 Poetic Banner */}
+        <section className="text-center space-y-3 py-4">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#2C2621]/15 text-xs text-[#2C2621] font-sans font-semibold shadow-2xs">
+            <Sparkles className="w-3.5 h-3.5 text-amber-700" />
+            <span>시적 감성의 미니멀 엽서 • AI 경조사 메시지 카피라이터</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-100">
-            마음을 담은 한 문장, 격식 있게 전하세요
+          <h2 className="text-2xl sm:text-3.5xl font-serif font-bold tracking-wide text-[#2C2621] leading-snug">
+            마치 한 장의 엽서를 써 내려가듯,<br className="hidden sm:inline" /> 온기와 격식을 전하세요
           </h2>
-          <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto leading-relaxed">
-            수신자와의 관계, 친밀도, 경조사 세부 상황 태그를 조합하여 손쉽게 완성하는 맞춤 멘트 생성 서비스입니다.
+          <p className="text-xs sm:text-sm text-[#2C2621]/70 font-sans max-w-xl mx-auto leading-relaxed">
+            소중한 분과의 관계, 마음 깊은 전달 목적, 경조사 상황을 담아 세상에 단 하나뿐인 정성 어린 메시지를 짓습니다.
           </p>
         </section>
 
-        {/* Selected Relationship Quick Bar */}
-        <section className="bg-slate-900/80 border border-slate-800 rounded-2xl p-4 flex items-center justify-between gap-3 shadow-lg">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center font-bold">
-              <UserCheck className="w-5 h-5" />
+        {/* Selected Relationship Quick Bar - Warm Postcard Header Feel */}
+        <section className="bg-white border border-[#2C2621]/15 rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-3 shadow-md shadow-[#2C2621]/5">
+          <div className="flex items-center gap-3.5">
+            <div className="w-11 h-11 rounded-xl bg-[#FAF6F0] text-[#2C2621] border border-[#2C2621]/15 flex items-center justify-center font-bold font-serif text-lg">
+              ✉️
             </div>
             <div>
-              <div className="text-[11px] text-slate-400 font-medium">수신 대상 프로필</div>
-              <div className="text-sm font-bold text-slate-100 flex items-center gap-2">
-                <span>{selectedRelationship ? selectedRelationship.name : '대상을 선택해주세요'}</span>
+              <div className="text-[11px] text-[#2C2621]/50 font-sans uppercase tracking-widest font-bold">To. 수신인 프로필</div>
+              <div className="text-sm sm:text-base font-bold text-[#2C2621] flex flex-wrap items-center gap-2 mt-0.5">
+                <span className="font-serif text-base font-bold">{selectedRelationship ? selectedRelationship.name : '대상을 선택해주세요'}</span>
                 {selectedRelationship && (
-                  <span className="text-xs px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 font-normal">
+                  <span className="text-xs font-sans px-2.5 py-0.5 rounded-md bg-[#FAF6F0] text-[#2C2621] border border-[#2C2621]/15 font-medium">
                     {selectedRelationship.relationType} • 친밀도 {selectedRelationship.closeness}점
                   </span>
                 )}
@@ -229,9 +232,9 @@ export default function App() {
 
           <button
             onClick={() => setIsRelationshipPickerOpen(true)}
-            className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-colors shrink-0"
+            className="px-4 py-2.5 rounded-xl bg-[#2C2621] hover:bg-[#403933] text-[#FAF6F0] text-xs font-sans font-bold transition-all shrink-0 cursor-pointer shadow-sm active:scale-95"
           >
-            변경 / 추가
+            수신인 변경
           </button>
         </section>
 
@@ -260,24 +263,24 @@ export default function App() {
           selectedSubKeywords={selectedSubKeywords}
         />
 
-        {/* 4. Generate CTA Button */}
-        <div className="pt-2">
+        {/* 4. Generate CTA Button - Proposal 1 Style */}
+        <div className="pt-2 font-sans">
           <button
             type="button"
             disabled={isGenerating}
             onClick={() => handleGenerateMessage()}
-            className="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-extrabold text-base sm:text-lg shadow-xl shadow-amber-500/15 flex items-center justify-center gap-2.5 transition-all transform active:scale-[0.99] disabled:opacity-50 cursor-pointer"
+            className="w-full py-4.5 rounded-2xl bg-[#2C2621] hover:bg-[#403933] text-[#FAF6F0] font-bold text-base sm:text-lg shadow-xl shadow-[#2C2621]/15 flex items-center justify-center gap-2.5 transition-all transform active:scale-[0.99] disabled:opacity-50 cursor-pointer"
           >
             {isGenerating ? (
               <>
-                <RefreshCw className="w-5 h-5 animate-spin" />
-                <span>예법과 관계를 분석하여 맞춤 멘트 작성 중...</span>
+                <RefreshCw className="w-5 h-5 animate-spin text-amber-300" />
+                <span>정성 어린 문장을 가다듬는 중입니다...</span>
               </>
             ) : (
               <>
-                <Sparkles className="w-5 h-5 stroke-[2.5]" />
-                <span>AI 맞춤 경조사 멘트 생성하기</span>
-                <ArrowRight className="w-5 h-5 stroke-[2.5]" />
+                <Sparkles className="w-5 h-5 text-amber-300 stroke-[2.5]" />
+                <span className="font-serif font-bold tracking-wide">✨ 편지 짓기 (AI 맞춤 멘트 생성)</span>
+                <ArrowRight className="w-5 h-5 text-amber-300 stroke-[2.5]" />
               </>
             )}
           </button>
@@ -285,7 +288,7 @@ export default function App() {
 
         {/* Error Alert */}
         {errorMessage && (
-          <div className="p-4 rounded-xl bg-red-950/40 border border-red-500/40 text-red-300 text-xs sm:text-sm">
+          <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs sm:text-sm">
             {errorMessage}
           </div>
         )}
@@ -340,6 +343,12 @@ export default function App() {
             setSelectedCandidate(rec.candidates[0]);
           }
         }}
+      />
+
+      {/* Etiquette Guide Modal */}
+      <EtiquetteModal
+        isOpen={isEtiquetteOpen}
+        onClose={() => setIsEtiquetteOpen(false)}
       />
     </div>
   );

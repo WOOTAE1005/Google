@@ -57,3 +57,44 @@ export interface GeneratedMessageRecord {
   candidates: MessageCandidate[];
   createdAt: string;
 }
+
+export type CardLayoutStyleId = 'traditional_frame' | 'envelope_slit' | 'minimal_editorial' | 'curved_arch' | 'seal_pendant';
+
+export type CardColorPaletteId =
+  | 'hanji_cream'
+  | 'autumn_burgundy'
+  | 'terracotta_olive'
+  | 'linen_sage'
+  | 'ochre_persimmon'
+  | 'forest_oat'
+  | 'dusty_lavender'
+  | 'soft_clay'
+  | 'deep_steel_amber'
+  | 'warm_camel'
+  | 'royal_indigo_gold'
+  | 'bordeaux_apricot'
+  | 'sober_slate';
+
+export interface CardLayoutStyleConfig {
+  id: CardLayoutStyleId;
+  name: string;
+  subtitle: string;
+  icon: string;
+}
+
+export interface CardColorPaletteConfig {
+  id: CardColorPaletteId;
+  name: string;
+  icon: string;
+  bgClass: string;
+  borderClass: string;
+  textClass: string;
+  accentClass: string;
+  badgeClass: string;
+  swatchBg: string;
+  outerBgClass?: string;
+  primaryBtnClass?: string;
+  secondaryBtnClass?: string;
+}
+
+

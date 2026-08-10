@@ -9,6 +9,7 @@ import {
   Sliders,
   CheckCircle2,
   Lightbulb,
+  BookmarkCheck,
 } from 'lucide-react';
 
 interface MessageCandidatesProps {
@@ -48,7 +49,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
           <h3 className="text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-amber-600" />
@@ -57,6 +58,10 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
           <p className="text-xs text-stone-500">
             상황에 맞게 가장 마음에 드는 문구를 선택하거나 직접 수정하세요.
           </p>
+        </div>
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-[11px] text-amber-900 font-semibold self-start sm:self-auto shadow-2xs">
+          <BookmarkCheck className="w-3.5 h-3.5 text-amber-700" />
+          <span>생성된 문구 자동 보관 중</span>
         </div>
       </div>
 
@@ -73,31 +78,31 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
               onClick={() => onSelectCandidate(cand)}
               className={`relative rounded-2xl border p-4 sm:p-5 flex flex-col justify-between transition-all cursor-pointer ${
                 isSelected
-                  ? 'bg-amber-50/90 border-amber-500 shadow-md ring-2 ring-amber-500/30'
-                  : 'bg-white border-stone-200 hover:bg-stone-50 hover:border-stone-300'
+                  ? 'bg-amber-100/60 border-[#2C2621] shadow-lg ring-2 ring-[#2C2621]/20'
+                  : 'bg-white border-[#2C2621]/15 hover:bg-[#FAF6F0] hover:border-[#2C2621]/30'
               }`}
             >
               {/* Top Meta Bar */}
               <div>
-                <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center justify-between mb-3 font-sans">
                   <div className="flex items-center gap-2">
-                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-200">
+                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#2C2621] text-[#FAF6F0]">
                       안 {cand.variantIndex}
                     </span>
-                    <span className="text-xs font-semibold text-stone-800">
+                    <span className="text-xs font-bold text-[#2C2621] font-serif">
                       {cand.title}
                     </span>
                   </div>
                   {isSelected && (
-                    <div className="text-amber-700 flex items-center gap-1 text-xs font-bold">
-                      <CheckCircle2 className="w-4 h-4" />
+                    <div className="text-amber-800 flex items-center gap-1 text-xs font-bold">
+                      <CheckCircle2 className="w-4 h-4 text-amber-700" />
                       선택됨
                     </div>
                   )}
                 </div>
 
                 {/* Tone tag */}
-                <div className="inline-block text-[10px] px-2 py-0.5 rounded-md bg-stone-100 text-stone-600 font-medium mb-3">
+                <div className="inline-block text-[10px] font-sans px-2 py-0.5 rounded-md bg-[#FAF6F0] text-[#2C2621]/80 font-medium mb-3 border border-[#2C2621]/10">
                   어조: {cand.toneTag}
                 </div>
 
@@ -110,34 +115,34 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                         onUpdateCandidateContent(cand.id, e.target.value)
                       }
                       rows={5}
-                      className="w-full p-3 rounded-xl bg-white border border-amber-500 text-stone-800 text-xs sm:text-sm leading-relaxed focus:outline-none shadow-xs"
+                      className="w-full p-3 rounded-xl bg-white border border-[#2C2621] text-[#2C2621] text-xs sm:text-sm leading-relaxed focus:outline-none shadow-xs font-serif"
                     />
                     <button
                       type="button"
                       onClick={() => setEditingId(null)}
-                      className="w-full py-1.5 rounded-xl bg-stone-800 text-white text-xs font-medium hover:bg-stone-700 cursor-pointer"
+                      className="w-full py-1.5 rounded-xl bg-[#2C2621] text-[#FAF6F0] text-xs font-sans font-medium hover:bg-[#403933] cursor-pointer"
                     >
                       수정 완료
                     </button>
                   </div>
                 ) : (
-                  <p className="text-xs sm:text-sm text-stone-800 leading-relaxed font-sans whitespace-pre-wrap mb-4 bg-stone-50/80 p-3.5 rounded-xl border border-stone-200/60 min-h-[110px]">
-                    {cand.content}
+                  <p className="text-xs sm:text-sm text-[#2C2621] leading-relaxed font-serif whitespace-pre-wrap mb-4 bg-[#FAF6F0]/80 p-3.5 rounded-xl border border-[#2C2621]/10 min-h-[110px]">
+                    "{cand.content}"
                   </p>
                 )}
 
                 {/* Etiquette Tip */}
                 {cand.etiquetteTip && (
-                  <div className="flex items-start gap-1.5 text-[11px] text-stone-600 bg-amber-100/50 p-2.5 rounded-xl border border-amber-200 mb-4">
-                    <Lightbulb className="w-3.5 h-3.5 text-amber-700 shrink-0 mt-0.5" />
+                  <div className="flex items-start gap-1.5 text-[11px] font-sans text-[#2C2621]/80 bg-amber-100/50 p-2.5 rounded-xl border border-amber-300/60 mb-4">
+                    <Lightbulb className="w-3.5 h-3.5 text-amber-800 shrink-0 mt-0.5" />
                     <span>{cand.etiquetteTip}</span>
                   </div>
                 )}
               </div>
 
               {/* Bottom Actions */}
-              <div className="pt-3 border-t border-stone-200/80 flex items-center justify-between gap-2">
-                <div className="text-[10px] text-stone-400 font-mono">
+              <div className="pt-3 border-t border-[#2C2621]/10 flex items-center justify-between gap-2 font-sans">
+                <div className="text-[10px] text-[#2C2621]/50 font-mono">
                   {cand.content.length}자
                 </div>
 
@@ -148,7 +153,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                       e.stopPropagation();
                       setEditingId(isEditing ? null : cand.id);
                     }}
-                    className="p-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs flex items-center gap-1 transition-colors cursor-pointer"
+                    className="p-1.5 rounded-lg bg-[#FAF6F0] hover:bg-stone-200 text-[#2C2621] text-xs flex items-center gap-1 transition-colors cursor-pointer border border-[#2C2621]/10"
                     title="직접 수정"
                   >
                     <Edit3 className="w-3.5 h-3.5" />
@@ -159,8 +164,8 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                     onClick={(e) => handleCopy(cand, e)}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                       isCopied
-                        ? 'bg-emerald-600 text-white'
-                        : 'bg-amber-600 hover:bg-amber-700 text-white shadow-xs'
+                        ? 'bg-emerald-700 text-white'
+                        : 'bg-[#2C2621] hover:bg-[#403933] text-[#FAF6F0] shadow-xs'
                     }`}
                   >
                     {isCopied ? (
@@ -183,9 +188,9 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
       </div>
 
       {/* Quick Refinement / Regeneration Section */}
-      <div className="bg-white border border-stone-200/80 rounded-2xl p-4 sm:p-5 shadow-sm">
-        <div className="text-xs font-bold text-stone-500 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-          <Sliders className="w-4 h-4 text-amber-600" />
+      <div className="bg-white border border-[#2C2621]/15 rounded-2xl p-4 sm:p-5 shadow-md shadow-[#2C2621]/5 font-sans">
+        <div className="text-xs font-bold text-[#2C2621]/60 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+          <Sliders className="w-4 h-4 text-amber-700" />
           멘트 조율 & 다시 생성
         </div>
 
@@ -196,7 +201,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
               key={idx}
               disabled={isGenerating}
               onClick={() => onRegenerateWithInstruction(tweak)}
-              className="px-3 py-1.5 rounded-xl bg-stone-50 hover:bg-amber-50 border border-stone-200 hover:border-amber-300 text-xs text-stone-700 hover:text-amber-900 transition-colors disabled:opacity-50 cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-[#FAF6F0] hover:bg-amber-100/60 border border-[#2C2621]/10 hover:border-[#2C2621]/30 text-xs text-[#2C2621] font-serif transition-colors disabled:opacity-50 cursor-pointer"
             >
               ✨ {tweak}
             </button>
@@ -216,7 +221,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
               }
             }}
             placeholder="직접 변경 요청사항 입력 (예: 축의금 못 보낸 사과 어조 추가해줘)"
-            className="flex-1 px-3.5 py-2 rounded-xl bg-stone-50 border border-stone-200 text-stone-800 text-xs sm:text-sm focus:outline-none focus:bg-white focus:border-amber-500"
+            className="flex-1 px-3.5 py-2.5 rounded-xl bg-[#FAF6F0] border border-[#2C2621]/15 text-[#2C2621] text-xs sm:text-sm focus:outline-none focus:bg-white focus:border-[#2C2621] font-serif placeholder:font-sans placeholder:text-[#2C2621]/40"
           />
           <button
             type="button"
@@ -227,7 +232,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                 setCustomText('');
               }
             }}
-            className="px-4 py-2 rounded-xl bg-stone-800 hover:bg-stone-900 text-amber-300 font-bold text-xs flex items-center gap-1.5 transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
+            className="px-4 py-2.5 rounded-xl bg-[#2C2621] hover:bg-[#403933] text-amber-300 font-bold text-xs flex items-center gap-1.5 transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isGenerating ? 'animate-spin' : ''}`} />
             다시 생성

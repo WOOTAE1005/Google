@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react';
-import type { Session, User } from '@supabase/supabase-js';
-import { supabase, isCloudSyncEnabled } from './supabase';
+import {
+  onAuthStateChanged,
+  sendSignInLinkToEmail,
+  isSignInWithEmailLink,
+  signInWithEmailLink,
+  signOut as firebaseSignOut,
+  User,
+} from 'firebase/auth';
+import { auth, isCloudSyncEnabled, EMAIL_FOR_SIGN_IN_KEY } from './firebase';
 
 interface UseAuthResult {
   user: User | null;
@@ -11,46 +18,52 @@ interface UseAuthResult {
 }
 
 export function useAuth(): UseAuthResult {
-  const [session, setSession] = useState<Session | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(isCloudSyncEnabled);
 
+  // Complete sign-in if the app was just opened from the emailed link.
   useEffect(() => {
-    if (!supabase) {
+    if (!auth) return;
+    if (isSignInWithEmailLink(auth, window.location.href)) {
+      const storedEmail = window.localStorage.getItem(EMAIL_FOR_SIGN_IN_KEY);
+      const email = storedEmail || window.prompt('로그인을 완료할 이메일 주소를 다시 입력해주세요');
+      if (email) {
+        signInWithEmailLink(auth, email, window.location.href)
+          .then(() => {
+            window.localStorage.removeItem(EMAIL_FOR_SIGN_IN_KEY);
+            // Clean the sign-in params out of the URL.
+            window.history.replaceState({}, '', window.location.pathname);
+          })
+          .catch((err) => console.error('Failed to complete email link sign-in', err));
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!auth) {
       setIsLoading(false);
       return;
     }
-
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
+    const unsubscribe = onAuthStateChanged(auth, (newUser) => {
+      setUser(newUser);
       setIsLoading(false);
     });
-
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, newSession) => {
-      setSession(newSession);
-    });
-
-    return () => listener.subscription.unsubscribe();
+    return unsubscribe;
   }, []);
 
   const signInWithMagicLink = async (email: string) => {
-    if (!supabase) throw new Error('클라우드 동기화가 설정되지 않았습니다.');
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: window.location.origin },
+    if (!auth) throw new Error('클라우드 동기화가 설정되지 않았습니다.');
+    await sendSignInLinkToEmail(auth, email, {
+      url: window.location.href,
+      handleCodeInApp: true,
     });
-    if (error) throw error;
+    window.localStorage.setItem(EMAIL_FOR_SIGN_IN_KEY, email);
   };
 
   const signOut = async () => {
-    if (!supabase) return;
-    await supabase.auth.signOut();
+    if (!auth) return;
+    await firebaseSignOut(auth);
   };
 
-  return {
-    user: session?.user ?? null,
-    isLoading,
-    isCloudSyncEnabled,
-    signInWithMagicLink,
-    signOut,
-  };
+  return { user, isLoading, isCloudSyncEnabled, signInWithMagicLink, signOut };
 }

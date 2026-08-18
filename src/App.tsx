@@ -64,11 +64,11 @@ export default function App() {
 
     (async () => {
       if (user) {
-        await migrateLocalDataToCloudIfEmpty(user.id);
+        await migrateLocalDataToCloudIfEmpty(user.uid);
       }
       const [loadedRels, loadedHistory] = await Promise.all([
-        loadRelationships(user?.id ?? null),
-        loadHistory(user?.id ?? null),
+        loadRelationships(user?.uid ?? null),
+        loadHistory(user?.uid ?? null),
       ]);
       if (cancelled) return;
       setRelationships(loadedRels);
@@ -85,13 +85,13 @@ export default function App() {
   const handleSaveRelationship = (newRel: Relationship) => {
     const updated = [newRel, ...relationships];
     setRelationships(updated);
-    persistRelationships(user?.id ?? null, updated);
+    persistRelationships(user?.uid ?? null, updated);
   };
 
   const handleDeleteRelationship = (id: string) => {
     const updated = relationships.filter((r) => r.id !== id);
     setRelationships(updated);
-    persistRelationships(user?.id ?? null, updated);
+    persistRelationships(user?.uid ?? null, updated);
     if (selectedRelationship?.id === id) {
       setSelectedRelationship(updated[0] || null);
     }
@@ -173,7 +173,7 @@ export default function App() {
 
         const updatedHistory = [newRecord, ...historyRecords];
         setHistoryRecords(updatedHistory);
-        persistHistory(user?.id ?? null, updatedHistory);
+        persistHistory(user?.uid ?? null, updatedHistory);
       } else {
         throw new Error('생성 결과가 없습니다.');
       }
@@ -351,7 +351,7 @@ export default function App() {
         historyRecords={historyRecords}
         onClearHistory={() => {
           setHistoryRecords([]);
-          persistHistory(user?.id ?? null, []);
+          persistHistory(user?.uid ?? null, []);
         }}
         onSelectRecord={(rec) => {
           if (rec.candidates && rec.candidates.length > 0) {

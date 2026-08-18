@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { User as SupabaseUser } from '@supabase/supabase-js';
+import type { User as FirebaseUser } from 'firebase/auth';
 import { Relationship, RelationType, TonePreference } from '../../types';
 import { User, Plus, Check, Star, X, Tag, Trash2, Mail, LogOut, CloudUpload } from 'lucide-react';
 
@@ -12,7 +12,7 @@ interface RelationshipPickerProps {
   onSaveRelationship: (rel: Relationship) => void;
   onDeleteRelationship: (id: string) => void;
   isCloudSyncEnabled?: boolean;
-  authUser?: SupabaseUser | null;
+  authUser?: FirebaseUser | null;
   onSignInWithMagicLink?: (email: string) => Promise<void>;
   onSignOut?: () => Promise<void>;
 }

@@ -1,5 +1,14 @@
+import {
+  collection,
+  doc,
+  getDocs,
+  writeBatch,
+  query,
+  orderBy,
+  limit,
+} from 'firebase/firestore';
 import { Relationship, GeneratedMessageRecord } from '../types';
-import { supabase } from './supabase';
+import { db } from './firebase';
 import { getStoredRelationships, saveRelationships as saveLocalRelationships } from './relationships';
 
 const LOCAL_HISTORY_KEY = 'gyeongjosa_history_v1';
@@ -22,149 +31,148 @@ function saveLocalHistory(records: GeneratedMessageRecord[]): void {
   }
 }
 
+// Firestore doc data helpers. The client-generated string id (e.g. "rel-123")
+// is used directly as the Firestore document id, so writes are natural upserts.
+
+function relationshipToDocData(rel: Relationship) {
+  return {
+    name: rel.name,
+    relationType: rel.relationType,
+    closeness: rel.closeness,
+    tonePreference: rel.tonePreference,
+    memoryNotes: rel.memoryNotes,
+    createdAt: rel.createdAt,
+  };
+}
+
+function docToRelationship(id: string, data: any): Relationship {
+  return {
+    id,
+    name: data.name,
+    relationType: data.relationType,
+    closeness: data.closeness,
+    tonePreference: data.tonePreference,
+    memoryNotes: data.memoryNotes ?? [],
+    createdAt: data.createdAt,
+  };
+}
+
+function historyRecordToDocData(record: GeneratedMessageRecord) {
+  return {
+    relationshipName: record.relationshipName,
+    relationType: record.relationType,
+    category: record.category,
+    primaryKeywordLabel: record.primaryKeywordLabel,
+    subKeywordLabels: record.subKeywordLabels,
+    format: record.format,
+    selectedText: record.selectedText,
+    candidates: record.candidates,
+    createdAt: record.createdAt,
+  };
+}
+
+function docToHistoryRecord(id: string, data: any): GeneratedMessageRecord {
+  return {
+    id,
+    relationshipName: data.relationshipName,
+    relationType: data.relationType,
+    category: data.category,
+    primaryKeywordLabel: data.primaryKeywordLabel,
+    subKeywordLabels: data.subKeywordLabels ?? [],
+    format: data.format,
+    selectedText: data.selectedText,
+    candidates: data.candidates ?? [],
+    createdAt: data.createdAt,
+  };
+}
+
+// Replace the whole subcollection with `items` in one batch (small personal
+// data sets, so a full delete-then-write is simpler and safer than diffing).
+async function replaceSubcollection(
+  userId: string,
+  subcollection: string,
+  items: { id: string; data: Record<string, unknown> }[]
+): Promise<void> {
+  if (!db) return;
+  const colRef = collection(db, 'users', userId, subcollection);
+  const existing = await getDocs(colRef);
+  const batch = writeBatch(db);
+  existing.docs.forEach((d) => batch.delete(d.ref));
+  items.forEach((item) => batch.set(doc(colRef, item.id), item.data));
+  await batch.commit();
+}
+
 // ---------- Relationships ----------
 
-function rowToRelationship(row: any): Relationship {
-  return {
-    id: row.client_id,
-    name: row.name,
-    relationType: row.relation_type,
-    closeness: row.closeness,
-    tonePreference: row.tone_preference,
-    memoryNotes: row.memory_notes ?? [],
-    createdAt: row.created_at,
-  };
-}
-
-function relationshipToRow(userId: string, rel: Relationship) {
-  return {
-    user_id: userId,
-    client_id: rel.id,
-    name: rel.name,
-    relation_type: rel.relationType,
-    closeness: rel.closeness,
-    tone_preference: rel.tonePreference,
-    memory_notes: rel.memoryNotes,
-    created_at: rel.createdAt,
-  };
-}
-
 export async function loadRelationships(userId: string | null): Promise<Relationship[]> {
-  if (userId && supabase) {
-    const { data, error } = await supabase
-      .from('relationships')
-      .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false });
-    if (!error && data) return data.map(rowToRelationship);
-    console.error('Failed to load relationships from cloud, falling back to local', error);
+  if (userId && db) {
+    try {
+      const colRef = collection(db, 'users', userId, 'relationships');
+      const snapshot = await getDocs(query(colRef, orderBy('createdAt', 'desc')));
+      return snapshot.docs.map((d) => docToRelationship(d.id, d.data()));
+    } catch (err) {
+      console.error('Failed to load relationships from cloud, falling back to local', err);
+    }
   }
   return getStoredRelationships();
 }
 
 export async function persistRelationships(userId: string | null, list: Relationship[]): Promise<void> {
   saveLocalRelationships(list);
-  if (!userId || !supabase) return;
-
-  const { error: deleteError } = await supabase.from('relationships').delete().eq('user_id', userId);
-  if (deleteError) {
-    console.error('Failed to sync relationships to cloud (clear step)', deleteError);
-    return;
-  }
-  if (list.length === 0) return;
-
-  const { error: insertError } = await supabase
-    .from('relationships')
-    .insert(list.map((rel) => relationshipToRow(userId, rel)));
-  if (insertError) {
-    console.error('Failed to sync relationships to cloud (insert step)', insertError);
+  if (!userId || !db) return;
+  try {
+    await replaceSubcollection(
+      userId,
+      'relationships',
+      list.map((rel) => ({ id: rel.id, data: relationshipToDocData(rel) }))
+    );
+  } catch (err) {
+    console.error('Failed to sync relationships to cloud', err);
   }
 }
 
 // ---------- Message history ----------
 
-function rowToHistoryRecord(row: any): GeneratedMessageRecord {
-  return {
-    id: row.client_id,
-    relationshipName: row.relationship_name,
-    relationType: row.relation_type,
-    category: row.category,
-    primaryKeywordLabel: row.primary_keyword_label,
-    subKeywordLabels: row.sub_keyword_labels ?? [],
-    format: row.format,
-    selectedText: row.selected_text,
-    candidates: row.candidates ?? [],
-    createdAt: row.created_at,
-  };
-}
-
-function historyRecordToRow(userId: string, record: GeneratedMessageRecord) {
-  return {
-    user_id: userId,
-    client_id: record.id,
-    relationship_name: record.relationshipName,
-    relation_type: record.relationType,
-    category: record.category,
-    primary_keyword_label: record.primaryKeywordLabel,
-    sub_keyword_labels: record.subKeywordLabels,
-    format: record.format,
-    selected_text: record.selectedText,
-    candidates: record.candidates,
-    created_at: record.createdAt,
-  };
-}
-
 export async function loadHistory(userId: string | null): Promise<GeneratedMessageRecord[]> {
-  if (userId && supabase) {
-    const { data, error } = await supabase
-      .from('message_history')
-      .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false });
-    if (!error && data) return data.map(rowToHistoryRecord);
-    console.error('Failed to load history from cloud, falling back to local', error);
+  if (userId && db) {
+    try {
+      const colRef = collection(db, 'users', userId, 'history');
+      const snapshot = await getDocs(query(colRef, orderBy('createdAt', 'desc')));
+      return snapshot.docs.map((d) => docToHistoryRecord(d.id, d.data()));
+    } catch (err) {
+      console.error('Failed to load history from cloud, falling back to local', err);
+    }
   }
   return getLocalHistory();
 }
 
 export async function persistHistory(userId: string | null, records: GeneratedMessageRecord[]): Promise<void> {
   saveLocalHistory(records);
-  if (!userId || !supabase) return;
-
-  const { error: deleteError } = await supabase.from('message_history').delete().eq('user_id', userId);
-  if (deleteError) {
-    console.error('Failed to sync history to cloud (clear step)', deleteError);
-    return;
-  }
-  if (records.length === 0) return;
-
-  const { error: insertError } = await supabase
-    .from('message_history')
-    .insert(records.map((r) => historyRecordToRow(userId, r)));
-  if (insertError) {
-    console.error('Failed to sync history to cloud (insert step)', insertError);
+  if (!userId || !db) return;
+  try {
+    await replaceSubcollection(
+      userId,
+      'history',
+      records.map((r) => ({ id: r.id, data: historyRecordToDocData(r) }))
+    );
+  } catch (err) {
+    console.error('Failed to sync history to cloud', err);
   }
 }
 
 // ---------- One-time migration on first login ----------
 
 export async function migrateLocalDataToCloudIfEmpty(userId: string): Promise<void> {
-  if (!supabase) return;
+  if (!db) return;
 
-  const { count: relCount, error: relCountError } = await supabase
-    .from('relationships')
-    .select('*', { count: 'exact', head: true })
-    .eq('user_id', userId);
-  if (!relCountError && !relCount) {
+  const relSnapshot = await getDocs(query(collection(db, 'users', userId, 'relationships'), limit(1)));
+  if (relSnapshot.empty) {
     const localRels = getStoredRelationships();
     if (localRels.length > 0) await persistRelationships(userId, localRels);
   }
 
-  const { count: histCount, error: histCountError } = await supabase
-    .from('message_history')
-    .select('*', { count: 'exact', head: true })
-    .eq('user_id', userId);
-  if (!histCountError && !histCount) {
+  const histSnapshot = await getDocs(query(collection(db, 'users', userId, 'history'), limit(1)));
+  if (histSnapshot.empty) {
     const localHist = getLocalHistory();
     if (localHist.length > 0) await persistHistory(userId, localHist);
   }

@@ -7,11 +7,14 @@ import {
   MessageCandidate,
   GeneratedMessageRecord,
 } from './types';
+import { useAuth } from './lib/auth';
 import {
-  getStoredRelationships,
-  saveRelationships,
-  INITIAL_RELATIONSHIPS,
-} from './lib/relationships';
+  loadRelationships,
+  persistRelationships,
+  loadHistory,
+  persistHistory,
+  migrateLocalDataToCloudIfEmpty,
+} from './lib/cloudSync';
 import { getPrimaryKeywords, getSubKeywords } from './lib/keywords';
 import { Header } from './components/shared/Header';
 import { RelationshipPicker } from './components/shared/RelationshipPicker';
@@ -26,6 +29,8 @@ import { EtiquetteModal } from './components/shared/EtiquetteModal';
 import { Sparkles, ArrowRight, UserCheck, Check, RefreshCw } from 'lucide-react';
 
 export default function App() {
+  const { user, isLoading: authLoading, isCloudSyncEnabled, signInWithMagicLink, signOut } = useAuth();
+
   // 1. Relationships state
   const [relationships, setRelationships] = useState<Relationship[]>([]);
   const [selectedRelationship, setSelectedRelationship] = useState<Relationship | null>(null);
@@ -51,35 +56,42 @@ export default function App() {
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isEtiquetteOpen, setIsEtiquetteOpen] = useState(false);
 
-  // Load initial data from localStorage
+  // Load relationships & history — from Supabase when signed in, else localStorage.
+  // Re-runs whenever auth state settles or changes (sign-in / sign-out).
   useEffect(() => {
-    const loadedRels = getStoredRelationships();
-    setRelationships(loadedRels);
-    if (loadedRels.length > 0) {
-      setSelectedRelationship(loadedRels[0]);
-    }
+    if (authLoading) return;
+    let cancelled = false;
 
-    try {
-      const rawHistory = localStorage.getItem('gyeongjosa_history_v1');
-      if (rawHistory) {
-        setHistoryRecords(JSON.parse(rawHistory));
+    (async () => {
+      if (user) {
+        await migrateLocalDataToCloudIfEmpty(user.id);
       }
-    } catch (e) {
-      console.error('Failed to load history', e);
-    }
-  }, []);
+      const [loadedRels, loadedHistory] = await Promise.all([
+        loadRelationships(user?.id ?? null),
+        loadHistory(user?.id ?? null),
+      ]);
+      if (cancelled) return;
+      setRelationships(loadedRels);
+      setSelectedRelationship(loadedRels[0] ?? null);
+      setHistoryRecords(loadedHistory);
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user, authLoading]);
 
   // Save relationships when modified
   const handleSaveRelationship = (newRel: Relationship) => {
     const updated = [newRel, ...relationships];
     setRelationships(updated);
-    saveRelationships(updated);
+    persistRelationships(user?.id ?? null, updated);
   };
 
   const handleDeleteRelationship = (id: string) => {
     const updated = relationships.filter((r) => r.id !== id);
     setRelationships(updated);
-    saveRelationships(updated);
+    persistRelationships(user?.id ?? null, updated);
     if (selectedRelationship?.id === id) {
       setSelectedRelationship(updated[0] || null);
     }
@@ -161,7 +173,7 @@ export default function App() {
 
         const updatedHistory = [newRecord, ...historyRecords];
         setHistoryRecords(updatedHistory);
-        localStorage.setItem('gyeongjosa_history_v1', JSON.stringify(updatedHistory));
+        persistHistory(user?.id ?? null, updatedHistory);
       } else {
         throw new Error('생성 결과가 없습니다.');
       }
@@ -326,6 +338,10 @@ export default function App() {
         onSelectRelationship={setSelectedRelationship}
         onSaveRelationship={handleSaveRelationship}
         onDeleteRelationship={handleDeleteRelationship}
+        isCloudSyncEnabled={isCloudSyncEnabled}
+        authUser={user}
+        onSignInWithMagicLink={signInWithMagicLink}
+        onSignOut={signOut}
       />
 
       {/* History Drawer */}
@@ -335,7 +351,7 @@ export default function App() {
         historyRecords={historyRecords}
         onClearHistory={() => {
           setHistoryRecords([]);
-          localStorage.removeItem('gyeongjosa_history_v1');
+          persistHistory(user?.id ?? null, []);
         }}
         onSelectRecord={(rec) => {
           if (rec.candidates && rec.candidates.length > 0) {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import type { User as SupabaseUser } from '@supabase/supabase-js';
 import { Relationship, RelationType, TonePreference } from '../../types';
-import { User, Plus, Check, Star, X, Tag, Trash2 } from 'lucide-react';
+import { User, Plus, Check, Star, X, Tag, Trash2, Mail, LogOut, CloudUpload } from 'lucide-react';
 
 interface RelationshipPickerProps {
   isOpen: boolean;
@@ -10,6 +11,10 @@ interface RelationshipPickerProps {
   onSelectRelationship: (rel: Relationship) => void;
   onSaveRelationship: (rel: Relationship) => void;
   onDeleteRelationship: (id: string) => void;
+  isCloudSyncEnabled?: boolean;
+  authUser?: SupabaseUser | null;
+  onSignInWithMagicLink?: (email: string) => Promise<void>;
+  onSignOut?: () => Promise<void>;
 }
 
 const RELATION_TYPES: RelationType[] = [
@@ -38,6 +43,10 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
   onSelectRelationship,
   onSaveRelationship,
   onDeleteRelationship,
+  isCloudSyncEnabled,
+  authUser,
+  onSignInWithMagicLink,
+  onSignOut,
 }) => {
   const [isCreating, setIsCreating] = useState(false);
   const [newName, setNewName] = useState('');
@@ -47,7 +56,23 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
   const [newNoteInput, setNewNoteInput] = useState('');
   const [newNotes, setNewNotes] = useState<string[]>([]);
 
+  const [authEmail, setAuthEmail] = useState('');
+  const [authStatus, setAuthStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+
   if (!isOpen) return null;
+
+  const handleSendMagicLink = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!authEmail.trim() || !onSignInWithMagicLink) return;
+    setAuthStatus('sending');
+    try {
+      await onSignInWithMagicLink(authEmail.trim());
+      setAuthStatus('sent');
+    } catch (err) {
+      console.error('Failed to send magic link', err);
+      setAuthStatus('error');
+    }
+  };
 
   const handleAddNote = () => {
     if (!newNoteInput.trim()) return;
@@ -116,6 +141,60 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
               <div className="text-xs text-stone-500 mb-2">
                 메시지를 전달할 상대방을 선택하거나 새로운 관계를 등록하세요.
               </div>
+
+              {isCloudSyncEnabled && (
+                <div className="p-3.5 rounded-2xl bg-amber-50/60 border border-amber-200/80 mb-3">
+                  {authUser ? (
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2 min-w-0 text-xs text-stone-700">
+                        <CloudUpload className="w-4 h-4 text-amber-700 shrink-0" />
+                        <span className="truncate">
+                          <b className="text-stone-900">{authUser.email}</b>로 안전하게 보관 중
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => onSignOut?.()}
+                        className="flex items-center gap-1 text-[11px] font-semibold text-stone-500 hover:text-stone-800 shrink-0 cursor-pointer"
+                      >
+                        <LogOut className="w-3.5 h-3.5" />
+                        로그아웃
+                      </button>
+                    </div>
+                  ) : authStatus === 'sent' ? (
+                    <div className="text-xs text-stone-700">
+                      <b className="text-amber-800">{authEmail}</b>로 로그인 링크를 보냈어요. 메일함을 확인해주세요.
+                    </div>
+                  ) : (
+                    <form onSubmit={handleSendMagicLink} className="space-y-1.5">
+                      <div className="text-[11px] font-semibold text-amber-900 flex items-center gap-1.5">
+                        <Mail className="w-3.5 h-3.5" />
+                        로그인하면 기기가 바뀌어도 기록이 안전하게 보관돼요 (선택)
+                      </div>
+                      <div className="flex gap-1.5">
+                        <input
+                          type="email"
+                          required
+                          value={authEmail}
+                          onChange={(e) => setAuthEmail(e.target.value)}
+                          placeholder="이메일 주소"
+                          className="flex-1 px-3 py-2 rounded-xl bg-white border border-amber-200 text-stone-900 text-xs focus:outline-none focus:border-amber-500"
+                        />
+                        <button
+                          type="submit"
+                          disabled={authStatus === 'sending'}
+                          className="px-3 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold cursor-pointer disabled:opacity-50 shrink-0"
+                        >
+                          {authStatus === 'sending' ? '전송 중...' : '로그인 링크 받기'}
+                        </button>
+                      </div>
+                      {authStatus === 'error' && (
+                        <div className="text-[11px] text-red-600">전송에 실패했어요. 다시 시도해주세요.</div>
+                      )}
+                    </form>
+                  )}
+                </div>
+              )}
 
               <div className="space-y-2.5">
                 {relationships.map((rel) => {

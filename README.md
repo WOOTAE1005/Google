@@ -70,3 +70,22 @@ firestore.rules                  # Firestore 보안 규칙 (본인 데이터만 
 - 로그인하지 않으면 관계 프로필과 생성 기록은 **브라우저 `localStorage`에만** 저장됩니다.
 - `GEMINI_API_KEY`가 비어 있어도 앱은 정상 동작하며, 이 경우 항상 동일한 3개 예시 문구를 반환합니다.
 - Firebase 이메일 링크 로그인을 쓰려면 Firebase Console의 Authentication에서 "이메일 링크(비밀번호 없는 로그인)" 제공업체를 활성화해야 합니다.
+
+## 배포 체크리스트 (AI Studio → Cloud Run)
+
+로컬 `.env`는 배포본에 반영되지 않습니다. AI Studio의 **Secrets** 패널(또는 Cloud Run 환경변수)에 아래 7개를 그대로 등록하세요.
+
+- [ ] `GEMINI_API_KEY`
+- [ ] `VITE_FIREBASE_API_KEY`
+- [ ] `VITE_FIREBASE_AUTH_DOMAIN`
+- [ ] `VITE_FIREBASE_PROJECT_ID`
+- [ ] `VITE_FIREBASE_STORAGE_BUCKET`
+- [ ] `VITE_FIREBASE_MESSAGING_SENDER_ID`
+- [ ] `VITE_FIREBASE_APP_ID`
+
+그리고 배포 전/후로 확인할 것들:
+
+- [ ] Firebase Console → Authentication → Sign-in method → "이메일 링크(비밀번호 없는 로그인)" 활성화됨
+- [ ] Firebase Console → Firestore Database가 생성돼 있고, `firestore.rules` 내용이 게시(Publish)됨
+- [ ] 커스텀 도메인을 쓴다면, Firebase Console → Authentication → Settings → **승인된 도메인(Authorized domains)**에 그 도메인을 추가 (안 하면 이메일 링크 로그인이 그 도메인에서 실패함)
+- [ ] 배포된 실제 링크(로컬 아님)로 관계 선택 → 편지 짓기 → 카드 생성까지 한 번 직접 실행해서 확인

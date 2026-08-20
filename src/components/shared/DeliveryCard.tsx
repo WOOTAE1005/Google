@@ -387,9 +387,9 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
 
   return (
     <div
-      className={`border rounded-3xl p-4 sm:p-6 shadow-md space-y-5 transition-colors duration-300 ${
+      className={`border rounded-3xl px-4 sm:px-6 py-7 sm:py-10 space-y-5 transition-colors duration-300 ${
         currentPalette.outerBgClass || 'bg-[#FAF7F0]'
-      } border-stone-300/80`}
+      } border-stone-200/70`}
     >
       {/* Header & View Switch Tabs */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone-900/10 pb-4">

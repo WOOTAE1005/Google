@@ -24,7 +24,7 @@ export const KeywordSelector: React.FC<KeywordSelectorProps> = ({
   const subList = getSubKeywords(primaryKeyword.id);
 
   return (
-    <div className="space-y-6 bg-white border border-[#111827]/15 rounded-2xl p-4 sm:p-6">
+    <div className="space-y-9 bg-white rounded-2xl px-4 sm:px-6 py-7 sm:py-10">
       {/* 1. Category Selector */}
       <div>
         <div className="text-xs font-sans font-bold text-[#111827]/60 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">

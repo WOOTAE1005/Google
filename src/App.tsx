@@ -208,9 +208,9 @@ export default function App() {
       />
 
       {/* Main Container */}
-      <main className="max-w-4xl mx-auto px-4 py-8 space-y-8">
+      <main className="max-w-4xl mx-auto px-4 py-14 space-y-14">
         {/* Hero banner */}
-        <section className="text-center space-y-3 py-4">
+        <section className="text-center space-y-3 py-7">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#111827]/15 text-xs text-[#111827] font-sans font-semibold shadow-2xs">
             <Sparkles className="w-3.5 h-3.5 text-amber-700" />
             <span>AI 경조사 메시지 카피라이터</span>
@@ -224,7 +224,7 @@ export default function App() {
         </section>
 
         {/* Selected relationship summary */}
-        <section className="bg-white border border-[#111827]/15 rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-3">
+        <section className="bg-white rounded-2xl px-4 sm:px-5 py-7 sm:py-9 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3.5">
             <div className="w-11 h-11 rounded-xl bg-[#F9FAFB] text-[#111827] border border-[#111827]/15 flex items-center justify-center">
               <Mail className="w-4 h-4" />

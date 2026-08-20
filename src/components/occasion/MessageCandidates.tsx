@@ -48,7 +48,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-9">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
           <h3 className="text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2">
@@ -188,7 +188,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
       </div>
 
       {/* Quick Refinement / Regeneration Section */}
-      <div className="bg-white border border-[#111827]/15 rounded-2xl p-4 sm:p-5 font-sans">
+      <div className="bg-white rounded-2xl px-4 sm:px-5 py-7 sm:py-9 font-sans">
         <div className="text-xs font-bold text-[#111827]/60 uppercase tracking-wider mb-3 flex items-center gap-1.5">
           <Sliders className="w-4 h-4 text-amber-700" />
           멘트 조율 & 다시 생성

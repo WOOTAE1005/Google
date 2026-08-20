@@ -230,8 +230,7 @@ export default function App() {
               <Mail className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-[11px] text-[#111827]/50 font-sans uppercase tracking-widest font-bold">To. 수신인 프로필</div>
-              <div className="text-sm sm:text-base font-bold text-[#111827] flex flex-wrap items-center gap-2 mt-0.5">
+              <div className="text-sm sm:text-base font-bold text-[#111827] flex flex-wrap items-center gap-2">
                 <span className="font-display text-base font-bold">{selectedRelationship ? selectedRelationship.name : '대상을 선택해주세요'}</span>
                 {selectedRelationship && (
                   <span className="text-xs font-sans px-2.5 py-0.5 rounded-md bg-[#F9FAFB] text-[#111827] border border-[#111827]/15 font-medium flex items-center gap-1.5">

@@ -1,5 +1,5 @@
 import React from 'react';
-import { History, UserCheck, BookOpen, Mail } from 'lucide-react';
+import { History, UserCheck, BookOpen } from 'lucide-react';
 import { Relationship } from '../../types';
 
 interface HeaderProps {
@@ -22,8 +22,15 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
         {/* Logo & Service Name */}
         <div className="flex items-center gap-3 min-w-0 shrink">
-          <div className="w-9 h-9 rounded-xl bg-[#111827] flex items-center justify-center text-[#F9FAFB] font-bold font-serif shrink-0">
-            <Mail className="w-4 h-4 text-amber-300" />
+          <div className="w-9 h-9 rounded-xl bg-[#F9FAFB] border border-[#111827]/10 overflow-hidden shrink-0">
+            <img
+              src="/logo.png"
+              alt="마음담음 로고"
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
           </div>
           <div className="min-w-0">
             <h1 className="font-display font-bold text-lg tracking-widest text-[#111827] truncate">

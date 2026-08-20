@@ -32,8 +32,8 @@ export const CustomPromptInput: React.FC<CustomPromptInputProps> = ({
           <span className="w-2 h-2 rounded-full bg-amber-700"></span>
           추가 요청사항 (선택)
         </div>
-        <span className="text-[11px] text-[#111827] font-semibold flex items-center gap-1 bg-amber-100/70 px-2.5 py-0.5 rounded-full border border-amber-300/60">
-          <Sparkles className="w-3 h-3 text-amber-700" /> AI 맞춤 적용
+        <span className="text-[11px] text-[#111827]/50 font-medium flex items-center gap-1">
+          <Sparkles className="w-3 h-3 text-[#111827]/40" /> 적으면 AI가 자동 반영해요
         </span>
       </div>
 

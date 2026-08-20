@@ -561,19 +561,19 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
               <div className={`absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 ${currentPalette.borderClass}`} />
 
               <div className="flex items-center justify-end mb-6">
-                <span className={`text-xs font-serif italic font-medium ${currentPalette.accentClass}`}>
+                <span className={`text-xs font-display italic font-medium ${currentPalette.accentClass}`}>
                   To. {relationship.name}님께
                 </span>
               </div>
 
               <div className="my-6 py-4 px-2 text-center">
-                <p className={`text-sm sm:text-base leading-relaxed tracking-wide font-serif whitespace-pre-wrap ${currentPalette.textClass}`}>
+                <p className={`text-sm sm:text-base leading-relaxed tracking-wide font-display whitespace-pre-wrap ${currentPalette.textClass}`}>
                   {messageContent}
                 </p>
               </div>
 
               <div className={`pt-4 border-t flex justify-between items-center text-xs ${currentPalette.borderClass}`}>
-                <span className={`flex items-center gap-1 font-serif font-bold ${currentPalette.accentClass}`}>
+                <span className={`flex items-center gap-1 font-display font-bold ${currentPalette.accentClass}`}>
                   {category === '경사' ? <Flower2 className="w-4 h-4 text-amber-700" /> : <Heart className="w-4 h-4 text-slate-700" />}
                   진심을 담아 올림
                 </span>
@@ -591,7 +591,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
               <div className={`p-4 border-b-2 flex items-center justify-between bg-black/5 ${currentPalette.borderClass}`}>
                 <div className="flex items-center gap-2">
                   <Mail className={`w-4 h-4 ${currentPalette.accentClass}`} />
-                  <span className={`text-xs font-bold font-serif ${currentPalette.textClass}`}>
+                  <span className={`text-xs font-bold font-display ${currentPalette.textClass}`}>
                     {category} 전달 서신
                   </span>
                 </div>
@@ -603,16 +603,16 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
               {/* Inset Card Body */}
               <div className="p-6 sm:p-8 space-y-5">
                 <div className={`p-5 sm:p-7 rounded-2xl border bg-white/40 backdrop-blur-xs space-y-4 ${currentPalette.borderClass}`}>
-                  <div className={`text-xs font-serif font-semibold border-b pb-2 ${currentPalette.borderClass} ${currentPalette.accentClass}`}>
+                  <div className={`text-xs font-display font-semibold border-b pb-2 ${currentPalette.borderClass} ${currentPalette.accentClass}`}>
                     To. {relationship.name}님께 보내는 정성어린 멘트
                   </div>
-                  <p className={`text-sm sm:text-base leading-relaxed tracking-wide font-serif whitespace-pre-wrap ${currentPalette.textClass}`}>
+                  <p className={`text-sm sm:text-base leading-relaxed tracking-wide font-display whitespace-pre-wrap ${currentPalette.textClass}`}>
                     {messageContent}
                   </p>
                 </div>
 
                 <div className="flex justify-between items-center text-xs pt-1">
-                  <span className={`font-serif font-bold text-xs ${currentPalette.accentClass}`}>
+                  <span className={`font-display font-bold text-xs ${currentPalette.accentClass}`}>
                     - 마음을 담아 보냅니다 -
                   </span>
                   <span className="text-[10px] font-mono opacity-70">
@@ -633,7 +633,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
                 <div className="flex-1 space-y-5">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className={`text-xs font-serif font-bold ${currentPalette.accentClass}`}>
+                      <div className={`text-xs font-display font-bold ${currentPalette.accentClass}`}>
                         To. {relationship.name}님
                       </div>
                     </div>
@@ -669,18 +669,18 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
                 </div>
               </div>
 
-              <div className={`text-xs font-serif font-bold mb-4 tracking-widest uppercase ${currentPalette.accentClass}`}>
+              <div className={`text-xs font-display font-bold mb-4 tracking-widest uppercase ${currentPalette.accentClass}`}>
                 To. {relationship.name}님께 드리는 인사
               </div>
 
               <div className="my-4 py-2 px-3 border-y border-dashed border-current/30">
-                <p className={`text-sm sm:text-base leading-relaxed font-serif whitespace-pre-wrap ${currentPalette.textClass}`}>
+                <p className={`text-sm sm:text-base leading-relaxed font-display whitespace-pre-wrap ${currentPalette.textClass}`}>
                   {messageContent}
                 </p>
               </div>
 
               <div className="mt-6 flex justify-between items-center text-xs opacity-90">
-                <span className={`font-serif font-bold ${currentPalette.accentClass}`}>
+                <span className={`font-display font-bold ${currentPalette.accentClass}`}>
                   {category === '경사' ? '🌸 축하하는 마음을 담아' : '🌿 정성을 담아 올림'}
                 </span>
                 <span className="text-[10px] font-mono">
@@ -701,16 +701,16 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
                   <div className={`h-[1px] w-8 bg-current opacity-40 ${currentPalette.textClass}`} />
                 </div>
 
-                <div className={`text-xs font-serif font-extrabold tracking-widest ${currentPalette.accentClass}`}>
+                <div className={`text-xs font-display font-extrabold tracking-widest ${currentPalette.accentClass}`}>
                   To. {relationship.name}님 귀하
                 </div>
 
-                <p className={`text-sm sm:text-base leading-relaxed font-serif whitespace-pre-wrap ${currentPalette.textClass}`}>
+                <p className={`text-sm sm:text-base leading-relaxed font-display whitespace-pre-wrap ${currentPalette.textClass}`}>
                   {messageContent}
                 </p>
 
                 <div className="pt-2 flex items-center justify-center gap-2">
-                  <span className={`text-[11px] font-serif font-bold border-b-2 pb-0.5 ${currentPalette.borderClass} ${currentPalette.accentClass}`}>
+                  <span className={`text-[11px] font-display font-bold border-b-2 pb-0.5 ${currentPalette.borderClass} ${currentPalette.accentClass}`}>
                     마음을 담아 올림
                   </span>
                 </div>
@@ -756,8 +756,8 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
                 </div>
 
                 {/* Card Interior Preview */}
-                <div className={`p-4 text-center font-serif text-xs ${currentPalette.bgClass} ${currentPalette.textClass}`}>
-                  <p className="line-clamp-4 leading-relaxed font-serif whitespace-pre-wrap">
+                <div className={`p-4 text-center font-display text-xs ${currentPalette.bgClass} ${currentPalette.textClass}`}>
+                  <p className="line-clamp-4 leading-relaxed font-display whitespace-pre-wrap">
                     {messageContent}
                   </p>
                 </div>

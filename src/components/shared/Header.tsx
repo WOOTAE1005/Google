@@ -26,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
             <Mail className="w-4 h-4 text-amber-300" />
           </div>
           <div className="min-w-0">
-            <h1 className="font-serif font-bold text-lg tracking-widest text-[#111827] truncate">
+            <h1 className="font-display font-bold text-lg tracking-widest text-[#111827] truncate">
               마음담음
             </h1>
             <p className="text-[11px] text-[#111827]/60 font-sans hidden sm:block truncate">
@@ -40,13 +40,13 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Target Relationship Badge */}
           <button
             onClick={onOpenRelationshipPicker}
-            className="flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-white hover:bg-[#F3F4F6] border border-[#111827]/15 text-xs text-[#111827] shadow-2xs transition-all cursor-pointer min-w-0"
+            className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl bg-white hover:bg-[#F3F4F6] border border-[#111827]/15 text-xs text-[#111827] shadow-2xs transition-all cursor-pointer min-w-0"
             title="수신자/관계 설정 변경"
           >
             <UserCheck className="w-3.5 h-3.5 text-amber-700 shrink-0" />
             <div className="text-left min-w-0">
               <div className="text-[10px] text-[#111827]/50 leading-none hidden sm:block">To. 수신 대상</div>
-              <div className="font-semibold text-[#111827] max-w-[64px] sm:max-w-[140px] truncate">
+              <div className="font-semibold text-[#111827] max-w-[104px] sm:max-w-[140px] truncate">
                 {currentRelationship ? currentRelationship.name : '대상을 선택해주세요'}
               </div>
             </div>

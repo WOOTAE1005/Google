@@ -99,7 +99,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                         추천
                       </span>
                     )}
-                    <span className={`text-xs font-bold font-serif ${isRecommended ? 'text-[#F9FAFB]' : 'text-[#111827]'}`}>
+                    <span className={`text-xs font-bold font-display ${isRecommended ? 'text-[#F9FAFB]' : 'text-[#111827]'}`}>
                       {cand.title}
                     </span>
                   </div>
@@ -127,7 +127,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                         onUpdateCandidateContent(cand.id, e.target.value)
                       }
                       rows={5}
-                      className={`w-full p-3 rounded-xl text-xs sm:text-sm leading-relaxed focus:outline-none shadow-xs font-serif ${
+                      className={`w-full p-3 rounded-xl text-xs sm:text-sm leading-relaxed focus:outline-none shadow-xs font-display ${
                         isRecommended ? 'bg-white/10 border border-white/20 text-[#F9FAFB]' : 'bg-white border border-[#111827] text-[#111827]'
                       }`}
                     />
@@ -142,7 +142,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                     </button>
                   </div>
                 ) : (
-                  <p className={`text-xs sm:text-sm leading-relaxed font-serif whitespace-pre-wrap mb-4 p-3.5 rounded-xl border min-h-[110px] ${
+                  <p className={`text-xs sm:text-sm leading-relaxed font-display whitespace-pre-wrap mb-4 p-3.5 rounded-xl border min-h-[110px] ${
                     isRecommended ? 'bg-white/5 border-white/10 text-[#F9FAFB]' : 'bg-[#F9FAFB]/80 border-[#111827]/10 text-[#111827]'
                   }`}>
                     "{cand.content}"

@@ -117,7 +117,7 @@ export const EtiquetteModal: React.FC<EtiquetteModalProps> = ({ isOpen, onClose 
                       <div>
                         <span className="font-bold text-stone-900">· 뒷면 좌측하단:</span> 소속 + 이름 + <b>'올림/拜上/드림'</b>
                       </div>
-                      <div className="p-2 bg-amber-50/50 rounded-lg text-[10px] text-stone-600 font-serif">
+                      <div className="p-2 bg-amber-50/50 rounded-lg text-[10px] text-stone-600 font-display">
                         예시: [앞] 祝結婚 / [뒤] OO상사 홍길동 드림
                       </div>
                     </div>
@@ -137,7 +137,7 @@ export const EtiquetteModal: React.FC<EtiquetteModalProps> = ({ isOpen, onClose 
                         <span className="font-bold text-stone-900">· 뒷면 좌측하단:</span> 소속 + <b>성함만 단정히 기재</b><br />
                         <span className="text-amber-800 text-[10px] font-semibold">※ 조의 봉투엔 '드림/올림'을 붙이지 않는 것이 전통 예법!</span>
                       </div>
-                      <div className="p-2 bg-slate-50/60 rounded-lg text-[10px] text-slate-700 font-serif">
+                      <div className="p-2 bg-slate-50/60 rounded-lg text-[10px] text-slate-700 font-display">
                         예시: [앞] 謹弔 / [뒤] OO상사 김철수
                       </div>
                     </div>
@@ -158,7 +158,7 @@ export const EtiquetteModal: React.FC<EtiquetteModalProps> = ({ isOpen, onClose 
                     >
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-serif font-bold text-base text-stone-900">{item.kanji}</span>
+                          <span className="font-display font-bold text-base text-stone-900">{item.kanji}</span>
                           <span className="text-xs font-semibold text-amber-900 bg-amber-100 px-2 py-0.5 rounded-full">{item.hangeul}</span>
                         </div>
                         <div className="text-[11px] text-stone-500 mt-0.5">{item.desc}</div>

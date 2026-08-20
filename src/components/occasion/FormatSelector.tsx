@@ -94,7 +94,7 @@ export const FormatSelector: React.FC<FormatSelectorProps> = ({
                 {fmt.description}
               </p>
 
-              <div className="px-2.5 py-1.5 rounded-lg bg-white border border-[#111827]/10 text-[10px] text-[#111827]/60 font-serif italic truncate">
+              <div className="px-2.5 py-1.5 rounded-lg bg-white border border-[#111827]/10 text-[10px] text-[#111827]/60 font-display italic truncate">
                 {fmt.exampleText}
               </div>
             </button>

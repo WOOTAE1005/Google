@@ -26,7 +26,7 @@ import { MessageCandidates } from './components/occasion/MessageCandidates';
 import { DeliveryCard } from './components/shared/DeliveryCard';
 import { HistoryDrawer } from './components/occasion/HistoryDrawer';
 import { EtiquetteModal } from './components/shared/EtiquetteModal';
-import { Sparkles, ArrowRight, Mail, RefreshCw } from 'lucide-react';
+import { Sparkles, ArrowRight, Mail, RefreshCw, Star } from 'lucide-react';
 
 export default function App() {
   const { user, isLoading: authLoading, isCloudSyncEnabled, signInWithMagicLink, signOut } = useAuth();
@@ -149,7 +149,7 @@ export default function App() {
       });
 
       if (!response.ok) {
-        throw new Error('서버 응답 오답');
+        throw new Error('서버 응답 오류');
       }
 
       const data = await response.json();
@@ -215,7 +215,7 @@ export default function App() {
             <Sparkles className="w-3.5 h-3.5 text-amber-700" />
             <span>AI 경조사 메시지 카피라이터</span>
           </div>
-          <h2 className="text-2xl sm:text-3.5xl font-serif font-bold tracking-wide text-[#111827] leading-snug">
+          <h2 className="text-2xl sm:text-3.5xl font-display font-bold tracking-wide text-[#111827] leading-snug">
             관계와 상황에 맞는 경조사 문구를 짓습니다
           </h2>
           <p className="text-xs sm:text-sm text-[#111827]/70 font-sans max-w-xl leading-relaxed">
@@ -232,10 +232,23 @@ export default function App() {
             <div>
               <div className="text-[11px] text-[#111827]/50 font-sans uppercase tracking-widest font-bold">To. 수신인 프로필</div>
               <div className="text-sm sm:text-base font-bold text-[#111827] flex flex-wrap items-center gap-2 mt-0.5">
-                <span className="font-serif text-base font-bold">{selectedRelationship ? selectedRelationship.name : '대상을 선택해주세요'}</span>
+                <span className="font-display text-base font-bold">{selectedRelationship ? selectedRelationship.name : '대상을 선택해주세요'}</span>
                 {selectedRelationship && (
-                  <span className="text-xs font-sans px-2.5 py-0.5 rounded-md bg-[#F9FAFB] text-[#111827] border border-[#111827]/15 font-medium">
-                    {selectedRelationship.relationType} • 친밀도 {selectedRelationship.closeness}점
+                  <span className="text-xs font-sans px-2.5 py-0.5 rounded-md bg-[#F9FAFB] text-[#111827] border border-[#111827]/15 font-medium flex items-center gap-1.5">
+                    <span>{selectedRelationship.relationType}</span>
+                    <span className="text-[#111827]/20">•</span>
+                    <span className="flex items-center gap-0.5">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star
+                          key={star}
+                          className={`w-3 h-3 ${
+                            star <= selectedRelationship.closeness
+                              ? 'text-amber-500 fill-amber-500'
+                              : 'text-stone-300'
+                          }`}
+                        />
+                      ))}
+                    </span>
                   </span>
                 )}
               </div>

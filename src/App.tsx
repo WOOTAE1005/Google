@@ -26,7 +26,7 @@ import { MessageCandidates } from './components/occasion/MessageCandidates';
 import { DeliveryCard } from './components/shared/DeliveryCard';
 import { HistoryDrawer } from './components/occasion/HistoryDrawer';
 import { EtiquetteModal } from './components/shared/EtiquetteModal';
-import { Sparkles, ArrowRight, UserCheck, Check, RefreshCw } from 'lucide-react';
+import { Sparkles, ArrowRight, Mail, RefreshCw } from 'lucide-react';
 
 export default function App() {
   const { user, isLoading: authLoading, isCloudSyncEnabled, signInWithMagicLink, signOut } = useAuth();
@@ -209,25 +209,25 @@ export default function App() {
 
       {/* Main Container */}
       <main className="max-w-4xl mx-auto px-4 py-8 space-y-8">
-        {/* Banner Section - Proposal 1 Poetic Banner */}
+        {/* Hero banner */}
         <section className="text-center space-y-3 py-4">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#2C2621]/15 text-xs text-[#2C2621] font-sans font-semibold shadow-2xs">
             <Sparkles className="w-3.5 h-3.5 text-amber-700" />
-            <span>시적 감성의 미니멀 엽서 • AI 경조사 메시지 카피라이터</span>
+            <span>AI 경조사 메시지 카피라이터</span>
           </div>
           <h2 className="text-2xl sm:text-3.5xl font-serif font-bold tracking-wide text-[#2C2621] leading-snug">
-            마치 한 장의 엽서를 써 내려가듯,<br className="hidden sm:inline" /> 온기와 격식을 전하세요
+            관계와 상황에 맞는 경조사 문구를 짓습니다
           </h2>
           <p className="text-xs sm:text-sm text-[#2C2621]/70 font-sans max-w-xl mx-auto leading-relaxed">
-            소중한 분과의 관계, 마음 깊은 전달 목적, 경조사 상황을 담아 세상에 단 하나뿐인 정성 어린 메시지를 짓습니다.
+            관계, 상황, 톤을 고르면 봉투 문구·문자·카톡 메시지 세 가지 안을 만들어 드립니다.
           </p>
         </section>
 
-        {/* Selected Relationship Quick Bar - Warm Postcard Header Feel */}
-        <section className="bg-white border border-[#2C2621]/15 rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-3 shadow-md shadow-[#2C2621]/5">
+        {/* Selected relationship summary */}
+        <section className="bg-white border border-[#2C2621]/15 rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3.5">
-            <div className="w-11 h-11 rounded-xl bg-[#FAF6F0] text-[#2C2621] border border-[#2C2621]/15 flex items-center justify-center font-bold font-serif text-lg">
-              ✉️
+            <div className="w-11 h-11 rounded-xl bg-[#FAF6F0] text-[#2C2621] border border-[#2C2621]/15 flex items-center justify-center">
+              <Mail className="w-4 h-4" />
             </div>
             <div>
               <div className="text-[11px] text-[#2C2621]/50 font-sans uppercase tracking-widest font-bold">To. 수신인 프로필</div>
@@ -250,7 +250,7 @@ export default function App() {
           </button>
         </section>
 
-        {/* 1. Keyword Selection (Category, Primary, Sub Keywords) */}
+        {/* 1. Keyword selection (category, primary, sub keywords) */}
         <KeywordSelector
           category={category}
           onSelectCategory={handleSelectCategory}
@@ -260,22 +260,22 @@ export default function App() {
           onToggleSubKeyword={handleToggleSubKeyword}
         />
 
-        {/* 2. Custom Prompt Input (STEP 4) */}
+        {/* 2. Custom prompt input */}
         <CustomPromptInput
           customInstruction={customInstruction}
           onChangeCustomInstruction={setCustomInstruction}
         />
 
-        {/* 3. Format Selector (STEP 5) */}
+        {/* 3. Format selector */}
         <FormatSelector format={format} onSelectFormat={setFormat} />
 
-        {/* 4. Caution / Etiquette Banner */}
+        {/* 4. Caution / etiquette banner */}
         <CautionBanner
           primaryKeyword={primaryKeyword}
           selectedSubKeywords={selectedSubKeywords}
         />
 
-        {/* 4. Generate CTA Button - Proposal 1 Style */}
+        {/* 5. Generate CTA button */}
         <div className="pt-2 font-sans">
           <button
             type="button"
@@ -286,26 +286,26 @@ export default function App() {
             {isGenerating ? (
               <>
                 <RefreshCw className="w-5 h-5 animate-spin text-amber-300" />
-                <span>정성 어린 문장을 가다듬는 중입니다...</span>
+                <span>생성 중...</span>
               </>
             ) : (
               <>
                 <Sparkles className="w-5 h-5 text-amber-300 stroke-[2.5]" />
-                <span className="font-serif font-bold tracking-wide">✨ 편지 짓기 (AI 맞춤 멘트 생성)</span>
+                <span className="font-serif font-bold tracking-wide">편지 짓기</span>
                 <ArrowRight className="w-5 h-5 text-amber-300 stroke-[2.5]" />
               </>
             )}
           </button>
         </div>
 
-        {/* Error Alert */}
+        {/* Error alert */}
         {errorMessage && (
           <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs sm:text-sm">
             {errorMessage}
           </div>
         )}
 
-        {/* 5. Message Candidates Display */}
+        {/* 6. Message candidates display */}
         {candidates.length > 0 && (
           <MessageCandidates
             candidates={candidates}
@@ -317,7 +317,7 @@ export default function App() {
           />
         )}
 
-        {/* 6. Delivery Card & KakaoTalk Preview */}
+        {/* 7. Delivery card & KakaoTalk preview */}
         {selectedCandidate && (
           <DeliveryCard
             relationship={selectedRelationship!}

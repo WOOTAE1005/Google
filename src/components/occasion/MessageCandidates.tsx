@@ -78,7 +78,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
               onClick={() => onSelectCandidate(cand)}
               className={`relative rounded-2xl border p-4 sm:p-5 flex flex-col justify-between transition-all cursor-pointer ${
                 isSelected
-                  ? 'bg-amber-100/60 border-[#2C2621] shadow-lg ring-2 ring-[#2C2621]/20'
+                  ? 'bg-amber-100/60 border-[#2C2621] shadow-sm ring-2 ring-[#2C2621]/20'
                   : 'bg-white border-[#2C2621]/15 hover:bg-[#FAF6F0] hover:border-[#2C2621]/30'
               }`}
             >
@@ -188,7 +188,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
       </div>
 
       {/* Quick Refinement / Regeneration Section */}
-      <div className="bg-white border border-[#2C2621]/15 rounded-2xl p-4 sm:p-5 shadow-md shadow-[#2C2621]/5 font-sans">
+      <div className="bg-white border border-[#2C2621]/15 rounded-2xl p-4 sm:p-5 font-sans">
         <div className="text-xs font-bold text-[#2C2621]/60 uppercase tracking-wider mb-3 flex items-center gap-1.5">
           <Sliders className="w-4 h-4 text-amber-700" />
           멘트 조율 & 다시 생성
@@ -203,7 +203,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
               onClick={() => onRegenerateWithInstruction(tweak)}
               className="px-3 py-1.5 rounded-xl bg-[#FAF6F0] hover:bg-amber-100/60 border border-[#2C2621]/10 hover:border-[#2C2621]/30 text-xs text-[#2C2621] font-serif transition-colors disabled:opacity-50 cursor-pointer"
             >
-              ✨ {tweak}
+              {tweak}
             </button>
           ))}
         </div>

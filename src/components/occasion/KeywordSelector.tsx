@@ -1,7 +1,7 @@
 import React from 'react';
 import { OccasionCategory, PromptKeyword } from '../../types';
 import { getPrimaryKeywords, getSubKeywords } from '../../lib/keywords';
-import { PartyPopper, Flame, Check, Sparkles } from 'lucide-react';
+import { PartyPopper, Leaf, Check } from 'lucide-react';
 
 interface KeywordSelectorProps {
   category: OccasionCategory;
@@ -24,7 +24,7 @@ export const KeywordSelector: React.FC<KeywordSelectorProps> = ({
   const subList = getSubKeywords(primaryKeyword.id);
 
   return (
-    <div className="space-y-6 bg-white border border-[#2C2621]/15 rounded-2xl p-4 sm:p-6 shadow-md shadow-[#2C2621]/5">
+    <div className="space-y-6 bg-white border border-[#2C2621]/15 rounded-2xl p-4 sm:p-6">
       {/* 1. Category Selector */}
       <div>
         <div className="text-xs font-sans font-bold text-[#2C2621]/60 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
@@ -51,13 +51,13 @@ export const KeywordSelector: React.FC<KeywordSelectorProps> = ({
           >
             <div className="flex items-center gap-3">
               <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg ${
+                className={`w-10 h-10 rounded-xl flex items-center justify-center ${
                   category === '경사'
-                    ? 'bg-[#2C2621] text-[#FAF6F0] shadow-2xs font-serif'
+                    ? 'bg-[#2C2621] text-[#FAF6F0]'
                     : 'bg-stone-200/80 text-stone-600'
                 }`}
               >
-                🎉
+                <PartyPopper className="w-4.5 h-4.5" />
               </div>
               <div>
                 <div className="font-bold text-sm sm:text-base text-[#2C2621]">
@@ -87,19 +87,19 @@ export const KeywordSelector: React.FC<KeywordSelectorProps> = ({
             }}
             className={`p-4 rounded-2xl border text-left transition-all flex items-center justify-between cursor-pointer ${
               category === '조사'
-                ? 'bg-[#2C2621] border-[#2C2621] text-[#FAF6F0] shadow-md ring-2 ring-[#2C2621]/20'
+                ? 'bg-[#2C2621] border-[#2C2621] text-[#FAF6F0] shadow-xs ring-2 ring-[#2C2621]/20'
                 : 'bg-[#FAF6F0] border-[#2C2621]/10 text-stone-600 hover:bg-[#F2ECE1] hover:text-[#2C2621]'
             }`}
           >
             <div className="flex items-center gap-3">
               <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-lg ${
+                className={`w-10 h-10 rounded-xl flex items-center justify-center ${
                   category === '조사'
-                    ? 'bg-stone-800 text-[#FAF6F0] shadow-2xs border border-stone-700 font-serif'
+                    ? 'bg-stone-800 text-[#FAF6F0] border border-stone-700'
                     : 'bg-stone-200/80 text-stone-600'
                 }`}
               >
-                🌿
+                <Leaf className="w-4.5 h-4.5" />
               </div>
               <div>
                 <div className={`font-bold text-sm sm:text-base ${category === '조사' ? 'text-[#FAF6F0]' : 'text-[#2C2621]'}`}>

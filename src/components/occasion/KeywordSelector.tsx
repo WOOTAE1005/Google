@@ -29,7 +29,7 @@ export const KeywordSelector: React.FC<KeywordSelectorProps> = ({
       <div>
         <div className="text-xs font-sans font-bold text-[#2C2621]/60 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full bg-amber-700"></span>
-          STEP 1. 경조사 대분류 선택
+          경조사 대분류
         </div>
 
         <div className="grid grid-cols-2 gap-3 font-sans">
@@ -123,7 +123,7 @@ export const KeywordSelector: React.FC<KeywordSelectorProps> = ({
       <div>
         <div className="text-xs font-sans font-bold text-[#2C2621]/60 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full bg-amber-700"></span>
-          STEP 2. 주요 경조사 항목 선택
+          주요 항목
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 font-sans">
@@ -155,7 +155,7 @@ export const KeywordSelector: React.FC<KeywordSelectorProps> = ({
           <div className="text-xs font-sans font-bold text-[#2C2621]/60 uppercase tracking-wider mb-2.5 flex items-center justify-between">
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-amber-700"></span>
-              STEP 3. 세부 구체적 상황 태그 (복수 선택 가능)
+              세부 상황 태그 (복수 선택 가능)
             </div>
             <span className="text-[11px] text-[#2C2621]/50 font-normal">
               선택됨: {selectedSubKeywords.length}개

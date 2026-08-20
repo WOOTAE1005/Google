@@ -19,7 +19,8 @@ import {
   Sparkles,
   Heart,
   Flower2,
-  ExternalLink,
+  ChevronDown,
+  ChevronUp,
   Smartphone,
   MessageSquare,
   Palette,
@@ -272,6 +273,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
   const [imageCopied, setImageCopied] = useState(false);
   const [downloadedSuccess, setDownloadedSuccess] = useState(false);
   const [activeTab, setActiveTab] = useState<'card' | 'kakaotalk'>('card');
+  const [isCustomizerOpen, setIsCustomizerOpen] = useState(false);
 
   // Layout and Palette State
   const [selectedLayoutId, setSelectedLayoutId] = useState<CardLayoutStyleId>('traditional_frame');
@@ -398,7 +400,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
               감성 카드리폼 & 전송 미리보기
             </h3>
             <span className="px-2 py-0.5 rounded-full bg-amber-700 text-white text-[10px] font-bold">
-              STEP 5: {format}
+              {format}
             </span>
           </div>
           <p className="text-xs text-stone-600 mt-1">
@@ -435,99 +437,103 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
 
       {/* Card Customizer Toolbar (Visible in 'card' view) */}
       {activeTab === 'card' && (
-        <div className="space-y-3 bg-white/80 backdrop-blur-xs p-3.5 rounded-2xl border border-stone-300/80 shadow-xs">
-          {/* 1. Structural Layout Theme Selector */}
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between text-xs text-stone-800 font-bold">
-              <span className="flex items-center gap-1.5">
-                <Layout className="w-4 h-4 text-amber-700" />
-                1. 카드 구조 디자인 (5가지 형태 선택)
+        <div className="space-y-2">
+          {/* Collapsed summary — expands into the full layout/palette pickers */}
+          <button
+            type="button"
+            onClick={() => setIsCustomizerOpen((o) => !o)}
+            className="w-full flex items-center justify-between gap-2 p-3 rounded-xl bg-white/80 border border-stone-300/80 text-xs cursor-pointer"
+          >
+            <span className="flex items-center gap-2 min-w-0 text-stone-800">
+              <Layout className="w-4 h-4 text-amber-700 shrink-0" />
+              <span className="truncate">
+                <b className="font-bold text-stone-900">{currentLayout.name}</b>
+                <span className="text-stone-400 mx-1.5">·</span>
+                <b className="font-bold text-stone-900">{currentPalette.name}</b>
               </span>
-              <span className="text-[11px] text-stone-500 font-normal">
-                현재 구조: <b className="text-amber-900">{currentLayout.name}</b>
-              </span>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
-              {LAYOUT_STYLES.map((layout) => {
-                const isSelected = selectedLayoutId === layout.id;
-                return (
-                  <button
-                    key={layout.id}
-                    type="button"
-                    onClick={() => setSelectedLayoutId(layout.id)}
-                    className={`p-2 rounded-xl text-left border transition-all cursor-pointer flex flex-col justify-between ${
-                      isSelected
-                        ? 'bg-amber-50 border-amber-700 shadow-xs ring-2 ring-amber-600/20'
-                        : 'bg-white/80 border-stone-200 hover:border-amber-300 hover:bg-white'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm">{layout.icon}</span>
-                      {isSelected && <Check className="w-3.5 h-3.5 text-amber-700 font-bold" />}
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold text-stone-900 truncate">{layout.name}</div>
-                      <div className="text-[10px] text-stone-500 truncate">{layout.subtitle.split('&')[0]}</div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* 2. Color Palette Selector */}
-          <div className="space-y-1.5 pt-2 border-t border-stone-200/70">
-            <div className="flex items-center justify-between text-xs text-stone-800 font-bold">
-              <span className="flex items-center gap-1.5">
-                <Palette className="w-4 h-4 text-amber-700" />
-                2. 배경지 & 버튼 조합 색상 팔레트 (13가지 테마)
-              </span>
-              <span className="text-[11px] text-stone-600 font-normal">
-                현재 적용: <b className="text-amber-900 font-bold">{currentPalette.name}</b>
-              </span>
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1.5">
-              {COLOR_PALETTES.map((palette) => {
-                const isSelected = selectedPaletteId === palette.id;
-                const mainBtnBg = palette.primaryBtnClass?.split(' ')[0] || 'bg-amber-700';
-                return (
-                  <button
-                    key={palette.id}
-                    type="button"
-                    onClick={() => setSelectedPaletteId(palette.id)}
-                    className={`p-2 rounded-xl text-left border transition-all cursor-pointer flex items-center justify-between ${
-                      isSelected
-                        ? 'bg-amber-50 border-amber-700 shadow-xs ring-2 ring-amber-600/20'
-                        : 'bg-white/80 border-stone-200 hover:border-amber-300 hover:bg-white'
-                    }`}
-                  >
-                    <div className="flex items-center gap-1.5 truncate">
-                      {/* 3-Tone Color Composition Swatch: [Outer Wallpaper | Inner Card | Button Accent] */}
-                      <div className="flex items-center gap-[1px] rounded-full p-[1px] border shrink-0 shadow-2xs border-stone-300/80 bg-white overflow-hidden">
-                        <div className={`w-1.5 h-3.5 rounded-l-full ${palette.outerBgClass || 'bg-stone-200'}`} />
-                        <div className={`w-1.5 h-3.5 ${palette.swatchBg}`} />
-                        <div className={`w-1.5 h-3.5 rounded-r-full ${mainBtnBg}`} />
-                      </div>
-                      <span className="text-[11px] font-bold text-stone-800 truncate">{palette.name}</span>
-                    </div>
-                    {isSelected && <Check className="w-3.5 h-3.5 text-amber-700 font-bold shrink-0 ml-1" />}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Active Palette Banner Indicator */}
-          <div className="p-2.5 rounded-xl bg-amber-900/5 border border-amber-900/10 flex items-center justify-between text-xs text-stone-700">
-            <span className="font-bold text-amber-950 flex items-center gap-1.5">
-              🎨 적용 테마: <b>{currentPalette.name}</b>
             </span>
-            <span className="text-[11px] text-stone-600 hidden sm:inline-block">
-              [바탕 배경지] + [내부 카드지] + [다운로드 버튼] 전체 색감이 통합 적용됩니다.
+            <span className="flex items-center gap-1 font-bold text-amber-800 shrink-0">
+              디자인 변경
+              {isCustomizerOpen ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
             </span>
-          </div>
+          </button>
+
+          {isCustomizerOpen && (
+            <div className="space-y-3 bg-white/80 backdrop-blur-xs p-3.5 rounded-2xl border border-stone-300/80">
+              {/* Structural layout theme selector */}
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-1.5 text-xs text-stone-800 font-bold">
+                  <Layout className="w-4 h-4 text-amber-700" />
+                  카드 구조
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5">
+                  {LAYOUT_STYLES.map((layout) => {
+                    const isSelected = selectedLayoutId === layout.id;
+                    return (
+                      <button
+                        key={layout.id}
+                        type="button"
+                        onClick={() => setSelectedLayoutId(layout.id)}
+                        className={`p-2 rounded-xl text-left border transition-all cursor-pointer flex flex-col justify-between ${
+                          isSelected
+                            ? 'bg-amber-50 border-amber-700 shadow-xs ring-2 ring-amber-600/20'
+                            : 'bg-white/80 border-stone-200 hover:border-amber-300 hover:bg-white'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-sm">{layout.icon}</span>
+                          {isSelected && <Check className="w-3.5 h-3.5 text-amber-700 font-bold" />}
+                        </div>
+                        <div>
+                          <div className="text-xs font-bold text-stone-900 truncate">{layout.name}</div>
+                          <div className="text-[10px] text-stone-500 truncate">{layout.subtitle.split('&')[0]}</div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Color palette selector */}
+              <div className="space-y-1.5 pt-2 border-t border-stone-200/70">
+                <div className="flex items-center gap-1.5 text-xs text-stone-800 font-bold">
+                  <Palette className="w-4 h-4 text-amber-700" />
+                  색상 팔레트
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1.5">
+                  {COLOR_PALETTES.map((palette) => {
+                    const isSelected = selectedPaletteId === palette.id;
+                    const mainBtnBg = palette.primaryBtnClass?.split(' ')[0] || 'bg-amber-700';
+                    return (
+                      <button
+                        key={palette.id}
+                        type="button"
+                        onClick={() => setSelectedPaletteId(palette.id)}
+                        className={`p-2 rounded-xl text-left border transition-all cursor-pointer flex items-center justify-between ${
+                          isSelected
+                            ? 'bg-amber-50 border-amber-700 shadow-xs ring-2 ring-amber-600/20'
+                            : 'bg-white/80 border-stone-200 hover:border-amber-300 hover:bg-white'
+                        }`}
+                      >
+                        <div className="flex items-center gap-1.5 truncate">
+                          {/* 3-tone swatch: outer wallpaper / inner card / button accent */}
+                          <div className="flex items-center gap-[1px] rounded-full p-[1px] border shrink-0 shadow-2xs border-stone-300/80 bg-white overflow-hidden">
+                            <div className={`w-1.5 h-3.5 rounded-l-full ${palette.outerBgClass || 'bg-stone-200'}`} />
+                            <div className={`w-1.5 h-3.5 ${palette.swatchBg}`} />
+                            <div className={`w-1.5 h-3.5 rounded-r-full ${mainBtnBg}`} />
+                          </div>
+                          <span className="text-[11px] font-bold text-stone-800 truncate">{palette.name}</span>
+                        </div>
+                        {isSelected && <Check className="w-3.5 h-3.5 text-amber-700 font-bold shrink-0 ml-1" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 

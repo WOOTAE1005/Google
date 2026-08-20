@@ -46,7 +46,7 @@ export const FormatSelector: React.FC<FormatSelectorProps> = ({
       <div className="flex items-center justify-between border-b border-[#2C2621]/10 pb-3">
         <div className="text-xs font-sans font-bold text-[#2C2621] uppercase tracking-wider flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-amber-700"></span>
-          STEP 5. 작성 형태 (Format) 선택
+          작성 형태
         </div>
         <span className="text-[11px] font-sans text-[#2C2621]/60 font-medium">
           현재 선택: <b className="text-[#2C2621] font-bold font-serif">{format}</b>

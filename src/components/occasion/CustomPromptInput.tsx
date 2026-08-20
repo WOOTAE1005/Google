@@ -30,7 +30,7 @@ export const CustomPromptInput: React.FC<CustomPromptInputProps> = ({
       <div className="flex items-center justify-between">
         <div className="text-xs font-bold text-[#2C2621]/60 uppercase tracking-wider flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full bg-amber-700"></span>
-          STEP 4. 추가 맞춤 프롬프트 / 특이사항 요청 (선택)
+          추가 요청사항 (선택)
         </div>
         <span className="text-[11px] text-[#2C2621] font-semibold flex items-center gap-1 bg-amber-100/70 px-2.5 py-0.5 rounded-full border border-amber-300/60">
           <Sparkles className="w-3 h-3 text-amber-700" /> AI 맞춤 적용

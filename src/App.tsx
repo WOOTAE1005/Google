@@ -197,7 +197,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF6F0] text-[#2C2621] font-serif antialiased selection:bg-amber-200 selection:text-amber-950">
+    <div className="min-h-screen bg-[#F9FAFB] text-[#111827] font-serif antialiased selection:bg-amber-200 selection:text-amber-950">
       {/* Top Header Navigation */}
       <Header
         currentRelationship={selectedRelationship}
@@ -211,30 +211,30 @@ export default function App() {
       <main className="max-w-4xl mx-auto px-4 py-8 space-y-8">
         {/* Hero banner */}
         <section className="text-center space-y-3 py-4">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#2C2621]/15 text-xs text-[#2C2621] font-sans font-semibold shadow-2xs">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#111827]/15 text-xs text-[#111827] font-sans font-semibold shadow-2xs">
             <Sparkles className="w-3.5 h-3.5 text-amber-700" />
             <span>AI 경조사 메시지 카피라이터</span>
           </div>
-          <h2 className="text-2xl sm:text-3.5xl font-serif font-bold tracking-wide text-[#2C2621] leading-snug">
+          <h2 className="text-2xl sm:text-3.5xl font-serif font-bold tracking-wide text-[#111827] leading-snug">
             관계와 상황에 맞는 경조사 문구를 짓습니다
           </h2>
-          <p className="text-xs sm:text-sm text-[#2C2621]/70 font-sans max-w-xl mx-auto leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#111827]/70 font-sans max-w-xl mx-auto leading-relaxed">
             관계, 상황, 톤을 고르면 봉투 문구·문자·카톡 메시지 세 가지 안을 만들어 드립니다.
           </p>
         </section>
 
         {/* Selected relationship summary */}
-        <section className="bg-white border border-[#2C2621]/15 rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-3">
+        <section className="bg-white border border-[#111827]/15 rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3.5">
-            <div className="w-11 h-11 rounded-xl bg-[#FAF6F0] text-[#2C2621] border border-[#2C2621]/15 flex items-center justify-center">
+            <div className="w-11 h-11 rounded-xl bg-[#F9FAFB] text-[#111827] border border-[#111827]/15 flex items-center justify-center">
               <Mail className="w-4 h-4" />
             </div>
             <div>
-              <div className="text-[11px] text-[#2C2621]/50 font-sans uppercase tracking-widest font-bold">To. 수신인 프로필</div>
-              <div className="text-sm sm:text-base font-bold text-[#2C2621] flex flex-wrap items-center gap-2 mt-0.5">
+              <div className="text-[11px] text-[#111827]/50 font-sans uppercase tracking-widest font-bold">To. 수신인 프로필</div>
+              <div className="text-sm sm:text-base font-bold text-[#111827] flex flex-wrap items-center gap-2 mt-0.5">
                 <span className="font-serif text-base font-bold">{selectedRelationship ? selectedRelationship.name : '대상을 선택해주세요'}</span>
                 {selectedRelationship && (
-                  <span className="text-xs font-sans px-2.5 py-0.5 rounded-md bg-[#FAF6F0] text-[#2C2621] border border-[#2C2621]/15 font-medium">
+                  <span className="text-xs font-sans px-2.5 py-0.5 rounded-md bg-[#F9FAFB] text-[#111827] border border-[#111827]/15 font-medium">
                     {selectedRelationship.relationType} • 친밀도 {selectedRelationship.closeness}점
                   </span>
                 )}
@@ -244,7 +244,7 @@ export default function App() {
 
           <button
             onClick={() => setIsRelationshipPickerOpen(true)}
-            className="px-4 py-2.5 rounded-xl bg-[#2C2621] hover:bg-[#403933] text-[#FAF6F0] text-xs font-sans font-bold transition-all shrink-0 cursor-pointer shadow-sm active:scale-95"
+            className="px-4 py-2.5 rounded-xl bg-[#111827] hover:bg-[#1F2937] text-[#F9FAFB] text-xs font-sans font-bold transition-all shrink-0 cursor-pointer shadow-sm active:scale-95"
           >
             수신인 변경
           </button>
@@ -281,7 +281,7 @@ export default function App() {
             type="button"
             disabled={isGenerating}
             onClick={() => handleGenerateMessage()}
-            className="w-full py-4.5 rounded-2xl bg-[#2C2621] hover:bg-[#403933] text-[#FAF6F0] font-bold text-base sm:text-lg shadow-xl shadow-[#2C2621]/15 flex items-center justify-center gap-2.5 transition-all transform active:scale-[0.99] disabled:opacity-50 cursor-pointer"
+            className="w-full py-4.5 rounded-2xl bg-[#111827] hover:bg-[#1F2937] text-[#F9FAFB] font-bold text-base sm:text-lg shadow-xl shadow-[#111827]/15 flex items-center justify-center gap-2.5 transition-all transform active:scale-[0.99] disabled:opacity-50 cursor-pointer"
           >
             {isGenerating ? (
               <>

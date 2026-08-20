@@ -42,14 +42,14 @@ export const FormatSelector: React.FC<FormatSelectorProps> = ({
   ];
 
   return (
-    <div className="bg-white border border-[#2C2621]/15 rounded-2xl p-4 sm:p-5 space-y-4">
-      <div className="flex items-center justify-between border-b border-[#2C2621]/10 pb-3">
-        <div className="text-xs font-sans font-bold text-[#2C2621] uppercase tracking-wider flex items-center gap-2">
+    <div className="bg-white border border-[#111827]/15 rounded-2xl p-4 sm:p-5 space-y-4">
+      <div className="flex items-center justify-between border-b border-[#111827]/10 pb-3">
+        <div className="text-xs font-sans font-bold text-[#111827] uppercase tracking-wider flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-amber-700"></span>
           작성 형태
         </div>
-        <span className="text-[11px] font-sans text-[#2C2621]/60 font-medium">
-          현재 선택: <b className="text-[#2C2621] font-bold font-serif">{format}</b>
+        <span className="text-[11px] font-sans text-[#111827]/60 font-medium">
+          현재 선택: <b className="text-[#111827] font-bold font-serif">{format}</b>
         </span>
       </div>
 
@@ -64,8 +64,8 @@ export const FormatSelector: React.FC<FormatSelectorProps> = ({
               onClick={() => onSelectFormat(fmt.id)}
               className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer flex flex-col gap-2.5 ${
                 isSelected
-                  ? 'bg-amber-100/60 border-[#2C2621] text-[#2C2621] shadow-xs ring-2 ring-[#2C2621]/20'
-                  : 'bg-[#FAF6F0] border-[#2C2621]/10 text-stone-600 hover:bg-[#F2ECE1] hover:text-[#2C2621]'
+                  ? 'bg-amber-100/60 border-[#111827] text-[#111827] shadow-xs ring-2 ring-[#111827]/20'
+                  : 'bg-[#F9FAFB] border-[#111827]/10 text-stone-600 hover:bg-[#E5E7EB] hover:text-[#111827]'
               }`}
             >
               <div className="flex items-center justify-between">
@@ -73,28 +73,28 @@ export const FormatSelector: React.FC<FormatSelectorProps> = ({
                   <div
                     className={`p-1.5 rounded-lg shrink-0 ${
                       isSelected
-                        ? 'bg-[#2C2621] text-[#FAF6F0]'
+                        ? 'bg-[#111827] text-[#F9FAFB]'
                         : 'bg-stone-200 text-stone-700'
                     }`}
                   >
                     {fmt.icon}
                   </div>
-                  <span className="text-sm font-bold font-serif text-[#2C2621]">
+                  <span className="text-sm font-bold font-serif text-[#111827]">
                     {fmt.label}
                   </span>
                 </div>
                 {isSelected && (
-                  <span className="p-1 rounded-full bg-[#2C2621] text-[#FAF6F0]">
+                  <span className="p-1 rounded-full bg-[#111827] text-[#F9FAFB]">
                     <Check className="w-3 h-3 stroke-[3]" />
                   </span>
                 )}
               </div>
 
-              <p className="text-[11.5px] text-[#2C2621]/70 leading-snug">
+              <p className="text-[11.5px] text-[#111827]/70 leading-snug">
                 {fmt.description}
               </p>
 
-              <div className="px-2.5 py-1.5 rounded-lg bg-white border border-[#2C2621]/10 text-[10px] text-[#2C2621]/60 font-serif italic truncate">
+              <div className="px-2.5 py-1.5 rounded-lg bg-white border border-[#111827]/10 text-[10px] text-[#111827]/60 font-serif italic truncate">
                 {fmt.exampleText}
               </div>
             </button>

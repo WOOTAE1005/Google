@@ -26,13 +26,13 @@ export const CustomPromptInput: React.FC<CustomPromptInputProps> = ({
   ];
 
   return (
-    <div className="bg-white border border-[#2C2621]/15 rounded-2xl p-4 sm:p-5 space-y-3 font-sans">
+    <div className="bg-white border border-[#111827]/15 rounded-2xl p-4 sm:p-5 space-y-3 font-sans">
       <div className="flex items-center justify-between">
-        <div className="text-xs font-bold text-[#2C2621]/60 uppercase tracking-wider flex items-center gap-1.5">
+        <div className="text-xs font-bold text-[#111827]/60 uppercase tracking-wider flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full bg-amber-700"></span>
           추가 요청사항 (선택)
         </div>
-        <span className="text-[11px] text-[#2C2621] font-semibold flex items-center gap-1 bg-amber-100/70 px-2.5 py-0.5 rounded-full border border-amber-300/60">
+        <span className="text-[11px] text-[#111827] font-semibold flex items-center gap-1 bg-amber-100/70 px-2.5 py-0.5 rounded-full border border-amber-300/60">
           <Sparkles className="w-3 h-3 text-amber-700" /> AI 맞춤 적용
         </span>
       </div>
@@ -43,7 +43,7 @@ export const CustomPromptInput: React.FC<CustomPromptInputProps> = ({
           value={customInstruction}
           onChange={(e) => onChangeCustomInstruction(e.target.value)}
           placeholder="AI에게 추가로 요청할 세부 조건이나 문맥을 자유롭게 입력하세요.&#10;예: '축의금 10만원을 카카오페이로 송금했다고 다정하게 써줘', '다음주 출근해서 인사하겠다고 전해줘'"
-          className="w-full p-3.5 rounded-xl bg-[#FAF6F0] border border-[#2C2621]/15 text-[#2C2621] text-xs sm:text-sm leading-relaxed focus:outline-none focus:bg-white focus:border-[#2C2621] transition-colors resize-none placeholder:text-[#2C2621]/40 font-serif"
+          className="w-full p-3.5 rounded-xl bg-[#F9FAFB] border border-[#111827]/15 text-[#111827] text-xs sm:text-sm leading-relaxed focus:outline-none focus:bg-white focus:border-[#111827] transition-colors resize-none placeholder:text-[#111827]/40 font-serif"
         />
         {customInstruction && (
           <button
@@ -58,7 +58,7 @@ export const CustomPromptInput: React.FC<CustomPromptInputProps> = ({
 
       {/* Seasonal & Mood Chips */}
       <div>
-        <div className="text-[11px] text-[#2C2621]/60 mb-1.5 font-medium flex items-center gap-1">
+        <div className="text-[11px] text-[#111827]/60 mb-1.5 font-medium flex items-center gap-1">
           <span>🌿 계절/절기 안부 태그 (원클릭 추가)</span>
         </div>
         <div className="flex flex-wrap gap-1.5 mb-3">
@@ -74,7 +74,7 @@ export const CustomPromptInput: React.FC<CustomPromptInputProps> = ({
                     : chip.text
                 );
               }}
-              className="px-2.5 py-1 rounded-lg bg-amber-100/60 hover:bg-amber-100 border border-amber-300/60 text-[11px] text-[#2C2621] font-medium transition-colors text-left cursor-pointer shadow-2xs font-serif"
+              className="px-2.5 py-1 rounded-lg bg-amber-100/60 hover:bg-amber-100 border border-amber-300/60 text-[11px] text-[#111827] font-medium transition-colors text-left cursor-pointer shadow-2xs font-serif"
             >
               {chip.label}
             </button>
@@ -84,8 +84,8 @@ export const CustomPromptInput: React.FC<CustomPromptInputProps> = ({
 
       {/* Recommended Quick Sample Chips */}
       <div>
-        <div className="text-[11px] text-[#2C2621]/60 mb-1.5 font-medium flex items-center gap-1">
-          <HelpCircle className="w-3 h-3 text-[#2C2621]/40" /> 자주 쓰는 프롬프트 예시 (클릭하여 입력)
+        <div className="text-[11px] text-[#111827]/60 mb-1.5 font-medium flex items-center gap-1">
+          <HelpCircle className="w-3 h-3 text-[#111827]/40" /> 자주 쓰는 프롬프트 예시 (클릭하여 입력)
         </div>
         <div className="flex flex-wrap gap-1.5">
           {samplePrompts.map((sample, idx) => (
@@ -100,7 +100,7 @@ export const CustomPromptInput: React.FC<CustomPromptInputProps> = ({
                     : sample
                 );
               }}
-              className="px-2.5 py-1 rounded-lg bg-[#FAF6F0] hover:bg-amber-100/50 border border-[#2C2621]/15 hover:border-[#2C2621]/30 text-[11px] text-[#2C2621] transition-colors text-left cursor-pointer font-serif"
+              className="px-2.5 py-1 rounded-lg bg-[#F9FAFB] hover:bg-amber-100/50 border border-[#111827]/15 hover:border-[#111827]/30 text-[11px] text-[#111827] transition-colors text-left cursor-pointer font-serif"
             >
               + {sample}
             </button>

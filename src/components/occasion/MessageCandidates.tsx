@@ -78,18 +78,18 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
               onClick={() => onSelectCandidate(cand)}
               className={`relative rounded-2xl border p-4 sm:p-5 flex flex-col justify-between transition-all cursor-pointer ${
                 isSelected
-                  ? 'bg-amber-100/60 border-[#2C2621] shadow-sm ring-2 ring-[#2C2621]/20'
-                  : 'bg-white border-[#2C2621]/15 hover:bg-[#FAF6F0] hover:border-[#2C2621]/30'
+                  ? 'bg-amber-100/60 border-[#111827] shadow-sm ring-2 ring-[#111827]/20'
+                  : 'bg-white border-[#111827]/15 hover:bg-[#F9FAFB] hover:border-[#111827]/30'
               }`}
             >
               {/* Top Meta Bar */}
               <div>
                 <div className="flex items-center justify-between mb-3 font-sans">
                   <div className="flex items-center gap-2">
-                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#2C2621] text-[#FAF6F0]">
+                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#111827] text-[#F9FAFB]">
                       안 {cand.variantIndex}
                     </span>
-                    <span className="text-xs font-bold text-[#2C2621] font-serif">
+                    <span className="text-xs font-bold text-[#111827] font-serif">
                       {cand.title}
                     </span>
                   </div>
@@ -102,7 +102,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                 </div>
 
                 {/* Tone tag */}
-                <div className="inline-block text-[10px] font-sans px-2 py-0.5 rounded-md bg-[#FAF6F0] text-[#2C2621]/80 font-medium mb-3 border border-[#2C2621]/10">
+                <div className="inline-block text-[10px] font-sans px-2 py-0.5 rounded-md bg-[#F9FAFB] text-[#111827]/80 font-medium mb-3 border border-[#111827]/10">
                   어조: {cand.toneTag}
                 </div>
 
@@ -115,25 +115,25 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                         onUpdateCandidateContent(cand.id, e.target.value)
                       }
                       rows={5}
-                      className="w-full p-3 rounded-xl bg-white border border-[#2C2621] text-[#2C2621] text-xs sm:text-sm leading-relaxed focus:outline-none shadow-xs font-serif"
+                      className="w-full p-3 rounded-xl bg-white border border-[#111827] text-[#111827] text-xs sm:text-sm leading-relaxed focus:outline-none shadow-xs font-serif"
                     />
                     <button
                       type="button"
                       onClick={() => setEditingId(null)}
-                      className="w-full py-1.5 rounded-xl bg-[#2C2621] text-[#FAF6F0] text-xs font-sans font-medium hover:bg-[#403933] cursor-pointer"
+                      className="w-full py-1.5 rounded-xl bg-[#111827] text-[#F9FAFB] text-xs font-sans font-medium hover:bg-[#1F2937] cursor-pointer"
                     >
                       수정 완료
                     </button>
                   </div>
                 ) : (
-                  <p className="text-xs sm:text-sm text-[#2C2621] leading-relaxed font-serif whitespace-pre-wrap mb-4 bg-[#FAF6F0]/80 p-3.5 rounded-xl border border-[#2C2621]/10 min-h-[110px]">
+                  <p className="text-xs sm:text-sm text-[#111827] leading-relaxed font-serif whitespace-pre-wrap mb-4 bg-[#F9FAFB]/80 p-3.5 rounded-xl border border-[#111827]/10 min-h-[110px]">
                     "{cand.content}"
                   </p>
                 )}
 
                 {/* Etiquette Tip */}
                 {cand.etiquetteTip && (
-                  <div className="flex items-start gap-1.5 text-[11px] font-sans text-[#2C2621]/80 bg-amber-100/50 p-2.5 rounded-xl border border-amber-300/60 mb-4">
+                  <div className="flex items-start gap-1.5 text-[11px] font-sans text-[#111827]/80 bg-amber-100/50 p-2.5 rounded-xl border border-amber-300/60 mb-4">
                     <Lightbulb className="w-3.5 h-3.5 text-amber-800 shrink-0 mt-0.5" />
                     <span>{cand.etiquetteTip}</span>
                   </div>
@@ -141,8 +141,8 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
               </div>
 
               {/* Bottom Actions */}
-              <div className="pt-3 border-t border-[#2C2621]/10 flex items-center justify-between gap-2 font-sans">
-                <div className="text-[10px] text-[#2C2621]/50 font-mono">
+              <div className="pt-3 border-t border-[#111827]/10 flex items-center justify-between gap-2 font-sans">
+                <div className="text-[10px] text-[#111827]/50 font-mono">
                   {cand.content.length}자
                 </div>
 
@@ -153,7 +153,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                       e.stopPropagation();
                       setEditingId(isEditing ? null : cand.id);
                     }}
-                    className="p-1.5 rounded-lg bg-[#FAF6F0] hover:bg-stone-200 text-[#2C2621] text-xs flex items-center gap-1 transition-colors cursor-pointer border border-[#2C2621]/10"
+                    className="p-1.5 rounded-lg bg-[#F9FAFB] hover:bg-stone-200 text-[#111827] text-xs flex items-center gap-1 transition-colors cursor-pointer border border-[#111827]/10"
                     title="직접 수정"
                   >
                     <Edit3 className="w-3.5 h-3.5" />
@@ -165,7 +165,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                       isCopied
                         ? 'bg-emerald-700 text-white'
-                        : 'bg-[#2C2621] hover:bg-[#403933] text-[#FAF6F0] shadow-xs'
+                        : 'bg-[#111827] hover:bg-[#1F2937] text-[#F9FAFB] shadow-xs'
                     }`}
                   >
                     {isCopied ? (
@@ -188,8 +188,8 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
       </div>
 
       {/* Quick Refinement / Regeneration Section */}
-      <div className="bg-white border border-[#2C2621]/15 rounded-2xl p-4 sm:p-5 font-sans">
-        <div className="text-xs font-bold text-[#2C2621]/60 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+      <div className="bg-white border border-[#111827]/15 rounded-2xl p-4 sm:p-5 font-sans">
+        <div className="text-xs font-bold text-[#111827]/60 uppercase tracking-wider mb-3 flex items-center gap-1.5">
           <Sliders className="w-4 h-4 text-amber-700" />
           멘트 조율 & 다시 생성
         </div>
@@ -201,7 +201,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
               key={idx}
               disabled={isGenerating}
               onClick={() => onRegenerateWithInstruction(tweak)}
-              className="px-3 py-1.5 rounded-xl bg-[#FAF6F0] hover:bg-amber-100/60 border border-[#2C2621]/10 hover:border-[#2C2621]/30 text-xs text-[#2C2621] font-serif transition-colors disabled:opacity-50 cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-[#F9FAFB] hover:bg-amber-100/60 border border-[#111827]/10 hover:border-[#111827]/30 text-xs text-[#111827] font-serif transition-colors disabled:opacity-50 cursor-pointer"
             >
               {tweak}
             </button>
@@ -221,7 +221,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
               }
             }}
             placeholder="직접 변경 요청사항 입력 (예: 축의금 못 보낸 사과 어조 추가해줘)"
-            className="flex-1 px-3.5 py-2.5 rounded-xl bg-[#FAF6F0] border border-[#2C2621]/15 text-[#2C2621] text-xs sm:text-sm focus:outline-none focus:bg-white focus:border-[#2C2621] font-serif placeholder:font-sans placeholder:text-[#2C2621]/40"
+            className="flex-1 px-3.5 py-2.5 rounded-xl bg-[#F9FAFB] border border-[#111827]/15 text-[#111827] text-xs sm:text-sm focus:outline-none focus:bg-white focus:border-[#111827] font-serif placeholder:font-sans placeholder:text-[#111827]/40"
           />
           <button
             type="button"
@@ -232,7 +232,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                 setCustomText('');
               }
             }}
-            className="px-4 py-2.5 rounded-xl bg-[#2C2621] hover:bg-[#403933] text-amber-300 font-bold text-xs flex items-center gap-1.5 transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
+            className="px-4 py-2.5 rounded-xl bg-[#111827] hover:bg-[#1F2937] text-amber-300 font-bold text-xs flex items-center gap-1.5 transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isGenerating ? 'animate-spin' : ''}`} />
             다시 생성

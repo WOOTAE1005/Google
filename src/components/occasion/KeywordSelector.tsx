@@ -1,7 +1,7 @@
 import React from 'react';
 import { OccasionCategory, PromptKeyword } from '../../types';
 import { getPrimaryKeywords, getSubKeywords } from '../../lib/keywords';
-import { PartyPopper, Leaf, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 interface KeywordSelectorProps {
   category: OccasionCategory;
@@ -49,23 +49,12 @@ export const KeywordSelector: React.FC<KeywordSelectorProps> = ({
                 : 'bg-[#F9FAFB] border-[#111827]/10 text-stone-600 hover:bg-[#E5E7EB] hover:text-[#111827]'
             }`}
           >
-            <div className="flex items-center gap-3">
-              <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                  category === '경사'
-                    ? 'bg-[#111827] text-[#F9FAFB]'
-                    : 'bg-stone-200/80 text-stone-600'
-                }`}
-              >
-                <PartyPopper className="w-4.5 h-4.5" />
+            <div>
+              <div className="font-bold text-sm sm:text-base text-[#111827]">
+                경사 (축하)
               </div>
-              <div>
-                <div className="font-bold text-sm sm:text-base text-[#111827]">
-                  경사 (축하)
-                </div>
-                <div className="text-xs text-[#111827]/60">
-                  결혼 · 출산 · 승진 · 개업 · 수연
-                </div>
+              <div className="text-xs text-[#111827]/60">
+                결혼 · 출산 · 승진 · 개업 · 수연
               </div>
             </div>
             {category === '경사' && (
@@ -91,23 +80,12 @@ export const KeywordSelector: React.FC<KeywordSelectorProps> = ({
                 : 'bg-[#F9FAFB] border-[#111827]/10 text-stone-600 hover:bg-[#E5E7EB] hover:text-[#111827]'
             }`}
           >
-            <div className="flex items-center gap-3">
-              <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                  category === '조사'
-                    ? 'bg-stone-800 text-[#F9FAFB] border border-stone-700'
-                    : 'bg-stone-200/80 text-stone-600'
-                }`}
-              >
-                <Leaf className="w-4.5 h-4.5" />
+            <div>
+              <div className={`font-bold text-sm sm:text-base ${category === '조사' ? 'text-[#F9FAFB]' : 'text-[#111827]'}`}>
+                조사 (애도/위로)
               </div>
-              <div>
-                <div className={`font-bold text-sm sm:text-base ${category === '조사' ? 'text-[#F9FAFB]' : 'text-[#111827]'}`}>
-                  조사 (애도/위로)
-                </div>
-                <div className={`text-xs ${category === '조사' ? 'text-amber-100/80' : 'text-[#111827]/60'}`}>
-                  부고(상가) · 입원/문병 · 쾌유 기원
-                </div>
+              <div className={`text-xs ${category === '조사' ? 'text-amber-100/80' : 'text-[#111827]/60'}`}>
+                부고(상가) · 입원/문병 · 쾌유 기원
               </div>
             </div>
             {category === '조사' && (

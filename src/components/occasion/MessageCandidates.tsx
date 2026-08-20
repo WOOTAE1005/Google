@@ -82,7 +82,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                   ? `md:-translate-y-1 bg-[#111827] text-[#F9FAFB] ${isSelected ? 'ring-2 ring-amber-400/70' : 'ring-1 ring-white/10'}`
                   : isSelected
                     ? 'bg-amber-100/60 border border-[#111827] shadow-sm ring-2 ring-[#111827]/20'
-                    : 'bg-white border border-[#111827]/15 hover:bg-[#F9FAFB] hover:border-[#111827]/30'
+                    : 'bg-white border border-[#111827]/15 hover:bg-[#F9FAFB] hover:border-[#111827]/30 hover:-translate-y-0.5 hover:shadow-sm'
               }`}
             >
               {/* Top Meta Bar */}

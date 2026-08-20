@@ -65,7 +65,7 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
                     onSelectRecord(rec);
                     onClose();
                   }}
-                  className="p-3.5 rounded-2xl bg-white border border-stone-200/80 hover:border-amber-300 hover:shadow-xs transition-all cursor-pointer space-y-2"
+                  className="p-3.5 rounded-2xl bg-white border border-stone-200/80 hover:border-amber-300 hover:shadow-xs hover:-translate-y-0.5 transition-all cursor-pointer space-y-2"
                 >
                   <div className="flex items-center justify-between text-xs">
                     <div className="flex items-center gap-1.5 font-bold text-stone-900">

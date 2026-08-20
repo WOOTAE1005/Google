@@ -244,7 +244,7 @@ export default function App() {
 
           <button
             onClick={() => setIsRelationshipPickerOpen(true)}
-            className="px-4 py-2.5 rounded-xl bg-[#111827] hover:bg-[#1F2937] text-[#F9FAFB] text-xs font-sans font-bold transition-all shrink-0 cursor-pointer shadow-sm active:scale-95"
+            className="px-4 py-2.5 rounded-xl bg-[#111827] hover:bg-[#1F2937] text-[#F9FAFB] text-xs font-sans font-bold transition-colors shrink-0 cursor-pointer shadow-sm"
           >
             수신인 변경
           </button>
@@ -281,7 +281,7 @@ export default function App() {
             type="button"
             disabled={isGenerating}
             onClick={() => handleGenerateMessage()}
-            className="w-full py-4.5 rounded-2xl bg-[#111827] hover:bg-[#1F2937] text-[#F9FAFB] font-bold text-base sm:text-lg shadow-xl shadow-[#111827]/15 flex items-center justify-center gap-2.5 transition-all transform active:scale-[0.99] disabled:opacity-50 cursor-pointer"
+            className="w-full py-4.5 rounded-2xl bg-[#111827] hover:bg-[#1F2937] text-[#F9FAFB] font-bold text-base sm:text-lg shadow-xl shadow-[#111827]/15 hover:shadow-2xl hover:shadow-[#111827]/25 flex items-center justify-center gap-2.5 transition-all disabled:opacity-50 cursor-pointer"
           >
             {isGenerating ? (
               <>

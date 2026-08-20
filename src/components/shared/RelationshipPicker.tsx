@@ -209,7 +209,7 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
                       className={`group p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
                         isSelected
                           ? 'bg-amber-50/80 border-amber-400 text-stone-900 shadow-xs ring-1 ring-amber-400/30'
-                          : 'bg-stone-50/60 border-stone-200 hover:bg-stone-100/80 text-stone-700'
+                          : 'bg-stone-50/60 border-stone-200 hover:bg-stone-100/80 text-stone-700 hover:-translate-y-0.5 hover:shadow-sm'
                       }`}
                     >
                       <div className="space-y-1">

@@ -26,7 +26,7 @@ import { MessageCandidates } from './components/occasion/MessageCandidates';
 import { DeliveryCard } from './components/shared/DeliveryCard';
 import { HistoryDrawer } from './components/occasion/HistoryDrawer';
 import { EtiquetteModal } from './components/shared/EtiquetteModal';
-import { Sparkles, ArrowRight, Mail, RefreshCw, Star } from 'lucide-react';
+import { Sparkles, ArrowRight, RefreshCw } from 'lucide-react';
 
 export default function App() {
   const { user, isLoading: authLoading, isCloudSyncEnabled, signInWithMagicLink, signOut } = useAuth();
@@ -221,45 +221,6 @@ export default function App() {
           <p className="text-xs sm:text-sm text-[#111827]/70 font-sans max-w-xl leading-relaxed">
             관계, 상황, 톤을 고르면 봉투 문구·문자·카톡 메시지 세 가지 안을 만들어 드립니다.
           </p>
-        </section>
-
-        {/* Selected relationship summary */}
-        <section className="bg-white rounded-2xl px-4 sm:px-5 py-7 sm:py-9 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3.5">
-            <div className="w-11 h-11 rounded-xl bg-[#F9FAFB] text-[#111827] border border-[#111827]/15 flex items-center justify-center">
-              <Mail className="w-4 h-4" />
-            </div>
-            <div>
-              <div className="text-sm sm:text-base font-bold text-[#111827] flex flex-wrap items-center gap-2">
-                <span className="font-display text-base font-bold">{selectedRelationship ? selectedRelationship.name : '대상을 선택해주세요'}</span>
-                {selectedRelationship && (
-                  <span className="text-xs font-sans px-2.5 py-0.5 rounded-md bg-[#F9FAFB] text-[#111827] border border-[#111827]/15 font-medium flex items-center gap-1.5">
-                    <span>{selectedRelationship.relationType}</span>
-                    <span className="text-[#111827]/20">•</span>
-                    <span className="flex items-center gap-0.5">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <Star
-                          key={star}
-                          className={`w-3 h-3 ${
-                            star <= selectedRelationship.closeness
-                              ? 'text-amber-500 fill-amber-500'
-                              : 'text-stone-300'
-                          }`}
-                        />
-                      ))}
-                    </span>
-                  </span>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <button
-            onClick={() => setIsRelationshipPickerOpen(true)}
-            className="px-4 py-2.5 rounded-xl bg-[#111827] hover:bg-[#1F2937] text-[#F9FAFB] text-xs font-sans font-bold transition-colors shrink-0 cursor-pointer shadow-sm"
-          >
-            수신인 변경
-          </button>
         </section>
 
         {/* 1. Keyword selection (category, primary, sub keywords) */}

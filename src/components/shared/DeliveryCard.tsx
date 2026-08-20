@@ -11,6 +11,7 @@ import {
   CardColorPaletteId,
   CardColorPaletteConfig,
 } from '../../types';
+import { withHonorific } from '../../lib/format';
 import {
   Share2,
   Copy,
@@ -290,7 +291,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
     setTimeout(() => setCopied(false), 2500);
   };
 
-  const formattedShareText = `[${category} 멘트] ${relationship.name}님께 전하는 마음\n-------------------\n${messageContent}\n-------------------\n- 경조사 멘트 AI 도우미에서 생성됨`;
+  const formattedShareText = `[${category} 멘트] ${withHonorific(relationship.name)}께 전하는 마음\n-------------------\n${messageContent}\n-------------------\n- 경조사 멘트 AI 도우미에서 생성됨`;
 
   const handleCopyShareText = () => {
     navigator.clipboard.writeText(formattedShareText);
@@ -308,7 +309,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
         cacheBust: true,
       });
       const link = document.createElement('a');
-      link.download = `${relationship.name}님_${category}_감성_카드.png`;
+      link.download = `${withHonorific(relationship.name)}_${category}_감성_카드.png`;
       link.href = dataUrl;
       link.click();
       setDownloadedSuccess(true);
@@ -356,13 +357,13 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
       });
       if (!blob) throw new Error('Blob creation failed');
 
-      const file = new File([blob], `${relationship.name}님_${category}_카드.png`, {
+      const file = new File([blob], `${withHonorific(relationship.name)}_${category}_카드.png`, {
         type: 'image/png',
       });
 
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({
-          title: `To. ${relationship.name}님께 전하는 ${category} 카드`,
+          title: `To. ${withHonorific(relationship.name)}께 전하는 ${category} 카드`,
           text: messageContent,
           files: [file],
         });
@@ -562,7 +563,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
 
               <div className="flex items-center justify-end mb-6">
                 <span className={`text-xs font-display italic font-medium ${currentPalette.accentClass}`}>
-                  To. {relationship.name}님께
+                  To. {withHonorific(relationship.name)}께
                 </span>
               </div>
 
@@ -596,7 +597,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
                   </span>
                 </div>
                 <span className={`text-[10px] font-extrabold tracking-widest uppercase px-2.5 py-0.5 rounded-md ${currentPalette.badgeClass}`}>
-                  {relationship.name}님 귀하
+                  {withHonorific(relationship.name)} 귀하
                 </span>
               </div>
 
@@ -604,7 +605,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
               <div className="p-6 sm:p-8 space-y-5">
                 <div className={`p-5 sm:p-7 rounded-2xl border bg-white/40 backdrop-blur-xs space-y-4 ${currentPalette.borderClass}`}>
                   <div className={`text-xs font-display font-semibold border-b pb-2 ${currentPalette.borderClass} ${currentPalette.accentClass}`}>
-                    To. {relationship.name}님께 보내는 정성어린 멘트
+                    To. {withHonorific(relationship.name)}께 보내는 정성어린 멘트
                   </div>
                   <p className={`text-sm sm:text-base leading-relaxed tracking-wide font-display whitespace-pre-wrap ${currentPalette.textClass}`}>
                     {messageContent}
@@ -634,7 +635,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
                   <div className="flex items-center justify-between">
                     <div>
                       <div className={`text-xs font-display font-bold ${currentPalette.accentClass}`}>
-                        To. {relationship.name}님
+                        To. {withHonorific(relationship.name)}
                       </div>
                     </div>
                     <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${currentPalette.borderClass}`}>
@@ -670,7 +671,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
               </div>
 
               <div className={`text-xs font-display font-bold mb-4 tracking-widest uppercase ${currentPalette.accentClass}`}>
-                To. {relationship.name}님께 드리는 인사
+                To. {withHonorific(relationship.name)}께 드리는 인사
               </div>
 
               <div className="my-4 py-2 px-3 border-y border-dashed border-current/30">
@@ -702,7 +703,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
                 </div>
 
                 <div className={`text-xs font-display font-extrabold tracking-widest ${currentPalette.accentClass}`}>
-                  To. {relationship.name}님 귀하
+                  To. {withHonorific(relationship.name)} 귀하
                 </div>
 
                 <p className={`text-sm sm:text-base leading-relaxed font-display whitespace-pre-wrap ${currentPalette.textClass}`}>
@@ -732,7 +733,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
         >
           {/* Mock Chat Header */}
           <div className="text-center text-xs font-bold text-slate-700 bg-white/60 py-1 px-3 rounded-full max-w-[220px] mx-auto shadow-xs">
-            {relationship.name}님과의 카카오톡 대화방
+            {withHonorific(relationship.name)}과의 카카오톡 대화방
           </div>
 
           {/* KakaoTalk Card Image Message Preview */}

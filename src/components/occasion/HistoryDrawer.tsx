@@ -34,7 +34,7 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
         {/* Header */}
         <div className="p-4 sm:p-5 border-b border-stone-200 flex items-center justify-between bg-[#FAF7F2]">
           <div className="flex items-center gap-2">
-            <History className="w-5 h-5 text-amber-700" />
+            <History className="w-5 h-5 text-brand-700" />
             <h2 className="font-bold text-base sm:text-lg text-stone-900">생성 기록 히스토리</h2>
           </div>
           <button
@@ -47,7 +47,7 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
 
         {/* Content list */}
         <div className="p-4 sm:p-5 overflow-y-auto flex-1 space-y-3 bg-[#FAF7F2]/50">
-          <div className="p-3 rounded-xl bg-amber-50/80 border border-amber-200/80 text-[11px] text-amber-900 leading-snug">
+          <div className="p-3 rounded-xl bg-brand-50/80 border border-brand-200/80 text-[11px] text-brand-900 leading-snug">
             💡 AI가 생성한 문구는 <b>자동으로 보관함(히스토리)에 저장</b>됩니다. 이전 작성 문구를 클릭하면 메인 화면으로 즉시 불러와 복사 및 전송할 수 있습니다.
           </div>
 
@@ -65,13 +65,13 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
                     onSelectRecord(rec);
                     onClose();
                   }}
-                  className="p-3.5 rounded-2xl bg-white border border-stone-200/80 hover:border-amber-300 hover:shadow-xs hover:-translate-y-0.5 transition-all cursor-pointer space-y-2"
+                  className="p-3.5 rounded-2xl bg-white border border-stone-200/80 hover:border-brand-300 hover:shadow-xs hover:-translate-y-0.5 transition-all cursor-pointer space-y-2"
                 >
                   <div className="flex items-center justify-between text-xs">
                     <div className="flex items-center gap-1.5 font-bold text-stone-900">
                       <span
                         className={`w-2 h-2 rounded-full ${
-                          rec.category === '경사' ? 'bg-amber-500' : 'bg-slate-700'
+                          rec.category === '경사' ? 'bg-brand-500' : 'bg-slate-700'
                         }`}
                       />
                       <span>To. {rec.relationshipName}</span>

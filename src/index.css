@@ -4,6 +4,20 @@
 @theme {
   --font-sans: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans KR', Arial, sans-serif;
   --font-serif: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans KR', Arial, sans-serif;
+
+  /* Brand accent — "장미빛 잉크" (rosewood ink): snow/paper background,
+     wine-ink accent, warm plum text. Replaces the old neutral amber/slate look. */
+  --color-brand-50: #fdf2f4;
+  --color-brand-100: #fbe4e8;
+  --color-brand-200: #f5c9d2;
+  --color-brand-300: #e9a3b2;
+  --color-brand-400: #ce7688;
+  --color-brand-500: #b15a6c;
+  --color-brand-600: #a85a66;
+  --color-brand-700: #9b4e59;
+  --color-brand-800: #7d3d47;
+  --color-brand-900: #3d2b31;
+  --color-brand-950: #2a1d22;
 }
 
 body {

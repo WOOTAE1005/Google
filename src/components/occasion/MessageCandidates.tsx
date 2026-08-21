@@ -52,15 +52,15 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
           <h3 className="text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-amber-600" />
+            <Sparkles className="w-5 h-5 text-brand-600" />
             AI 추천 멘트 후보 (3가지 안)
           </h3>
           <p className="text-xs text-stone-500">
             상황에 맞게 가장 마음에 드는 문구를 선택하거나 직접 수정하세요.
           </p>
         </div>
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-[11px] text-amber-900 font-semibold self-start sm:self-auto shadow-2xs">
-          <BookmarkCheck className="w-3.5 h-3.5 text-amber-700" />
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-50 border border-brand-200/80 text-[11px] text-brand-900 font-semibold self-start sm:self-auto shadow-2xs">
+          <BookmarkCheck className="w-3.5 h-3.5 text-brand-700" />
           <span>생성된 문구 자동 보관 중</span>
         </div>
       </div>
@@ -79,10 +79,10 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
               onClick={() => onSelectCandidate(cand)}
               className={`relative rounded-2xl p-4 sm:p-5 flex flex-col justify-between transition-all cursor-pointer ${
                 isRecommended
-                  ? `md:-translate-y-1 bg-[#111827] text-[#F9FAFB] ${isSelected ? 'ring-2 ring-amber-400/70' : 'ring-1 ring-white/10'}`
+                  ? `md:-translate-y-1 bg-[#3D2B31] text-[#FFFAFA] ${isSelected ? 'ring-2 ring-brand-400/70' : 'ring-1 ring-white/10'}`
                   : isSelected
-                    ? 'bg-amber-100/60 border border-[#111827] shadow-sm ring-2 ring-[#111827]/20'
-                    : 'bg-white border border-[#111827]/15 hover:bg-[#F9FAFB] hover:border-[#111827]/30 hover:-translate-y-0.5 hover:shadow-sm'
+                    ? 'bg-brand-100/60 border border-[#3D2B31] shadow-sm ring-2 ring-[#3D2B31]/20'
+                    : 'bg-white border border-[#3D2B31]/15 hover:bg-[#FFFAFA] hover:border-[#3D2B31]/30 hover:-translate-y-0.5 hover:shadow-sm'
               }`}
             >
               {/* Top Meta Bar */}
@@ -90,22 +90,22 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                 <div className="flex items-center justify-between mb-3 font-sans">
                   <div className="flex items-center gap-2">
                     <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
-                      isRecommended ? 'bg-amber-400 text-[#111827]' : 'bg-[#111827] text-[#F9FAFB]'
+                      isRecommended ? 'bg-brand-400 text-[#3D2B31]' : 'bg-[#3D2B31] text-[#FFFAFA]'
                     }`}>
                       안 {cand.variantIndex}
                     </span>
                     {isRecommended && (
-                      <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-white/10 text-amber-300">
+                      <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-white/10 text-brand-300">
                         추천
                       </span>
                     )}
-                    <span className={`text-xs font-bold font-display ${isRecommended ? 'text-[#F9FAFB]' : 'text-[#111827]'}`}>
+                    <span className={`text-xs font-bold font-display ${isRecommended ? 'text-[#FFFAFA]' : 'text-[#3D2B31]'}`}>
                       {cand.title}
                     </span>
                   </div>
                   {isSelected && (
-                    <div className={`flex items-center gap-1 text-xs font-bold ${isRecommended ? 'text-amber-300' : 'text-amber-800'}`}>
-                      <CheckCircle2 className={`w-4 h-4 ${isRecommended ? 'text-amber-300' : 'text-amber-700'}`} />
+                    <div className={`flex items-center gap-1 text-xs font-bold ${isRecommended ? 'text-brand-300' : 'text-brand-800'}`}>
+                      <CheckCircle2 className={`w-4 h-4 ${isRecommended ? 'text-brand-300' : 'text-brand-700'}`} />
                       선택됨
                     </div>
                   )}
@@ -113,7 +113,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
 
                 {/* Tone tag */}
                 <div className={`inline-block text-[10px] font-sans px-2 py-0.5 rounded-md font-medium mb-3 border ${
-                  isRecommended ? 'bg-white/10 text-[#F9FAFB]/80 border-white/10' : 'bg-[#F9FAFB] text-[#111827]/80 border-[#111827]/10'
+                  isRecommended ? 'bg-white/10 text-[#FFFAFA]/80 border-white/10' : 'bg-[#FFFAFA] text-[#3D2B31]/80 border-[#3D2B31]/10'
                 }`}>
                   어조: {cand.toneTag}
                 </div>
@@ -128,14 +128,14 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                       }
                       rows={5}
                       className={`w-full p-3 rounded-xl text-xs sm:text-sm leading-relaxed focus:outline-none shadow-xs font-display ${
-                        isRecommended ? 'bg-white/10 border border-white/20 text-[#F9FAFB]' : 'bg-white border border-[#111827] text-[#111827]'
+                        isRecommended ? 'bg-white/10 border border-white/20 text-[#FFFAFA]' : 'bg-white border border-[#3D2B31] text-[#3D2B31]'
                       }`}
                     />
                     <button
                       type="button"
                       onClick={() => setEditingId(null)}
                       className={`w-full py-1.5 rounded-xl text-xs font-sans font-medium cursor-pointer ${
-                        isRecommended ? 'bg-amber-400 hover:bg-amber-300 text-[#111827]' : 'bg-[#111827] hover:bg-[#1F2937] text-[#F9FAFB]'
+                        isRecommended ? 'bg-brand-400 hover:bg-brand-300 text-[#3D2B31]' : 'bg-[#3D2B31] hover:bg-[#2a1d22] text-[#FFFAFA]'
                       }`}
                     >
                       수정 완료
@@ -143,7 +143,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                   </div>
                 ) : (
                   <p className={`text-xs sm:text-sm leading-relaxed font-display whitespace-pre-wrap mb-4 p-3.5 rounded-xl border min-h-[110px] ${
-                    isRecommended ? 'bg-white/5 border-white/10 text-[#F9FAFB]' : 'bg-[#F9FAFB]/80 border-[#111827]/10 text-[#111827]'
+                    isRecommended ? 'bg-white/5 border-white/10 text-[#FFFAFA]' : 'bg-[#FFFAFA]/80 border-[#3D2B31]/10 text-[#3D2B31]'
                   }`}>
                     "{cand.content}"
                   </p>
@@ -152,9 +152,9 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                 {/* Etiquette Tip */}
                 {cand.etiquetteTip && (
                   <div className={`flex items-start gap-1.5 text-[11px] font-sans p-2.5 rounded-xl border mb-4 ${
-                    isRecommended ? 'bg-amber-400/10 border-amber-400/30 text-amber-100' : 'bg-amber-100/50 border-amber-300/60 text-[#111827]/80'
+                    isRecommended ? 'bg-brand-400/10 border-brand-400/30 text-brand-100' : 'bg-brand-100/50 border-brand-300/60 text-[#3D2B31]/80'
                   }`}>
-                    <Lightbulb className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${isRecommended ? 'text-amber-300' : 'text-amber-800'}`} />
+                    <Lightbulb className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${isRecommended ? 'text-brand-300' : 'text-brand-800'}`} />
                     <span>{cand.etiquetteTip}</span>
                   </div>
                 )}
@@ -162,9 +162,9 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
 
               {/* Bottom Actions */}
               <div className={`pt-3 border-t flex items-center justify-between gap-2 font-sans ${
-                isRecommended ? 'border-white/10' : 'border-[#111827]/10'
+                isRecommended ? 'border-white/10' : 'border-[#3D2B31]/10'
               }`}>
-                <div className={`text-[10px] font-mono ${isRecommended ? 'text-[#F9FAFB]/50' : 'text-[#111827]/50'}`}>
+                <div className={`text-[10px] font-mono ${isRecommended ? 'text-[#FFFAFA]/50' : 'text-[#3D2B31]/50'}`}>
                   {cand.content.length}자
                 </div>
 
@@ -177,8 +177,8 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                     }}
                     className={`p-1.5 rounded-lg text-xs flex items-center gap-1 transition-colors cursor-pointer border ${
                       isRecommended
-                        ? 'bg-white/10 hover:bg-white/20 text-[#F9FAFB] border-white/10'
-                        : 'bg-[#F9FAFB] hover:bg-stone-200 text-[#111827] border-[#111827]/10'
+                        ? 'bg-white/10 hover:bg-white/20 text-[#FFFAFA] border-white/10'
+                        : 'bg-[#FFFAFA] hover:bg-stone-200 text-[#3D2B31] border-[#3D2B31]/10'
                     }`}
                     title="직접 수정"
                   >
@@ -192,8 +192,8 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                       isCopied
                         ? 'bg-emerald-700 text-white'
                         : isRecommended
-                          ? 'bg-amber-400 hover:bg-amber-300 text-[#111827] shadow-xs'
-                          : 'bg-[#111827] hover:bg-[#1F2937] text-[#F9FAFB] shadow-xs'
+                          ? 'bg-brand-400 hover:bg-brand-300 text-[#3D2B31] shadow-xs'
+                          : 'bg-[#3D2B31] hover:bg-[#2a1d22] text-[#FFFAFA] shadow-xs'
                     }`}
                   >
                     {isCopied ? (
@@ -217,8 +217,8 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
 
       {/* Quick Refinement / Regeneration Section */}
       <div className="bg-white rounded-2xl px-4 sm:px-5 py-7 sm:py-9 font-sans">
-        <div className="text-xs font-bold text-[#111827]/60 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-          <Sliders className="w-4 h-4 text-amber-700" />
+        <div className="text-xs font-bold text-[#3D2B31]/60 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+          <Sliders className="w-4 h-4 text-brand-700" />
           멘트 조율 & 다시 생성
         </div>
 
@@ -229,7 +229,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
               key={idx}
               disabled={isGenerating}
               onClick={() => onRegenerateWithInstruction(tweak)}
-              className="px-3 py-1.5 rounded-xl bg-[#F9FAFB] hover:bg-amber-100/60 border border-[#111827]/10 hover:border-[#111827]/30 text-xs text-[#111827] font-serif transition-colors disabled:opacity-50 cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-[#FFFAFA] hover:bg-brand-100/60 border border-[#3D2B31]/10 hover:border-[#3D2B31]/30 text-xs text-[#3D2B31] font-serif transition-colors disabled:opacity-50 cursor-pointer"
             >
               {tweak}
             </button>
@@ -249,7 +249,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
               }
             }}
             placeholder="직접 변경 요청사항 입력 (예: 축의금 못 보낸 사과 어조 추가해줘)"
-            className="flex-1 px-3.5 py-2.5 rounded-xl bg-[#F9FAFB] border border-[#111827]/15 text-[#111827] text-xs sm:text-sm focus:outline-none focus:bg-white focus:border-[#111827] font-serif placeholder:font-sans placeholder:text-[#111827]/40"
+            className="flex-1 px-3.5 py-2.5 rounded-xl bg-[#FFFAFA] border border-[#3D2B31]/15 text-[#3D2B31] text-xs sm:text-sm focus:outline-none focus:bg-white focus:border-[#3D2B31] font-serif placeholder:font-sans placeholder:text-[#3D2B31]/40"
           />
           <button
             type="button"
@@ -260,7 +260,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                 setCustomText('');
               }
             }}
-            className="px-4 py-2.5 rounded-xl bg-[#111827] hover:bg-[#1F2937] text-amber-300 font-bold text-xs flex items-center gap-1.5 transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
+            className="px-4 py-2.5 rounded-xl bg-[#3D2B31] hover:bg-[#2a1d22] text-brand-300 font-bold text-xs flex items-center gap-1.5 transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isGenerating ? 'animate-spin' : ''}`} />
             다시 생성

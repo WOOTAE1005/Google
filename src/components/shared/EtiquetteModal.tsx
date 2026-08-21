@@ -33,7 +33,7 @@ export const EtiquetteModal: React.FC<EtiquetteModalProps> = ({ isOpen, onClose 
         {/* Header */}
         <div className="p-4 sm:p-5 border-b border-stone-200/80 flex items-center justify-between bg-[#FAF7F2]">
           <div className="flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-amber-700" />
+            <BookOpen className="w-5 h-5 text-brand-700" />
             <div>
               <h2 className="font-bold text-base sm:text-lg text-stone-900">
                 경조사 봉투 작성법 & 예법 가이드
@@ -55,7 +55,7 @@ export const EtiquetteModal: React.FC<EtiquetteModalProps> = ({ isOpen, onClose 
             onClick={() => setActiveTab('envelope')}
             className={`flex-1 min-w-[120px] py-2 px-1 rounded-xl transition-all cursor-pointer ${
               activeTab === 'envelope'
-                ? 'bg-amber-700 text-white shadow-xs'
+                ? 'bg-brand-700 text-white shadow-xs'
                 : 'text-stone-600 hover:text-stone-900'
             }`}
           >
@@ -65,7 +65,7 @@ export const EtiquetteModal: React.FC<EtiquetteModalProps> = ({ isOpen, onClose 
             onClick={() => setActiveTab('cash')}
             className={`flex-1 min-w-[120px] py-2 px-1 rounded-xl transition-all cursor-pointer ${
               activeTab === 'cash'
-                ? 'bg-amber-700 text-white shadow-xs'
+                ? 'bg-brand-700 text-white shadow-xs'
                 : 'text-stone-600 hover:text-stone-900'
             }`}
           >
@@ -75,7 +75,7 @@ export const EtiquetteModal: React.FC<EtiquetteModalProps> = ({ isOpen, onClose 
             onClick={() => setActiveTab('dress')}
             className={`flex-1 min-w-[120px] py-2 px-1 rounded-xl transition-all cursor-pointer ${
               activeTab === 'dress'
-                ? 'bg-amber-700 text-white shadow-xs'
+                ? 'bg-brand-700 text-white shadow-xs'
                 : 'text-stone-600 hover:text-stone-900'
             }`}
           >
@@ -85,7 +85,7 @@ export const EtiquetteModal: React.FC<EtiquetteModalProps> = ({ isOpen, onClose 
             onClick={() => setActiveTab('kakao')}
             className={`flex-1 min-w-[120px] py-2 px-1 rounded-xl transition-all cursor-pointer ${
               activeTab === 'kakao'
-                ? 'bg-amber-700 text-white shadow-xs'
+                ? 'bg-brand-700 text-white shadow-xs'
                 : 'text-stone-600 hover:text-stone-900'
             }`}
           >
@@ -98,17 +98,17 @@ export const EtiquetteModal: React.FC<EtiquetteModalProps> = ({ isOpen, onClose 
           {activeTab === 'envelope' && (
             <div className="space-y-5">
               {/* Envelope Diagram Graphic comparing Celebration vs Condolence */}
-              <div className="p-4 rounded-2xl bg-[#FAF6EE] border border-amber-200/80 space-y-3">
-                <div className="text-xs font-bold text-amber-900 flex items-center gap-1.5">
-                  <HelpCircle className="w-4 h-4 text-amber-700" /> 경사 vs 조사 봉투 작성 위치 비교
+              <div className="p-4 rounded-2xl bg-[#FAF6EE] border border-brand-200/80 space-y-3">
+                <div className="text-xs font-bold text-brand-900 flex items-center gap-1.5">
+                  <HelpCircle className="w-4 h-4 text-brand-700" /> 경사 vs 조사 봉투 작성 위치 비교
                 </div>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                   {/* 경사 봉투 (축의금) */}
-                  <div className="p-3 bg-white rounded-xl border border-amber-300 shadow-2xs space-y-2">
-                    <div className="text-[11px] text-amber-800 font-bold border-b border-amber-100 pb-1 flex items-center justify-between">
+                  <div className="p-3 bg-white rounded-xl border border-brand-300 shadow-2xs space-y-2">
+                    <div className="text-[11px] text-brand-800 font-bold border-b border-brand-100 pb-1 flex items-center justify-between">
                       <span>🎉 경사 (결혼, 돌, 개업 등)</span>
-                      <span className="text-[10px] bg-amber-100 px-1.5 py-0.5 rounded text-amber-900">축의금</span>
+                      <span className="text-[10px] bg-brand-100 px-1.5 py-0.5 rounded text-brand-900">축의금</span>
                     </div>
                     <div className="space-y-1.5 text-left text-[11px]">
                       <div>
@@ -117,7 +117,7 @@ export const EtiquetteModal: React.FC<EtiquetteModalProps> = ({ isOpen, onClose 
                       <div>
                         <span className="font-bold text-stone-900">· 뒷면 좌측하단:</span> 소속 + 이름 + <b>'올림/拜上/드림'</b>
                       </div>
-                      <div className="p-2 bg-amber-50/50 rounded-lg text-[10px] text-stone-600 font-display">
+                      <div className="p-2 bg-brand-50/50 rounded-lg text-[10px] text-stone-600 font-display">
                         예시: [앞] 祝結婚 / [뒤] OO상사 홍길동 드림
                       </div>
                     </div>
@@ -135,7 +135,7 @@ export const EtiquetteModal: React.FC<EtiquetteModalProps> = ({ isOpen, onClose 
                       </div>
                       <div>
                         <span className="font-bold text-stone-900">· 뒷면 좌측하단:</span> 소속 + <b>성함만 단정히 기재</b><br />
-                        <span className="text-amber-800 text-[10px] font-semibold">※ 조의 봉투엔 '드림/올림'을 붙이지 않는 것이 전통 예법!</span>
+                        <span className="text-brand-800 text-[10px] font-semibold">※ 조의 봉투엔 '드림/올림'을 붙이지 않는 것이 전통 예법!</span>
                       </div>
                       <div className="p-2 bg-slate-50/60 rounded-lg text-[10px] text-slate-700 font-display">
                         예시: [앞] 謹弔 / [뒤] OO상사 김철수
@@ -154,12 +154,12 @@ export const EtiquetteModal: React.FC<EtiquetteModalProps> = ({ isOpen, onClose 
                   {hanjiList.map((item, idx) => (
                     <div
                       key={idx}
-                      className="p-3 rounded-xl bg-white border border-stone-200 hover:border-amber-300 transition-all flex justify-between items-center"
+                      className="p-3 rounded-xl bg-white border border-stone-200 hover:border-brand-300 transition-all flex justify-between items-center"
                     >
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="font-display font-bold text-base text-stone-900">{item.kanji}</span>
-                          <span className="text-xs font-semibold text-amber-900 bg-amber-100 px-2 py-0.5 rounded-full">{item.hangeul}</span>
+                          <span className="text-xs font-semibold text-brand-900 bg-brand-100 px-2 py-0.5 rounded-full">{item.hangeul}</span>
                         </div>
                         <div className="text-[11px] text-stone-500 mt-0.5">{item.desc}</div>
                       </div>
@@ -184,8 +184,8 @@ export const EtiquetteModal: React.FC<EtiquetteModalProps> = ({ isOpen, onClose 
 
           {activeTab === 'cash' && (
             <div className="space-y-4 text-xs sm:text-sm text-stone-700 leading-relaxed">
-              <div className="p-4 rounded-2xl bg-amber-50/80 border border-amber-200 space-y-2">
-                <div className="font-bold text-amber-950 text-sm flex items-center gap-1.5">
+              <div className="p-4 rounded-2xl bg-brand-50/80 border border-brand-200 space-y-2">
+                <div className="font-bold text-brand-950 text-sm flex items-center gap-1.5">
                   💡 홀수(3, 5, 7, 10...) 단위의 봉투 액수 법칙
                 </div>
                 <p className="text-stone-700 text-xs leading-relaxed">
@@ -219,13 +219,13 @@ export const EtiquetteModal: React.FC<EtiquetteModalProps> = ({ isOpen, onClose 
           {activeTab === 'dress' && (
             <div className="space-y-4 text-xs sm:text-sm text-stone-700 leading-relaxed">
               {/* 결혼식 하객 의상 */}
-              <div className="p-4 rounded-2xl bg-amber-50/80 border border-amber-200 space-y-2">
-                <div className="font-bold text-amber-950 text-sm flex items-center gap-1.5">
+              <div className="p-4 rounded-2xl bg-brand-50/80 border border-brand-200 space-y-2">
+                <div className="font-bold text-brand-950 text-sm flex items-center gap-1.5">
                   🎉 결혼식 하객 의상 예절 (하객룩 매너)
                 </div>
                 <div className="space-y-2 text-xs text-stone-700">
-                  <div className="p-2.5 bg-white rounded-xl border border-amber-200">
-                    <span className="font-bold text-amber-900">· [핵심] 신부 배려 (올화이트 금지):</span><br />
+                  <div className="p-2.5 bg-white rounded-xl border border-brand-200">
+                    <span className="font-bold text-brand-900">· [핵심] 신부 배려 (올화이트 금지):</span><br />
                     순백색(올화이트) 원피스, 드레스, 화이트 투피스는 주인공인 신부를 위해 반드시 피하는 것이 매너입니다.
                   </div>
                   <div className="p-2.5 bg-white rounded-xl border border-stone-200">
@@ -264,7 +264,7 @@ export const EtiquetteModal: React.FC<EtiquetteModalProps> = ({ isOpen, onClose 
 
           {activeTab === 'kakao' && (
             <div className="space-y-4 text-xs sm:text-sm text-stone-700 leading-relaxed">
-              <div className="p-4 rounded-2xl bg-[#fee500]/20 border border-amber-300 space-y-2">
+              <div className="p-4 rounded-2xl bg-[#fee500]/20 border border-brand-300 space-y-2">
                 <div className="font-bold text-stone-900 text-sm">
                   📲 모바일 송금 & 카카오톡 메시지 에티켓
                 </div>
@@ -288,7 +288,7 @@ export const EtiquetteModal: React.FC<EtiquetteModalProps> = ({ isOpen, onClose 
           <button
             type="button"
             onClick={onClose}
-            className="px-5 py-2.5 rounded-xl bg-amber-700 hover:bg-amber-800 text-white font-bold text-xs shadow-xs cursor-pointer"
+            className="px-5 py-2.5 rounded-xl bg-brand-700 hover:bg-brand-800 text-white font-bold text-xs shadow-xs cursor-pointer"
           >
             확인 및 닫기
           </button>

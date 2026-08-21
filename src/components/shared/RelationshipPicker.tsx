@@ -121,7 +121,7 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
         {/* Modal Header */}
         <div className="p-4 sm:p-5 border-b border-stone-200 flex items-center justify-between bg-[#FAF7F2]">
           <div className="flex items-center gap-2">
-            <User className="w-5 h-5 text-amber-700" />
+            <User className="w-5 h-5 text-brand-700" />
             <h2 className="font-bold text-base sm:text-lg text-stone-900">
               {isCreating ? '새 수신자(관계) 추가' : '수신 대상 선택'}
             </h2>
@@ -143,11 +143,11 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
               </div>
 
               {isCloudSyncEnabled && (
-                <div className="p-3.5 rounded-2xl bg-amber-50/60 border border-amber-200/80 mb-3">
+                <div className="p-3.5 rounded-2xl bg-brand-50/60 border border-brand-200/80 mb-3">
                   {authUser ? (
                     <div className="flex items-center justify-between gap-2">
                       <div className="flex items-center gap-2 min-w-0 text-xs text-stone-700">
-                        <CloudUpload className="w-4 h-4 text-amber-700 shrink-0" />
+                        <CloudUpload className="w-4 h-4 text-brand-700 shrink-0" />
                         <span className="truncate">
                           <b className="text-stone-900">{authUser.email}</b>로 안전하게 보관 중
                         </span>
@@ -163,11 +163,11 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
                     </div>
                   ) : authStatus === 'sent' ? (
                     <div className="text-xs text-stone-700">
-                      <b className="text-amber-800">{authEmail}</b>로 로그인 링크를 보냈어요. 메일함을 확인해주세요.
+                      <b className="text-brand-800">{authEmail}</b>로 로그인 링크를 보냈어요. 메일함을 확인해주세요.
                     </div>
                   ) : (
                     <form onSubmit={handleSendMagicLink} className="space-y-1.5">
-                      <div className="text-[11px] font-semibold text-amber-900 flex items-center gap-1.5">
+                      <div className="text-[11px] font-semibold text-brand-900 flex items-center gap-1.5">
                         <Mail className="w-3.5 h-3.5" />
                         로그인하면 기기가 바뀌어도 기록이 안전하게 보관돼요 (선택)
                       </div>
@@ -178,12 +178,12 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
                           value={authEmail}
                           onChange={(e) => setAuthEmail(e.target.value)}
                           placeholder="이메일 주소"
-                          className="flex-1 px-3 py-2 rounded-xl bg-white border border-amber-200 text-stone-900 text-xs focus:outline-none focus:border-amber-500"
+                          className="flex-1 px-3 py-2 rounded-xl bg-white border border-brand-200 text-stone-900 text-xs focus:outline-none focus:border-brand-500"
                         />
                         <button
                           type="submit"
                           disabled={authStatus === 'sending'}
-                          className="px-3 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold cursor-pointer disabled:opacity-50 shrink-0"
+                          className="px-3 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold cursor-pointer disabled:opacity-50 shrink-0"
                         >
                           {authStatus === 'sending' ? '전송 중...' : '로그인 링크 받기'}
                         </button>
@@ -208,7 +208,7 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
                       }}
                       className={`group p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
                         isSelected
-                          ? 'bg-amber-50/80 border-amber-400 text-stone-900 shadow-xs ring-1 ring-amber-400/30'
+                          ? 'bg-brand-50/80 border-brand-400 text-stone-900 shadow-xs ring-1 ring-brand-400/30'
                           : 'bg-stone-50/60 border-stone-200 hover:bg-stone-100/80 text-stone-700 hover:-translate-y-0.5 hover:shadow-sm'
                       }`}
                     >
@@ -230,7 +230,7 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
                                 key={star}
                                 className={`w-3 h-3 ${
                                   star <= rel.closeness
-                                    ? 'text-amber-500 fill-amber-500'
+                                    ? 'text-brand-500 fill-brand-500'
                                     : 'text-stone-300'
                                 }`}
                               />
@@ -258,7 +258,7 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
 
                       <div className="flex items-center gap-2">
                         {isSelected ? (
-                          <div className="w-7 h-7 rounded-full bg-amber-600 text-white flex items-center justify-center font-bold">
+                          <div className="w-7 h-7 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold">
                             <Check className="w-4 h-4" />
                           </div>
                         ) : (
@@ -281,9 +281,9 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
 
               <button
                 onClick={() => setIsCreating(true)}
-                className="w-full py-3 rounded-2xl border border-dashed border-amber-400 text-amber-800 hover:bg-amber-50 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors mt-4 cursor-pointer"
+                className="w-full py-3 rounded-2xl border border-dashed border-brand-400 text-brand-800 hover:bg-brand-50 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors mt-4 cursor-pointer"
               >
-                <Plus className="w-4 h-4 text-amber-700" />
+                <Plus className="w-4 h-4 text-brand-700" />
                 새 수신자 / 관계 프로필 등록하기
               </button>
             </>
@@ -292,7 +292,7 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
               {/* Name input */}
               <div>
                 <label className="block text-xs font-semibold text-stone-700 mb-1">
-                  수신자 이름 또는 호칭 <span className="text-amber-700">*</span>
+                  수신자 이름 또는 호칭 <span className="text-brand-700">*</span>
                 </label>
                 <input
                   type="text"
@@ -300,7 +300,7 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
                   placeholder="예: 김상우 차장님, 민지, 박영희 이모"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-stone-50 border border-stone-200 text-stone-900 text-sm focus:outline-none focus:bg-white focus:border-amber-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-stone-50 border border-stone-200 text-stone-900 text-sm focus:outline-none focus:bg-white focus:border-brand-500"
                 />
               </div>
 
@@ -317,7 +317,7 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
                       onClick={() => setNewType(type)}
                       className={`py-2 text-xs rounded-xl border font-medium transition-all cursor-pointer ${
                         newType === type
-                          ? 'bg-amber-600 border-amber-600 text-white font-bold'
+                          ? 'bg-brand-600 border-brand-600 text-white font-bold'
                           : 'bg-stone-50 border-stone-200 text-stone-600 hover:bg-stone-100'
                       }`}
                     >
@@ -333,7 +333,7 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
                   <label className="text-xs font-semibold text-stone-700">
                     친밀도
                   </label>
-                  <span className="text-xs font-bold text-amber-800">
+                  <span className="text-xs font-bold text-brand-800">
                     {newCloseness} / 5 단계 (
                     {newCloseness <= 2
                       ? '격식/공적인 사이'
@@ -351,13 +351,13 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
                       onClick={() => setNewCloseness(val)}
                       className={`flex-1 py-2 rounded-xl border flex items-center justify-center gap-1 text-xs transition-all cursor-pointer ${
                         newCloseness >= val
-                          ? 'bg-amber-50 border-amber-400 text-amber-900 font-bold'
+                          ? 'bg-brand-50 border-brand-400 text-brand-900 font-bold'
                           : 'bg-stone-50 border-stone-200 text-stone-400'
                       }`}
                     >
                       <Star
                         className={`w-3.5 h-3.5 ${
-                          newCloseness >= val ? 'fill-amber-500 text-amber-500' : ''
+                          newCloseness >= val ? 'fill-brand-500 text-brand-500' : ''
                         }`}
                       />
                       {val}
@@ -379,7 +379,7 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
                       onClick={() => setNewTone(tone)}
                       className={`w-full p-2.5 text-xs text-left rounded-xl border transition-all cursor-pointer ${
                         newTone === tone
-                          ? 'bg-amber-50 border-amber-400 text-amber-950 font-semibold'
+                          ? 'bg-brand-50 border-brand-400 text-brand-950 font-semibold'
                           : 'bg-stone-50 border-stone-200 text-stone-600 hover:bg-stone-100'
                       }`}
                     >
@@ -406,7 +406,7 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
                       }
                     }}
                     placeholder="예: 10년지기, 팀장님 멘토, 축의금 전달"
-                    className="flex-1 px-3 py-2 rounded-xl bg-stone-50 border border-stone-200 text-stone-900 text-xs focus:outline-none focus:bg-white focus:border-amber-500"
+                    className="flex-1 px-3 py-2 rounded-xl bg-stone-50 border border-stone-200 text-stone-900 text-xs focus:outline-none focus:bg-white focus:border-brand-500"
                   />
                   <button
                     type="button"
@@ -422,7 +422,7 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
                     {newNotes.map((note, idx) => (
                       <span
                         key={idx}
-                        className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-amber-100 text-amber-900 border border-amber-200 text-xs"
+                        className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-brand-100 text-brand-900 border border-brand-200 text-xs"
                       >
                         #{note}
                         <button
@@ -449,7 +449,7 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs"
+                  className="flex-1 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs"
                 >
                   프로필 저장 및 선택
                 </button>

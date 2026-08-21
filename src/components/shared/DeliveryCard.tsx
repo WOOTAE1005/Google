@@ -416,10 +416,10 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
         <div>
           <div className="flex items-center gap-2">
             <h3 className="text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2">
-              <Share2 className="w-5 h-5 text-amber-700" />
+              <Share2 className="w-5 h-5 text-brand-700" />
               감성 카드리폼 & 전송 미리보기
             </h3>
-            <span className="px-2 py-0.5 rounded-full bg-amber-700 text-white text-[10px] font-bold">
+            <span className="px-2 py-0.5 rounded-full bg-brand-700 text-white text-[10px] font-bold">
               {format}
             </span>
           </div>
@@ -434,22 +434,22 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
             onClick={() => setActiveTab('card')}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
               activeTab === 'card'
-                ? 'bg-amber-700 text-white shadow-xs'
+                ? 'bg-brand-700 text-white shadow-xs'
                 : 'text-stone-700 hover:text-stone-900'
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-200" />
+            <Sparkles className="w-3.5 h-3.5 text-brand-200" />
             격식 디자인 카드
           </button>
           <button
             onClick={() => setActiveTab('kakaotalk')}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
               activeTab === 'kakaotalk'
-                ? 'bg-amber-700 text-white shadow-xs'
+                ? 'bg-brand-700 text-white shadow-xs'
                 : 'text-stone-700 hover:text-stone-900'
             }`}
           >
-            <Smartphone className="w-3.5 h-3.5 text-amber-200" />
+            <Smartphone className="w-3.5 h-3.5 text-brand-200" />
             카톡 메시지 창
           </button>
         </div>
@@ -465,14 +465,14 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
             className="w-full flex items-center justify-between gap-2 p-3 rounded-xl bg-white/80 border border-stone-300/80 text-xs cursor-pointer"
           >
             <span className="flex items-center gap-2 min-w-0 text-stone-800">
-              <Layout className="w-4 h-4 text-amber-700 shrink-0" />
+              <Layout className="w-4 h-4 text-brand-700 shrink-0" />
               <span className="truncate">
                 <b className="font-bold text-stone-900">{currentLayout.name}</b>
                 <span className="text-stone-400 mx-1.5">·</span>
                 <b className="font-bold text-stone-900">{currentPalette.name}</b>
               </span>
             </span>
-            <span className="flex items-center gap-1 font-bold text-amber-800 shrink-0">
+            <span className="flex items-center gap-1 font-bold text-brand-800 shrink-0">
               디자인 변경
               {isCustomizerOpen ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
             </span>
@@ -483,7 +483,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
               {/* Structural layout theme selector */}
               <div className="space-y-1.5">
                 <div className="flex items-center gap-1.5 text-xs text-stone-800 font-bold">
-                  <Layout className="w-4 h-4 text-amber-700" />
+                  <Layout className="w-4 h-4 text-brand-700" />
                   카드 구조
                 </div>
 
@@ -497,13 +497,13 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
                         onClick={() => setSelectedLayoutId(layout.id)}
                         className={`p-2 rounded-xl text-left border transition-all cursor-pointer flex flex-col justify-between ${
                           isSelected
-                            ? 'bg-amber-50 border-amber-700 shadow-xs ring-2 ring-amber-600/20'
-                            : 'bg-white/80 border-stone-200 hover:border-amber-300 hover:bg-white'
+                            ? 'bg-brand-50 border-brand-700 shadow-xs ring-2 ring-brand-600/20'
+                            : 'bg-white/80 border-stone-200 hover:border-brand-300 hover:bg-white'
                         }`}
                       >
                         <div className="flex items-center justify-between mb-1">
                           <span className="text-sm">{layout.icon}</span>
-                          {isSelected && <Check className="w-3.5 h-3.5 text-amber-700 font-bold" />}
+                          {isSelected && <Check className="w-3.5 h-3.5 text-brand-700 font-bold" />}
                         </div>
                         <div>
                           <div className="text-xs font-bold text-stone-900 truncate">{layout.name}</div>
@@ -518,14 +518,14 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
               {/* Color palette selector */}
               <div className="space-y-1.5 pt-2 border-t border-stone-200/70">
                 <div className="flex items-center gap-1.5 text-xs text-stone-800 font-bold">
-                  <Palette className="w-4 h-4 text-amber-700" />
+                  <Palette className="w-4 h-4 text-brand-700" />
                   색상 팔레트
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1.5">
                   {COLOR_PALETTES.map((palette) => {
                     const isSelected = selectedPaletteId === palette.id;
-                    const mainBtnBg = palette.primaryBtnClass?.split(' ')[0] || 'bg-amber-700';
+                    const mainBtnBg = palette.primaryBtnClass?.split(' ')[0] || 'bg-brand-700';
                     return (
                       <button
                         key={palette.id}
@@ -533,8 +533,8 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
                         onClick={() => setSelectedPaletteId(palette.id)}
                         className={`p-2 rounded-xl text-left border transition-all cursor-pointer flex items-center justify-between ${
                           isSelected
-                            ? 'bg-amber-50 border-amber-700 shadow-xs ring-2 ring-amber-600/20'
-                            : 'bg-white/80 border-stone-200 hover:border-amber-300 hover:bg-white'
+                            ? 'bg-brand-50 border-brand-700 shadow-xs ring-2 ring-brand-600/20'
+                            : 'bg-white/80 border-stone-200 hover:border-brand-300 hover:bg-white'
                         }`}
                       >
                         <div className="flex items-center gap-1.5 truncate">
@@ -546,7 +546,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
                           </div>
                           <span className="text-[11px] font-bold text-stone-800 truncate">{palette.name}</span>
                         </div>
-                        {isSelected && <Check className="w-3.5 h-3.5 text-amber-700 font-bold shrink-0 ml-1" />}
+                        {isSelected && <Check className="w-3.5 h-3.5 text-brand-700 font-bold shrink-0 ml-1" />}
                       </button>
                     );
                   })}
@@ -594,7 +594,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
 
               <div className={`pt-4 border-t flex justify-between items-center text-xs ${currentPalette.borderClass}`}>
                 <span className={`flex items-center gap-1 font-display font-bold ${currentPalette.accentClass}`}>
-                  {category === '경사' ? <Flower2 className="w-4 h-4 text-amber-700" /> : <Heart className="w-4 h-4 text-slate-700" />}
+                  {category === '경사' ? <Flower2 className="w-4 h-4 text-brand-700" /> : <Heart className="w-4 h-4 text-slate-700" />}
                   진심을 담아 올림
                 </span>
                 <span className="text-[10px] font-mono opacity-80">
@@ -767,12 +767,12 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
 
               {/* KakaoTalk Visual Card Message Container */}
               <div className="bg-white rounded-2xl overflow-hidden shadow-md border border-slate-200">
-                <div className="p-3 bg-amber-50/60 border-b border-amber-100 flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-amber-900 flex items-center gap-1">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                <div className="p-3 bg-brand-50/60 border-b border-brand-100 flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-brand-900 flex items-center gap-1">
+                    <Sparkles className="w-3.5 h-3.5 text-brand-600" />
                     {category} 감성 서신
                   </span>
-                  <span className="text-[10px] text-amber-800 font-mono">To. {relationship.name}</span>
+                  <span className="text-[10px] text-brand-800 font-mono">To. {relationship.name}</span>
                 </div>
 
                 {/* Card Interior Preview */}
@@ -787,7 +787,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
                   <button
                     type="button"
                     onClick={handleShareCardImage}
-                    className="text-amber-700 font-bold hover:underline flex items-center gap-1 cursor-pointer"
+                    className="text-brand-700 font-bold hover:underline flex items-center gap-1 cursor-pointer"
                   >
                     이미지 공유하기 <Send className="w-3 h-3" />
                   </button>
@@ -810,7 +810,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
       {/* Action Buttons Toolbar */}
       <div className="pt-4 border-t border-stone-200 space-y-3">
         <div className="text-center text-xs text-stone-700 font-bold flex items-center justify-center gap-1.5">
-          <ImageIcon className="w-4 h-4 text-amber-700" />
+          <ImageIcon className="w-4 h-4 text-brand-700" />
           <span>카드 이미지 전송 & 공유 옵션 (카톡 / 문자 / 공유)</span>
         </div>
 
@@ -821,7 +821,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
             disabled={isGeneratingImage}
             onClick={handleDownloadCardImage}
             className={`px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-md transition-all cursor-pointer disabled:opacity-50 ${
-              currentPalette.primaryBtnClass || 'bg-amber-700 hover:bg-amber-800 text-white'
+              currentPalette.primaryBtnClass || 'bg-brand-700 hover:bg-brand-800 text-white'
             }`}
           >
             {isGeneratingImage ? (
@@ -847,7 +847,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
             ) : imageCopied ? (
               <Check className="w-4 h-4 text-emerald-400" />
             ) : (
-              <Copy className="w-4 h-4 text-amber-300" />
+              <Copy className="w-4 h-4 text-brand-300" />
             )}
             {imageCopied ? '카드 이미지 복사 완료!' : '📋 카드 이미지 복사 (카톡 붙여넣기)'}
           </button>

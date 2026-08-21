@@ -13,12 +13,12 @@ export const CustomPromptInput: React.FC<CustomPromptInputProps> = ({
   return (
     <div className="bg-white rounded-2xl px-4 sm:px-5 py-7 sm:py-9 space-y-3 font-sans">
       <div className="flex items-center justify-between">
-        <div className="text-xs font-bold text-[#111827]/60 uppercase tracking-wider flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-amber-700"></span>
+        <div className="text-xs font-bold text-[#3D2B31]/60 uppercase tracking-wider flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-brand-700"></span>
           추가 요청사항 (선택)
         </div>
-        <span className="text-[11px] text-[#111827]/50 font-medium flex items-center gap-1">
-          <Sparkles className="w-3 h-3 text-[#111827]/40" /> 적으면 AI가 자동 반영해요
+        <span className="text-[11px] text-[#3D2B31]/50 font-medium flex items-center gap-1">
+          <Sparkles className="w-3 h-3 text-[#3D2B31]/40" /> 적으면 AI가 자동 반영해요
         </span>
       </div>
 
@@ -28,7 +28,7 @@ export const CustomPromptInput: React.FC<CustomPromptInputProps> = ({
           value={customInstruction}
           onChange={(e) => onChangeCustomInstruction(e.target.value)}
           placeholder="AI에게 추가로 요청할 세부 조건이나 문맥을 자유롭게 입력하세요.&#10;예: '축의금 10만원을 카카오페이로 송금했다고 다정하게 써줘', '다음주 출근해서 인사하겠다고 전해줘'"
-          className="w-full p-3.5 rounded-xl bg-[#F9FAFB] border border-[#111827]/15 text-[#111827] text-xs sm:text-sm leading-relaxed focus:outline-none focus:bg-white focus:border-[#111827] transition-colors resize-none placeholder:text-[#111827]/40 font-serif"
+          className="w-full p-3.5 rounded-xl bg-[#FFFAFA] border border-[#3D2B31]/15 text-[#3D2B31] text-xs sm:text-sm leading-relaxed focus:outline-none focus:bg-white focus:border-[#3D2B31] transition-colors resize-none placeholder:text-[#3D2B31]/40 font-serif"
         />
         {customInstruction && (
           <button

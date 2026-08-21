@@ -205,7 +205,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] text-[#111827] font-serif antialiased selection:bg-amber-200 selection:text-amber-950">
+    <div className="min-h-screen bg-[#FFFAFA] text-[#3D2B31] font-serif antialiased selection:bg-brand-200 selection:text-brand-950">
       {/* Top Header Navigation */}
       <Header
         currentRelationship={selectedRelationship}
@@ -219,14 +219,14 @@ export default function App() {
       <main className="max-w-4xl mx-auto px-4 py-14 space-y-14">
         {/* Hero banner */}
         <section className="text-left space-y-3 py-7">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#111827]/15 text-xs text-[#111827] font-sans font-semibold shadow-2xs">
-            <Sparkles className="w-3.5 h-3.5 text-amber-700" />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#3D2B31]/15 text-xs text-[#3D2B31] font-sans font-semibold shadow-2xs">
+            <Sparkles className="w-3.5 h-3.5 text-brand-700" />
             <span>AI 경조사 메시지 카피라이터</span>
           </div>
-          <h2 className="text-2xl sm:text-3.5xl font-display font-bold tracking-wide text-[#111827] leading-snug">
+          <h2 className="text-2xl sm:text-3.5xl font-display font-bold tracking-wide text-[#3D2B31] leading-snug">
             관계와 상황에 맞는 경조사 문구를 짓습니다
           </h2>
-          <p className="text-xs sm:text-sm text-[#111827]/70 font-sans max-w-xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-[#3D2B31]/70 font-sans max-w-xl leading-relaxed">
             관계, 상황, 톤을 고르면 봉투 문구·문자·카톡 메시지 세 가지 안을 만들어 드립니다.
           </p>
         </section>
@@ -262,18 +262,18 @@ export default function App() {
             type="button"
             disabled={isGenerating}
             onClick={() => handleGenerateMessage()}
-            className="w-full py-4.5 rounded-2xl bg-[#111827] hover:bg-[#1F2937] text-[#F9FAFB] font-bold text-base sm:text-lg shadow-xl shadow-[#111827]/15 hover:shadow-2xl hover:shadow-[#111827]/25 flex items-center justify-center gap-2.5 transition-all disabled:opacity-50 cursor-pointer"
+            className="w-full py-4.5 rounded-2xl bg-[#3D2B31] hover:bg-[#2a1d22] text-[#FFFDFB] font-bold text-base sm:text-lg shadow-xl shadow-[#3D2B31]/15 hover:shadow-2xl hover:shadow-[#3D2B31]/25 flex items-center justify-center gap-2.5 transition-all disabled:opacity-50 cursor-pointer"
           >
             {isGenerating ? (
               <>
-                <RefreshCw className="w-5 h-5 animate-spin text-amber-300" />
+                <RefreshCw className="w-5 h-5 animate-spin text-brand-300" />
                 <span>생성 중...</span>
               </>
             ) : (
               <>
-                <Sparkles className="w-5 h-5 text-amber-300 stroke-[2.5]" />
+                <Sparkles className="w-5 h-5 text-brand-300 stroke-[2.5]" />
                 <span className="font-serif font-bold tracking-wide">편지 짓기</span>
-                <ArrowRight className="w-5 h-5 text-amber-300 stroke-[2.5]" />
+                <ArrowRight className="w-5 h-5 text-brand-300 stroke-[2.5]" />
               </>
             )}
           </button>

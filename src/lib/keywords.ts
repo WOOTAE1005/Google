@@ -1,4 +1,4 @@
-import { PromptKeyword, OccasionCategory } from '../types';
+import { PromptKeyword, LetterCategory } from '../types';
 
 export const PROMPT_KEYWORDS: PromptKeyword[] = [
   // ==================== 경사 (Celebrations) ====================
@@ -230,9 +230,46 @@ export const PROMPT_KEYWORDS: PromptKeyword[] = [
     parentKeywordId: 'k-sick-primary',
     promptFragment: '하루빨리 털고 일어나 늘 밝고 건강하셨던 모습으로 다시 만나뵙기를 온 마음으로 기다립니다.',
   },
+
+  // ==================== 일반 편지 (General letters, not tied to an occasion) ====================
+  {
+    id: 'k-letter-apology',
+    category: '편지',
+    keywordType: 'primary',
+    keywordLabel: '사과 편지',
+    promptFragment: '상대방에게 서운함이나 상처를 준 일에 대해 변명 없이 솔직하게 사과하며, 관계를 회복하고 싶은 진심을 전합니다.',
+  },
+  {
+    id: 'k-letter-thanks',
+    category: '편지',
+    keywordType: 'primary',
+    keywordLabel: '감사 편지',
+    promptFragment: '그동안 받은 도움이나 마음 씀씀이에 대해 구체적인 기억을 떠올리며 진심 어린 고마움을 전합니다.',
+  },
+  {
+    id: 'k-letter-cheer',
+    category: '편지',
+    keywordType: 'primary',
+    keywordLabel: '응원 편지',
+    promptFragment: '힘든 시기를 보내고 있거나 새로운 도전을 앞둔 상대방에게 따뜻한 응원과 믿음을 전합니다.',
+  },
+  {
+    id: 'k-letter-longing',
+    category: '편지',
+    keywordType: 'primary',
+    keywordLabel: '그리움 편지',
+    promptFragment: '자주 만나지 못해 그리운 마음과 함께했던 소중한 기억을 떠올리며 안부를 전합니다.',
+  },
+  {
+    id: 'k-letter-checkin',
+    category: '편지',
+    keywordType: 'primary',
+    keywordLabel: '안부 편지',
+    promptFragment: '특별한 용건 없이 오랜만에 안부를 묻고 서로의 근황을 다정하게 나누는 편지를 씁니다.',
+  },
 ];
 
-export function getPrimaryKeywords(category: OccasionCategory): PromptKeyword[] {
+export function getPrimaryKeywords(category: LetterCategory): PromptKeyword[] {
   return PROMPT_KEYWORDS.filter(
     (k) => k.category === category && k.keywordType === 'primary'
   );

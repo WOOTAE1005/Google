@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import {
   Relationship,
   OccasionCategory,
+  LetterCategory,
+  AppMode,
   PromptKeyword,
   MessageFormat,
   MessageCandidate,
@@ -20,6 +22,7 @@ import { trackGeneration } from './lib/analytics';
 import { Header } from './components/shared/Header';
 import { RelationshipPicker } from './components/shared/RelationshipPicker';
 import { KeywordSelector } from './components/occasion/KeywordSelector';
+import { LetterTopicSelector } from './components/letter/LetterTopicSelector';
 import { FormatSelector } from './components/occasion/FormatSelector';
 import { CautionBanner } from './components/occasion/CautionBanner';
 import { CustomPromptInput } from './components/occasion/CustomPromptInput';
@@ -27,7 +30,7 @@ import { MessageCandidates } from './components/occasion/MessageCandidates';
 import { DeliveryCard } from './components/shared/DeliveryCard';
 import { HistoryDrawer } from './components/occasion/HistoryDrawer';
 import { EtiquetteModal } from './components/shared/EtiquetteModal';
-import { Sparkles, ArrowRight, RefreshCw } from 'lucide-react';
+import { Sparkles, ArrowRight, RefreshCw, Check } from 'lucide-react';
 
 export default function App() {
   const { user, isLoading: authLoading, isCloudSyncEnabled, signInWithMagicLink, signOut } = useAuth();
@@ -37,7 +40,10 @@ export default function App() {
   const [selectedRelationship, setSelectedRelationship] = useState<Relationship | null>(null);
   const [isRelationshipPickerOpen, setIsRelationshipPickerOpen] = useState(false);
 
-  // 2. Keyword & Format Selection State
+  // 2. Mode: 경조사 (occasion) vs 일반편지 (general letter, not tied to an occasion)
+  const [mode, setMode] = useState<AppMode>('경조사');
+
+  // 3. Keyword & Format Selection State (경조사 mode)
   const [category, setCategory] = useState<OccasionCategory>('경사');
   const [primaryKeyword, setPrimaryKeyword] = useState<PromptKeyword>(
     () => getPrimaryKeywords('경사')[0]
@@ -46,13 +52,18 @@ export default function App() {
   const [format, setFormat] = useState<MessageFormat>('카톡메시지');
   const [customInstruction, setCustomInstruction] = useState<string>('');
 
-  // 3. Generation & Candidates state
+  // 4. Letter topic state (일반편지 mode)
+  const [letterTopic, setLetterTopic] = useState<PromptKeyword>(
+    () => getPrimaryKeywords('편지')[0]
+  );
+
+  // 5. Generation & Candidates state
   const [isGenerating, setIsGenerating] = useState(false);
   const [candidates, setCandidates] = useState<MessageCandidate[]>([]);
   const [selectedCandidate, setSelectedCandidate] = useState<MessageCandidate | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // 4. History state
+  // 6. History state
   const [historyRecords, setHistoryRecords] = useState<GeneratedMessageRecord[]>([]);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isEtiquetteOpen, setIsEtiquetteOpen] = useState(false);
@@ -123,6 +134,22 @@ export default function App() {
     }
   };
 
+  // Mode Change — reset in-progress results so a stale 경조사/편지 mix isn't shown
+  const handleSelectMode = (nextMode: AppMode) => {
+    if (nextMode === mode) return;
+    setMode(nextMode);
+    setCandidates([]);
+    setSelectedCandidate(null);
+    setErrorMessage(null);
+  };
+
+  // Active selection derived from the current mode — 경조사 fields vs the
+  // standalone letter topic — so generation/history/DeliveryCard share one source.
+  const activeCategory: LetterCategory = mode === '경조사' ? category : '편지';
+  const activePrimaryKeyword: PromptKeyword = mode === '경조사' ? primaryKeyword : letterTopic;
+  const activeSubKeywords: PromptKeyword[] = mode === '경조사' ? selectedSubKeywords : [];
+  const activeFormat: MessageFormat = mode === '경조사' ? format : '편지';
+
   // Generate Message API Call
   const handleGenerateMessage = async (overrideInstruction?: string) => {
     if (!selectedRelationship) {
@@ -141,10 +168,10 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           relationship: selectedRelationship,
-          category,
-          primaryKeyword,
-          subKeywords: selectedSubKeywords,
-          format,
+          category: activeCategory,
+          primaryKeyword: activePrimaryKeyword,
+          subKeywords: activeSubKeywords,
+          format: activeFormat,
           customInstruction: activeInstruction,
         }),
       });
@@ -159,9 +186,9 @@ export default function App() {
         setSelectedCandidate(data.candidates[0]);
 
         trackGeneration({
-          category,
-          primaryKeywordLabel: primaryKeyword.keywordLabel,
-          format,
+          category: activeCategory,
+          primaryKeywordLabel: activePrimaryKeyword.keywordLabel,
+          format: activeFormat,
           customInstruction: activeInstruction,
         });
 
@@ -170,10 +197,10 @@ export default function App() {
           id: `hist-${Date.now()}`,
           relationshipName: selectedRelationship.name,
           relationType: selectedRelationship.relationType,
-          category,
-          primaryKeywordLabel: primaryKeyword.keywordLabel,
-          subKeywordLabels: selectedSubKeywords.map((s) => s.keywordLabel),
-          format,
+          category: activeCategory,
+          primaryKeywordLabel: activePrimaryKeyword.keywordLabel,
+          subKeywordLabels: activeSubKeywords.map((s) => s.keywordLabel),
+          format: activeFormat,
           selectedText: data.candidates[0].content,
           candidates: data.candidates,
           createdAt: new Date().toISOString(),
@@ -224,22 +251,50 @@ export default function App() {
             <span>AI 경조사 메시지 카피라이터</span>
           </div>
           <h2 className="text-2xl sm:text-3.5xl font-display font-bold tracking-wide text-[#3D2B31] leading-snug">
-            관계와 상황에 맞는 경조사 문구를 짓습니다
+            {mode === '경조사' ? '관계와 상황에 맞는 경조사 문구를 짓습니다' : '관계와 마음에 맞는 편지를 대신 써드립니다'}
           </h2>
           <p className="text-xs sm:text-sm text-[#3D2B31]/70 font-sans max-w-xl leading-relaxed">
-            관계, 상황, 톤을 고르면 봉투 문구·문자·카톡 메시지 세 가지 안을 만들어 드립니다.
+            {mode === '경조사'
+              ? '관계, 상황, 톤을 고르면 봉투 문구·문자·카톡 메시지 세 가지 안을 만들어 드립니다.'
+              : '관계와 편지 주제, 톤을 고르면 사연이 담긴 편지 세 가지 안을 만들어 드립니다.'}
           </p>
         </section>
 
-        {/* 1. Keyword selection (category, primary, sub keywords) */}
-        <KeywordSelector
-          category={category}
-          onSelectCategory={handleSelectCategory}
-          primaryKeyword={primaryKeyword}
-          onSelectPrimaryKeyword={handleSelectPrimaryKeyword}
-          selectedSubKeywords={selectedSubKeywords}
-          onToggleSubKeyword={handleToggleSubKeyword}
-        />
+        {/* Mode toggle: 경조사 vs 일반편지 */}
+        <div className="inline-flex rounded-2xl border border-[#3D2B31]/15 bg-white p-1 gap-1 font-sans text-sm font-bold">
+          {(['경조사', '일반편지'] as AppMode[]).map((m) => {
+            const isSelected = mode === m;
+            return (
+              <button
+                key={m}
+                type="button"
+                onClick={() => handleSelectMode(m)}
+                className={`px-5 py-2 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${
+                  isSelected
+                    ? 'bg-[#3D2B31] text-[#FFFAFA] shadow-xs'
+                    : 'text-stone-600 hover:text-[#3D2B31]'
+                }`}
+              >
+                {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                {m === '경조사' ? '경조사' : '일반 편지'}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* 1. Keyword selection */}
+        {mode === '경조사' ? (
+          <KeywordSelector
+            category={category}
+            onSelectCategory={handleSelectCategory}
+            primaryKeyword={primaryKeyword}
+            onSelectPrimaryKeyword={handleSelectPrimaryKeyword}
+            selectedSubKeywords={selectedSubKeywords}
+            onToggleSubKeyword={handleToggleSubKeyword}
+          />
+        ) : (
+          <LetterTopicSelector topic={letterTopic} onSelectTopic={setLetterTopic} />
+        )}
 
         {/* 2. Custom prompt input */}
         <CustomPromptInput
@@ -247,14 +302,16 @@ export default function App() {
           onChangeCustomInstruction={setCustomInstruction}
         />
 
-        {/* 3. Format selector */}
-        <FormatSelector format={format} onSelectFormat={setFormat} />
+        {/* 3. Format selector — only for 경조사 (일반편지 always writes a full 편지) */}
+        {mode === '경조사' && <FormatSelector format={format} onSelectFormat={setFormat} />}
 
         {/* 4. Caution / etiquette banner */}
-        <CautionBanner
-          primaryKeyword={primaryKeyword}
-          selectedSubKeywords={selectedSubKeywords}
-        />
+        {mode === '경조사' && (
+          <CautionBanner
+            primaryKeyword={primaryKeyword}
+            selectedSubKeywords={selectedSubKeywords}
+          />
+        )}
 
         {/* 5. Generate CTA button */}
         <div className="pt-2 font-sans">
@@ -302,9 +359,9 @@ export default function App() {
         {selectedCandidate && (
           <DeliveryCard
             relationship={selectedRelationship!}
-            category={category}
-            primaryKeyword={primaryKeyword}
-            format={format}
+            category={activeCategory}
+            primaryKeyword={activePrimaryKeyword}
+            format={activeFormat}
             messageContent={selectedCandidate.content}
           />
         )}

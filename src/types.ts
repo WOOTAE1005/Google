@@ -1,5 +1,11 @@
 export type OccasionCategory = '경사' | '조사';
 
+// Widened category used by prompt keywords/generation once 일반 편지 (non-occasion
+// letters) reuses the same keyword-tree + promptBuilder infrastructure.
+export type LetterCategory = OccasionCategory | '편지';
+
+export type AppMode = '경조사' | '일반편지';
+
 export type RelationType = '가족' | '친척' | '친구' | '직장동료' | '직장상사' | '직장후배' | '지인' | '기타';
 
 export type TonePreference = '격식체 (정중하고 정제된)' | '다정한 (따뜻하고 진심어린)' | '유머러스 (재치있고 밝은)' | '깊은 위로 (진중하고 담백한)';
@@ -18,7 +24,7 @@ export interface Relationship {
 
 export interface PromptKeyword {
   id: string;
-  category: OccasionCategory;
+  category: LetterCategory;
   keywordType: 'primary' | 'sub';
   keywordLabel: string; // e.g., "결혼", "첫 아이", "부모상", "하객 참석 못함"
   promptFragment: string;
@@ -28,7 +34,7 @@ export interface PromptKeyword {
 
 export interface BuildPromptInput {
   relationship: Relationship;
-  category: OccasionCategory;
+  category: LetterCategory;
   primaryKeyword: PromptKeyword;
   subKeywords: PromptKeyword[];
   format: MessageFormat;
@@ -49,7 +55,7 @@ export interface GeneratedMessageRecord {
   id: string;
   relationshipName: string;
   relationType: RelationType;
-  category: OccasionCategory;
+  category: LetterCategory;
   primaryKeywordLabel: string;
   subKeywordLabels: string[];
   format: MessageFormat;

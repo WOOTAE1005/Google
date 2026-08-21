@@ -56,7 +56,9 @@ app.post('/api/generate-message', async (req, res) => {
           content:
             input.category === '경사'
               ? `${withHonorific(input.relationship.name)}, 기쁜 소식을 접하고 진심으로 축하의 마음을 전합니다. 앞으로 펼쳐질 앞날에 늘 행복과 평안이 가득하시기를 기원합니다.`
-              : `삼가 고인의 명복을 빌며, ${input.relationship.name}님과 유가족분들께 깊은 애도와 위로의 마음을 전합니다.`,
+              : input.category === '조사'
+              ? `삼가 고인의 명복을 빌며, ${input.relationship.name}님과 유가족분들께 깊은 애도와 위로의 마음을 전합니다.`
+              : `${withHonorific(input.relationship.name)}, 오랜만에 마음을 담아 몇 자 적어봅니다. 늘 곁에서 함께해준 것에 진심으로 고마운 마음을 전하고 싶었어요.`,
           etiquetteTip: '정중하고 결례 없는 무난하고 품격 있는 문구입니다.',
           charCount: 80,
         },
@@ -68,7 +70,9 @@ app.post('/api/generate-message', async (req, res) => {
           content:
             input.category === '경사'
               ? `${withHonorific(input.relationship.name)}! 소중한 경사를 진심으로 축하드려요. 항상 보여주신 소중한 마음처럼 더욱 빛나고 기쁜 일들만 가득하길 바랄게요.`
-              : `${withHonorific(input.relationship.name)}, 갑작스러운 소식에 마음이 너무 무겁습니다. 마음 깊이 위로를 보내며, 부디 몸과 마음을 잘 추스르시길 바랄게요.`,
+              : input.category === '조사'
+              ? `${withHonorific(input.relationship.name)}, 갑작스러운 소식에 마음이 너무 무겁습니다. 마음 깊이 위로를 보내며, 부디 몸과 마음을 잘 추스르시길 바랄게요.`
+              : `${withHonorific(input.relationship.name)}, 잘 지내고 있나요? 문득 생각나서 편지를 써요. 그때 함께했던 기억이 아직도 참 따뜻하게 남아있어요.`,
           etiquetteTip: '따뜻한 마음과 친근함을 동시에 담아 전달하기에 좋습니다.',
           charCount: 85,
         },
@@ -80,7 +84,9 @@ app.post('/api/generate-message', async (req, res) => {
           content:
             input.category === '경사'
               ? `${withHonorific(input.relationship.name)}의 기쁜 경사를 축하드리며, 앞날의 큰 발전과 축복을 축원합니다.`
-              : `삼가 조의를 표하며 고인의 명복을 빕니다. 유가족분들께 깊은 위로를 전합니다.`,
+              : input.category === '조사'
+              ? `삼가 조의를 표하며 고인의 명복을 빕니다. 유가족분들께 깊은 위로를 전합니다.`
+              : `${withHonorific(input.relationship.name)}, 짧게나마 안부를 전합니다. 늘 건강하고 좋은 일만 가득하길 바랄게요.`,
           etiquetteTip: '부담 없이 한눈에 전달되는 간결한 문구입니다.',
           charCount: 50,
         },

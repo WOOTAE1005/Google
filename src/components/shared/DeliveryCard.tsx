@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { toPng, toBlob } from 'html-to-image';
 import {
   Relationship,
-  OccasionCategory,
+  LetterCategory,
   MessageFormat,
   PromptKeyword,
   CardLayoutStyleId,
@@ -36,7 +36,7 @@ import {
 
 interface DeliveryCardProps {
   relationship: Relationship;
-  category: OccasionCategory;
+  category: LetterCategory;
   primaryKeyword: PromptKeyword;
   format: MessageFormat;
   messageContent: string;

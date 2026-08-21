@@ -7,5 +7,22 @@ service cloud.firestore {
     match /users/{userId}/{document=**} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
+
+    // Anonymous, aggregate-only usage counters (see src/lib/analytics.ts).
+    // Write-only from the client on purpose: anyone (including guests who
+    // aren't logged in) may bump a counter, but no client can read the
+    // aggregated totals back out — only the project owner via the Firebase
+    // Console. This is intentionally permissive on writes since collecting
+    // from logged-out guests is the whole point; the trade-off is that a
+    // bad actor could spam junk increments, which only corrupts the stats,
+    // never exposes anyone's data.
+    match /analytics/{doc} {
+      allow read: if false;
+      allow write: if true;
+    }
+    match /analytics_words/{word} {
+      allow read: if false;
+      allow write: if true;
+    }
   }
 }

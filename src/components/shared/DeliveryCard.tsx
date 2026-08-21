@@ -12,6 +12,7 @@ import {
   CardColorPaletteConfig,
 } from '../../types';
 import { withHonorific } from '../../lib/format';
+import { trackCardPreference } from '../../lib/analytics';
 import {
   Share2,
   Copy,
@@ -302,6 +303,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
   // Image Export Handlers
   const handleDownloadCardImage = async () => {
     if (!cardRef.current) return;
+    trackCardPreference(selectedLayoutId, selectedPaletteId);
     setIsGeneratingImage(true);
     try {
       const dataUrl = await toPng(cardRef.current, {
@@ -324,6 +326,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
 
   const handleCopyCardImage = async () => {
     if (!cardRef.current) return;
+    trackCardPreference(selectedLayoutId, selectedPaletteId);
     setIsGeneratingImage(true);
     try {
       const blob = await toBlob(cardRef.current, {
@@ -349,6 +352,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
 
   const handleShareCardImage = async () => {
     if (!cardRef.current) return;
+    trackCardPreference(selectedLayoutId, selectedPaletteId);
     setIsGeneratingImage(true);
     try {
       const blob = await toBlob(cardRef.current, {

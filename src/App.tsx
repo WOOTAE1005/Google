@@ -16,6 +16,7 @@ import {
   migrateLocalDataToCloudIfEmpty,
 } from './lib/cloudSync';
 import { getPrimaryKeywords, getSubKeywords } from './lib/keywords';
+import { trackGeneration } from './lib/analytics';
 import { Header } from './components/shared/Header';
 import { RelationshipPicker } from './components/shared/RelationshipPicker';
 import { KeywordSelector } from './components/occasion/KeywordSelector';
@@ -156,6 +157,13 @@ export default function App() {
       if (data.candidates && data.candidates.length > 0) {
         setCandidates(data.candidates);
         setSelectedCandidate(data.candidates[0]);
+
+        trackGeneration({
+          category,
+          primaryKeywordLabel: primaryKeyword.keywordLabel,
+          format,
+          customInstruction: activeInstruction,
+        });
 
         // Save to History
         const newRecord: GeneratedMessageRecord = {

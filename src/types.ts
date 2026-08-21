@@ -73,7 +73,8 @@ export type CardColorPaletteId =
   | 'warm_camel'
   | 'royal_indigo_gold'
   | 'bordeaux_apricot'
-  | 'sober_slate';
+  | 'sober_slate'
+  | 'rosewood_ink';
 
 export interface CardLayoutStyleConfig {
   id: CardLayoutStyleId;

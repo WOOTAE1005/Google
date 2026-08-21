@@ -258,6 +258,21 @@ const COLOR_PALETTES: CardColorPaletteConfig[] = [
     primaryBtnClass: 'bg-slate-800 hover:bg-slate-900 text-slate-100',
     secondaryBtnClass: 'bg-slate-600 hover:bg-slate-700 text-white',
   },
+  {
+    // 60(눈꽃 배경) : 30(종이 카드) : 10(잉크 포인트) 비율 — 경사/조사 모두에 어울리는 톤
+    id: 'rosewood_ink',
+    name: '장미빛 잉크',
+    icon: '🌹',
+    bgClass: 'bg-[#FFFDFB] shadow-rose-950/10',
+    borderClass: 'border-[#9B4E59]',
+    textClass: 'text-[#3D2B31]',
+    accentClass: 'border-[#9B4E59] text-[#9B4E59]',
+    badgeClass: 'bg-[#9B4E59] border border-[#9B4E59]/60 text-[#FFFDFB]',
+    swatchBg: 'bg-[#FFFDFB] border-[#9B4E59]',
+    outerBgClass: 'bg-[#FFFAFA]',
+    primaryBtnClass: 'bg-[#9B4E59] hover:bg-[#7d3d47] text-white',
+    secondaryBtnClass: 'bg-[#3D2B31] hover:bg-[#2a1d22] text-[#FFFDFB]',
+  },
 ];
 
 export const DeliveryCard: React.FC<DeliveryCardProps> = ({

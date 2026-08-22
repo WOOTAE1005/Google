@@ -1,0 +1,18 @@
+// 마음담음 Firebase Storage security rules.
+// Paste this into Firebase Console -> Storage -> Rules, then Publish.
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Card images uploaded right before a KakaoTalk share (src/lib/cardUpload.ts).
+    // Public read is required so Kakao's share preview can fetch the image by
+    // URL. Writes are open (no login required, matching the rest of the app)
+    // but capped in size/type to limit abuse — anyone can still spam uploads,
+    // but not with arbitrarily large or non-image files.
+    match /card-shares/{fileName} {
+      allow read: if true;
+      allow write: if request.resource.size < 5 * 1024 * 1024
+                   && request.resource.contentType.matches('image/.*');
+    }
+  }
+}

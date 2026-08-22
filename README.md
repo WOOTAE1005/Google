@@ -7,7 +7,7 @@
 - **관계 프로필 관리**: 관계 유형·친밀도·선호 톤을 저장해두고 재사용
 - **조건부 상황 선택**: 경사/조사 대분류 → 세부 항목 → 상황 태그까지 단계적으로 좁혀가는 프롬프트 빌더
 - **AI 문구 생성**: Gemini API로 정중형 / 감성형 / 간결형 3개 후보를 동시 생성, 조율 후 재생성 가능
-- **전달용 카드**: 카드 구조 5종 × 색상 팔레트(무드 카테고리 4개로 정리) 조합으로 이미지 저장·클립보드 복사·카카오톡 공유
+- **전달용 카드**: 카드 구조 5종 × 색상 팔레트 조합으로 이미지 저장·클립보드 복사, Kakao SDK로 실제 카카오톡 공유(이미지 포함)
 - **예법 가이드**: 관계·상황별 경조사 예법 및 금기 표현 안내
 - **생성 기록 보관**: 과거 작성한 멘트를 저장해 재사용
 - **선택적 로그인 동기화**: 이메일 링크로 로그인하면 관계·기록이 기기 간에도 안전하게 보관됨 (미설정 시 로그인 없이도 전체 기능 정상 동작)
@@ -43,7 +43,8 @@ npm run dev             # http://localhost:3000
 | 변수 | 필수 여부 | 설명 |
 | --- | --- | --- |
 | `GEMINI_API_KEY` | 선택 | 비워두면 서버가 하드코딩된 3개 예시 문구로 자동 폴백합니다 (`server.ts`). 실제 Gemini 응답을 받으려면 [Google AI Studio](https://aistudio.google.com/)에서 발급한 키를 입력하세요. |
-| `VITE_FIREBASE_*` (6개) | 선택 | 비워두면 로그인 기능 없이 전체 기능이 `localStorage` 기반으로 그대로 동작합니다. 기기 간 동기화를 켜려면 [Firebase Console](https://console.firebase.google.com/)에서 웹 앱을 등록하고 값을 채운 뒤, `firestore.rules`를 Firestore 규칙에 게시하세요. |
+| `VITE_FIREBASE_*` (6개) | 선택 | 비워두면 로그인 기능 없이 전체 기능이 `localStorage` 기반으로 그대로 동작합니다. 기기 간 동기화를 켜려면 [Firebase Console](https://console.firebase.google.com/)에서 웹 앱을 등록하고 값을 채운 뒤, `firestore.rules`와 `storage.rules`를 각각 Firestore/Storage 규칙에 게시하세요. |
+| `VITE_KAKAO_JS_KEY` | 선택 | 비워두면 카카오톡 공유 버튼이 OS 공유 시트/클립보드 복사로 대체 동작합니다. 실제 카카오톡 공유를 쓰려면 [Kakao Developers](https://developers.kakao.com)에서 앱 등록 후 JavaScript 키를 발급받고, 플랫폼 설정 → Web에 도메인(로컬은 `http://localhost:3000`)을 등록하세요. 카드 **이미지까지** 공유하려면 `VITE_FIREBASE_STORAGE_BUCKET`도 함께 설정해야 합니다(없으면 텍스트만 공유). |
 
 ## 프로젝트 구조
 
@@ -59,10 +60,13 @@ src/
     firebase.ts                  # Firebase 앱 초기화 (env 미설정 시 비활성)
     auth.ts                      # useAuth 훅 — 이메일 링크 로그인 상태 관리
     cloudSync.ts                 # 관계/기록 로드·저장 (로그인 시 Firestore, 아니면 localStorage)
+    kakaoShare.ts                # Kakao SDK 로드/초기화 + 공유 호출
+    cardUpload.ts                # 공유 직전 카드 이미지를 Firebase Storage에 업로드
   components/
     occasion/                    # 상황 선택, 형식 선택, 후보 카드 등 입력 관련 컴포넌트
     shared/                      # 헤더, 관계 선택 모달, 전달용 카드 등 공통 컴포넌트
 firestore.rules                  # Firestore 보안 규칙 (본인 데이터만 접근 가능)
+storage.rules                    # Storage 보안 규칙 (card-shares/ 경로만 이미지 업로드 허용)
 ```
 
 ## 참고
@@ -73,7 +77,7 @@ firestore.rules                  # Firestore 보안 규칙 (본인 데이터만 
 
 ## 배포 체크리스트 (AI Studio → Cloud Run)
 
-로컬 `.env`는 배포본에 반영되지 않습니다. AI Studio의 **Secrets** 패널(또는 Cloud Run 환경변수)에 아래 7개를 그대로 등록하세요.
+로컬 `.env`는 배포본에 반영되지 않습니다. AI Studio의 **Secrets** 패널(또는 Cloud Run 환경변수)에 아래 8개를 그대로 등록하세요.
 
 - [ ] `GEMINI_API_KEY`
 - [ ] `VITE_FIREBASE_API_KEY`
@@ -82,10 +86,13 @@ firestore.rules                  # Firestore 보안 규칙 (본인 데이터만 
 - [ ] `VITE_FIREBASE_STORAGE_BUCKET`
 - [ ] `VITE_FIREBASE_MESSAGING_SENDER_ID`
 - [ ] `VITE_FIREBASE_APP_ID`
+- [ ] `VITE_KAKAO_JS_KEY`
 
 그리고 배포 전/후로 확인할 것들:
 
 - [ ] Firebase Console → Authentication → Sign-in method → "이메일 링크(비밀번호 없는 로그인)" 활성화됨
 - [ ] Firebase Console → Firestore Database가 생성돼 있고, `firestore.rules` 내용이 게시(Publish)됨
+- [ ] Firebase Console → Storage가 생성돼 있고, `storage.rules` 내용이 게시(Publish)됨 (카카오 이미지 공유에 필요)
 - [ ] 커스텀 도메인을 쓴다면, Firebase Console → Authentication → Settings → **승인된 도메인(Authorized domains)**에 그 도메인을 추가 (안 하면 이메일 링크 로그인이 그 도메인에서 실패함)
-- [ ] 배포된 실제 링크(로컬 아님)로 관계 선택 → 편지 짓기 → 카드 생성까지 한 번 직접 실행해서 확인
+- [ ] Kakao Developers → 앱 → 플랫폼 설정 → Web에 배포 도메인 추가 (안 하면 카카오 공유가 그 도메인에서 실패함)
+- [ ] 배포된 실제 링크(로컬 아님)로 관계 선택 → 편지 짓기 → 카드 생성 → 카카오톡 공유까지 한 번 직접 실행해서 확인

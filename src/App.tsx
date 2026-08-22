@@ -134,10 +134,12 @@ export default function App() {
     }
   };
 
-  // Mode Change — reset in-progress results so a stale 경조사/편지 mix isn't shown
+  // Mode Change — reset in-progress results so a stale 경조사/편지 mix isn't shown,
+  // and default the format to what that mode is usually used for (still user-editable).
   const handleSelectMode = (nextMode: AppMode) => {
     if (nextMode === mode) return;
     setMode(nextMode);
+    setFormat(nextMode === '일반편지' ? '편지' : '카톡메시지');
     setCandidates([]);
     setSelectedCandidate(null);
     setErrorMessage(null);
@@ -145,10 +147,12 @@ export default function App() {
 
   // Active selection derived from the current mode — 경조사 fields vs the
   // standalone letter topic — so generation/history/DeliveryCard share one source.
+  // `format` itself is shared across both modes: FormatSelector is shown in both,
+  // with 일반편지 additionally offering the long-form '편지' option.
   const activeCategory: LetterCategory = mode === '경조사' ? category : '편지';
   const activePrimaryKeyword: PromptKeyword = mode === '경조사' ? primaryKeyword : letterTopic;
   const activeSubKeywords: PromptKeyword[] = mode === '경조사' ? selectedSubKeywords : [];
-  const activeFormat: MessageFormat = mode === '경조사' ? format : '편지';
+  const activeFormat: MessageFormat = format;
 
   // Generate Message API Call
   const handleGenerateMessage = async (overrideInstruction?: string) => {
@@ -302,8 +306,8 @@ export default function App() {
           onChangeCustomInstruction={setCustomInstruction}
         />
 
-        {/* 3. Format selector — only for 경조사 (일반편지 always writes a full 편지) */}
-        {mode === '경조사' && <FormatSelector format={format} onSelectFormat={setFormat} />}
+        {/* 3. Format selector — 일반편지 mode additionally offers the long-form '편지' option */}
+        <FormatSelector format={format} onSelectFormat={setFormat} allowLetterFormat={mode === '일반편지'} />
 
         {/* 4. Caution / etiquette banner */}
         {mode === '경조사' && (

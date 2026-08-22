@@ -13,6 +13,8 @@ import {
 } from '../../types';
 import { withHonorific } from '../../lib/format';
 import { trackCardPreference } from '../../lib/analytics';
+import { ensureKakaoReady, shareCardFeed, shareCardText } from '../../lib/kakaoShare';
+import { uploadCardImage } from '../../lib/cardUpload';
 import {
   Share2,
   Copy,
@@ -365,6 +367,9 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
     }
   };
 
+  // OS-level share sheet (mobile) / clipboard copy (desktop) fallback — used
+  // directly when Kakao isn't configured, and as the last resort if the real
+  // Kakao share call itself fails.
   const handleShareCardImage = async () => {
     if (!cardRef.current) return;
     trackCardPreference(selectedLayoutId, selectedPaletteId);
@@ -393,6 +398,46 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
     } catch (err) {
       console.error('Share card image error:', err);
       await handleDownloadCardImage();
+    } finally {
+      setIsGeneratingImage(false);
+    }
+  };
+
+  // Real KakaoTalk share (src/lib/kakaoShare.ts). Uploads the card image to
+  // Firebase Storage first so Kakao's feed template has a fetchable imageUrl;
+  // falls back to a text-only Kakao share if Storage isn't configured, and to
+  // the OS share sheet / clipboard if the Kakao JS key itself isn't set.
+  const handleKakaoShare = async () => {
+    if (!cardRef.current) return;
+    trackCardPreference(selectedLayoutId, selectedPaletteId);
+    setIsGeneratingImage(true);
+    try {
+      const kakaoReady = await ensureKakaoReady();
+      if (!kakaoReady) {
+        await handleShareCardImage();
+        return;
+      }
+
+      const blob = await toBlob(cardRef.current, { pixelRatio: 2, cacheBust: true });
+      if (!blob) throw new Error('Blob creation failed');
+
+      const linkUrl = window.location.href;
+      const imageUrl = await uploadCardImage(blob);
+
+      if (imageUrl) {
+        shareCardFeed({
+          title: `To. ${withHonorific(relationship.name)}께 전하는 ${category} 카드`,
+          description: messageContent.length > 60 ? `${messageContent.slice(0, 60)}…` : messageContent,
+          imageUrl,
+          link: { mobileWebUrl: linkUrl, webUrl: linkUrl },
+        });
+      } else {
+        // Firebase Storage not configured — share the text instead of failing silently.
+        shareCardText(formattedShareText, linkUrl);
+      }
+    } catch (err) {
+      console.error('Kakao share error:', err);
+      await handleShareCardImage();
     } finally {
       setIsGeneratingImage(false);
     }
@@ -786,7 +831,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
                   <span>정성스런 이미지가 전달되었습니다</span>
                   <button
                     type="button"
-                    onClick={handleShareCardImage}
+                    onClick={handleKakaoShare}
                     className="text-brand-700 font-bold hover:underline flex items-center gap-1 cursor-pointer"
                   >
                     이미지 공유하기 <Send className="w-3 h-3" />
@@ -855,7 +900,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
           <button
             type="button"
             disabled={isGeneratingImage}
-            onClick={handleShareCardImage}
+            onClick={handleKakaoShare}
             className="px-4 py-2.5 rounded-xl bg-[#fee500] hover:bg-[#ebd300] text-slate-950 text-xs font-bold flex items-center gap-1.5 shadow-md transition-all cursor-pointer disabled:opacity-50"
           >
             {isGeneratingImage ? (
@@ -863,7 +908,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
             ) : (
               <Send className="w-4 h-4 text-slate-900" />
             )}
-            📲 카톡/앱 이미지 직접 공유
+            📲 카카오톡으로 공유하기
           </button>
         </div>
 

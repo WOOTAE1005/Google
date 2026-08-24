@@ -57,7 +57,7 @@ app.post('/api/generate-message', async (req, res) => {
             input.category === '경사'
               ? `${withHonorific(input.relationship.name)}, 기쁜 소식을 접하고 진심으로 축하의 마음을 전합니다. 앞으로 펼쳐질 앞날에 늘 행복과 평안이 가득하시기를 기원합니다.`
               : input.category === '조사'
-              ? `삼가 고인의 명복을 빌며, ${input.relationship.name}님과 유가족분들께 깊은 애도와 위로의 마음을 전합니다.`
+              ? `삼가 고인의 명복을 빌며, ${withHonorific(input.relationship.name)}과 유가족분들께 깊은 애도와 위로의 마음을 전합니다.`
               : `${withHonorific(input.relationship.name)}, 오랜만에 마음을 담아 몇 자 적어봅니다. 늘 곁에서 함께해준 것에 진심으로 고마운 마음을 전하고 싶었어요.`,
           etiquetteTip: '정중하고 결례 없는 무난하고 품격 있는 문구입니다.',
           charCount: 80,

@@ -257,22 +257,21 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
                       </div>
 
                       <div className="flex items-center gap-2">
-                        {isSelected ? (
-                          <div className="w-7 h-7 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold">
+                        {isSelected && (
+                          <div className="w-7 h-7 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold shrink-0">
                             <Check className="w-4 h-4" />
                           </div>
-                        ) : (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onDeleteRelationship(rel.id);
-                            }}
-                            className="p-1.5 rounded-lg text-stone-400 hover:text-red-600 hover:bg-stone-200 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
-                            title="삭제"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
                         )}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDeleteRelationship(rel.id);
+                          }}
+                          className="p-1.5 rounded-lg text-stone-400 hover:text-red-600 hover:bg-stone-200 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer shrink-0"
+                          title="삭제"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
                     </div>
                   );

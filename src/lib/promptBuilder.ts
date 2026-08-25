@@ -53,10 +53,15 @@ export function buildPrompt(input: BuildPromptInput): string {
 - 주요 상황: ${input.primaryKeyword.keywordLabel} (${input.primaryKeyword.promptFragment})
 - 세부 옵션: ${input.subKeywords.map((k) => `• ${k.keywordLabel}: ${k.promptFragment}`).join('\n')}
 `
-    : `
+    : input.category !== '미지정'
+    ? `
 [상황 및 선택 키워드]
 - 분류: ${input.category}
 - 별도로 선택된 주제 키워드 없음 — 아래 [사용자 추가 요청사항]에 적힌 내용만을 근거로 자연스러운 편지를 작성하세요.
+`
+    : `
+[상황 및 선택 키워드]
+- 별도로 선택된 대분류/주제 키워드 없음 — 아래 [사용자 추가 요청사항]에 적힌 내용만을 근거로, 경사(축하)인지 조사(위로)인지부터 스스로 판단하여 상황에 맞는 자연스러운 메시지를 작성하세요.
 `;
 
   const cautionNotes = [

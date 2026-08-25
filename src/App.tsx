@@ -44,8 +44,8 @@ export default function App() {
 
   // 3. Keyword & Format Selection State (경조사 mode)
   const [category, setCategory] = useState<OccasionCategory>('경사');
-  const [primaryKeyword, setPrimaryKeyword] = useState<PromptKeyword>(
-    () => getPrimaryKeywords('경사')[0]
+  const [primaryKeyword, setPrimaryKeyword] = useState<PromptKeyword | null>(
+    () => getPrimaryKeywords('경사')[0] ?? null
   );
   const [selectedSubKeywords, setSelectedSubKeywords] = useState<PromptKeyword[]>([]);
   const [format, setFormat] = useState<MessageFormat>('카톡메시지');
@@ -127,20 +127,21 @@ export default function App() {
     setErrorMessage(null);
   };
 
-  const handleSelectPrimaryKeyword = (pk: PromptKeyword) => {
+  // 세부 상황 태그와 동일하게 선택/선택취소 둘 다 가능 — 이미 선택된 항목을 다시
+  // 누르면 null로 해제.
+  const handleSelectPrimaryKeyword = (pk: PromptKeyword | null) => {
     setPrimaryKeyword(pk);
     setSelectedSubKeywords([]);
     clearStaleResult();
   };
 
-  // Category Change
+  // Category Change — 경사/조사 둘 다 선택 해제한 '미지정' 상태도 허용.
+  // getPrimaryKeywords('미지정')는 항상 빈 배열이므로 주요 항목은 자동으로 비워짐.
   const handleSelectCategory = (cat: OccasionCategory) => {
     setCategory(cat);
     const firstPk = getPrimaryKeywords(cat)[0];
-    if (firstPk) {
-      setPrimaryKeyword(firstPk);
-      setSelectedSubKeywords([]);
-    }
+    setPrimaryKeyword(firstPk ?? null);
+    setSelectedSubKeywords([]);
     clearStaleResult();
   };
 
@@ -169,8 +170,13 @@ export default function App() {
   const activePrimaryKeyword: PromptKeyword | null = mode === '경조사' ? primaryKeyword : letterTopic;
   const activeSubKeywords: PromptKeyword[] = mode === '경조사' ? selectedSubKeywords : [];
   const activeFormat: MessageFormat = format;
-  // 일반편지 mode only: a topic chip OR free-text instruction is required.
-  const canGenerate = mode === '경조사' || Boolean(letterTopic) || customInstruction.trim().length > 0;
+  // 두 모드 모두: 키워드/주제 칩을 골랐거나, 자유 요청사항을 적었거나 — 둘 중
+  // 하나는 있어야 생성 가능 (경조사도 대분류/주요 항목을 전부 해제할 수 있게 되면서
+  // 더 이상 "경조사 모드면 무조건 가능"이 성립하지 않음).
+  const canGenerate =
+    mode === '경조사'
+      ? Boolean(primaryKeyword) || customInstruction.trim().length > 0
+      : Boolean(letterTopic) || customInstruction.trim().length > 0;
 
   // Generate Message API Call
   const handleGenerateMessage = async (overrideInstruction?: string) => {
@@ -279,6 +285,9 @@ export default function App() {
         );
         setSelectedSubKeywords(matchedSubs);
       } else {
+        // 저장 당시 주요 항목을 고르지 않았거나(자유 주제) 대분류가 미지정이었던
+        // 기록 — 이전 화면에 남아있던 primaryKeyword를 그대로 두면 기록과 안 맞으므로 비운다.
+        setPrimaryKeyword(null);
         setSelectedSubKeywords([]);
       }
     }

@@ -1,4 +1,6 @@
-export type OccasionCategory = '경사' | '조사';
+// '미지정' = 경조사 모드에서 대분류(경사/조사)를 둘 다 선택 해제한 상태.
+// 사용자가 추가 요청사항 자유 텍스트만으로 생성하고 싶을 때를 위한 값.
+export type OccasionCategory = '경사' | '조사' | '미지정';
 
 // Widened category used by prompt keywords/generation once 일반 편지 (non-occasion
 // letters) reuses the same keyword-tree + promptBuilder infrastructure.

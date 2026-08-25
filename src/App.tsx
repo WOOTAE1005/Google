@@ -118,9 +118,20 @@ export default function App() {
   };
 
   // Primary Keyword Change
+  // Clears a previously generated result so it can't be mistaken for output
+  // of the selection the user is now looking at (same issue class as the
+  // mode-switch fix below, just triggered by changing category/keyword/topic
+  // instead of the 경조사/일반편지 toggle).
+  const clearStaleResult = () => {
+    setCandidates([]);
+    setSelectedCandidate(null);
+    setErrorMessage(null);
+  };
+
   const handleSelectPrimaryKeyword = (pk: PromptKeyword) => {
     setPrimaryKeyword(pk);
     setSelectedSubKeywords([]);
+    clearStaleResult();
   };
 
   // Category Change
@@ -131,6 +142,12 @@ export default function App() {
       setPrimaryKeyword(firstPk);
       setSelectedSubKeywords([]);
     }
+    clearStaleResult();
+  };
+
+  const handleSelectLetterTopic = (topic: PromptKeyword | null) => {
+    setLetterTopic(topic);
+    clearStaleResult();
   };
 
   // Mode Change — reset in-progress results *and* the free-text instruction so
@@ -142,9 +159,7 @@ export default function App() {
     setMode(nextMode);
     setFormat(nextMode === '일반편지' ? '편지' : '카톡메시지');
     setCustomInstruction('');
-    setCandidates([]);
-    setSelectedCandidate(null);
-    setErrorMessage(null);
+    clearStaleResult();
   };
 
   // Active selection derived from the current mode — 경조사 fields vs the
@@ -185,12 +200,15 @@ export default function App() {
         }),
       });
 
+      const data = await response.json().catch(() => null);
+
       if (!response.ok) {
-        throw new Error('서버 응답 오류');
+        // Surface the server's actual reason (validation message, Gemini error,
+        // etc.) instead of a generic "something went wrong".
+        throw new Error(data?.error || `서버 오류가 발생했습니다 (${response.status}). 잠시 후 다시 시도해주세요.`);
       }
 
-      const data = await response.json();
-      if (data.candidates && data.candidates.length > 0) {
+      if (data?.candidates && data.candidates.length > 0) {
         setCandidates(data.candidates);
         setSelectedCandidate(data.candidates[0]);
 
@@ -219,14 +237,57 @@ export default function App() {
         setHistoryRecords(updatedHistory);
         persistHistory(user?.uid ?? null, updatedHistory);
       } else {
-        throw new Error('생성 결과가 없습니다.');
+        throw new Error('AI가 생성한 결과가 비어 있습니다. 잠시 후 다시 시도해주세요.');
       }
     } catch (err: any) {
       console.error('Failed to generate message:', err);
-      setErrorMessage('메시지 생성 중 문제가 발생했습니다. 네트워크 연결을 확인하고 다시 시도해 주세요.');
+      // TypeError here means fetch() itself never got a response (offline,
+      // DNS/CORS failure, server not running) — distinguish that from a
+      // response we did get back but that reported/contained an error.
+      const message =
+        err instanceof TypeError
+          ? '서버에 연결할 수 없습니다. 인터넷 연결 상태를 확인하고 다시 시도해주세요.'
+          : err?.message || '메시지 생성 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.';
+      setErrorMessage(message);
     } finally {
       setIsGenerating(false);
     }
+  };
+
+  // Restore a past record's full context (mode/category/topic/relationship/format),
+  // not just its candidates — otherwise the reloaded text stays tagged with
+  // whatever mode/category happens to be currently selected on screen.
+  const handleSelectHistoryRecord = (rec: GeneratedMessageRecord) => {
+    if (!rec.candidates || rec.candidates.length === 0) return;
+
+    const matchedRelationship = relationships.find((r) => r.name === rec.relationshipName);
+    if (matchedRelationship) {
+      setSelectedRelationship(matchedRelationship);
+    }
+
+    if (rec.category === '편지') {
+      setMode('일반편지');
+      const matchedTopic = getPrimaryKeywords('편지').find((k) => k.keywordLabel === rec.primaryKeywordLabel);
+      setLetterTopic(matchedTopic ?? null);
+    } else {
+      setMode('경조사');
+      setCategory(rec.category);
+      const matchedPrimary = getPrimaryKeywords(rec.category).find((k) => k.keywordLabel === rec.primaryKeywordLabel);
+      if (matchedPrimary) {
+        setPrimaryKeyword(matchedPrimary);
+        const matchedSubs = getSubKeywords(matchedPrimary.id).filter((k) =>
+          rec.subKeywordLabels.includes(k.keywordLabel)
+        );
+        setSelectedSubKeywords(matchedSubs);
+      } else {
+        setSelectedSubKeywords([]);
+      }
+    }
+
+    setFormat(rec.format);
+    setCandidates(rec.candidates);
+    setSelectedCandidate(rec.candidates.find((c) => c.content === rec.selectedText) ?? rec.candidates[0]);
+    setErrorMessage(null);
   };
 
   // Update candidate content
@@ -302,7 +363,7 @@ export default function App() {
             onToggleSubKeyword={handleToggleSubKeyword}
           />
         ) : (
-          <LetterTopicSelector topic={letterTopic} onSelectTopic={setLetterTopic} />
+          <LetterTopicSelector topic={letterTopic} onSelectTopic={handleSelectLetterTopic} />
         )}
 
         {/* 2. Custom prompt input */}
@@ -400,12 +461,7 @@ export default function App() {
           setHistoryRecords([]);
           persistHistory(user?.uid ?? null, []);
         }}
-        onSelectRecord={(rec) => {
-          if (rec.candidates && rec.candidates.length > 0) {
-            setCandidates(rec.candidates);
-            setSelectedCandidate(rec.candidates[0]);
-          }
-        }}
+        onSelectRecord={handleSelectHistoryRecord}
       />
 
       {/* Etiquette Guide Modal */}

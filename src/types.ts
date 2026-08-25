@@ -8,7 +8,10 @@ export type AppMode = '경조사' | '일반편지';
 
 export type RelationType = '가족' | '친척' | '친구' | '직장동료' | '직장상사' | '직장후배' | '지인' | '기타';
 
-export type TonePreference = '격식체 (정중하고 정제된)' | '다정한 (따뜻하고 진심어린)' | '유머러스 (재치있고 밝은)' | '깊은 위로 (진중하고 담백한)';
+// '격식체' was dropped 2026-08-25 — closeness (1~2점 = "격식있는 원거리") already
+// covers that end of the spectrum, so keeping a separate formal-tone option
+// duplicated it and could contradict a high closeness score.
+export type TonePreference = '다정한 (따뜻하고 진심어린)' | '유머러스 (재치있고 밝은)' | '깊은 위로 (진중하고 담백한)';
 
 export type MessageFormat = '봉투문구' | '문자' | '카톡메시지' | '편지';
 

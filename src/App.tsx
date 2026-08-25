@@ -24,7 +24,6 @@ import { RelationshipPicker } from './components/shared/RelationshipPicker';
 import { KeywordSelector } from './components/occasion/KeywordSelector';
 import { LetterTopicSelector } from './components/letter/LetterTopicSelector';
 import { FormatSelector } from './components/occasion/FormatSelector';
-import { CautionBanner } from './components/occasion/CautionBanner';
 import { CustomPromptInput } from './components/occasion/CustomPromptInput';
 import { MessageCandidates } from './components/occasion/MessageCandidates';
 import { DeliveryCard } from './components/shared/DeliveryCard';
@@ -352,38 +351,39 @@ export default function App() {
           })}
         </div>
 
-        {/* 1. Keyword selection */}
-        {mode === '경조사' ? (
-          <KeywordSelector
-            category={category}
-            onSelectCategory={handleSelectCategory}
-            primaryKeyword={primaryKeyword}
-            onSelectPrimaryKeyword={handleSelectPrimaryKeyword}
-            selectedSubKeywords={selectedSubKeywords}
-            onToggleSubKeyword={handleToggleSubKeyword}
-          />
-        ) : (
-          <LetterTopicSelector topic={letterTopic} onSelectTopic={handleSelectLetterTopic} />
-        )}
+        {/* 1~3. Keyword/topic selection, custom prompt, format — one continuous
+            card instead of three separate ones, since they're all part of the
+            same build-up-a-request flow. Caution notes still flow into the
+            prompt via promptBuilder (see keywords.ts cautionNote) even though
+            the inline warning banner is no longer shown here — see 예법 가이드
+            in the header for the reference version. */}
+        <div className="bg-white rounded-2xl px-4 sm:px-6 py-7 sm:py-10 space-y-9">
+          {mode === '경조사' ? (
+            <KeywordSelector
+              category={category}
+              onSelectCategory={handleSelectCategory}
+              primaryKeyword={primaryKeyword}
+              onSelectPrimaryKeyword={handleSelectPrimaryKeyword}
+              selectedSubKeywords={selectedSubKeywords}
+              onToggleSubKeyword={handleToggleSubKeyword}
+            />
+          ) : (
+            <LetterTopicSelector topic={letterTopic} onSelectTopic={handleSelectLetterTopic} />
+          )}
 
-        {/* 2. Custom prompt input */}
-        <CustomPromptInput
-          customInstruction={customInstruction}
-          onChangeCustomInstruction={setCustomInstruction}
-        />
+          <div className="pt-9 border-t border-stone-200/70">
+            <CustomPromptInput
+              customInstruction={customInstruction}
+              onChangeCustomInstruction={setCustomInstruction}
+            />
+          </div>
 
-        {/* 3. Format selector — 일반편지 mode additionally offers the long-form '편지' option */}
-        <FormatSelector format={format} onSelectFormat={setFormat} allowLetterFormat={mode === '일반편지'} />
+          <div className="pt-9 border-t border-stone-200/70">
+            <FormatSelector format={format} onSelectFormat={setFormat} allowLetterFormat={mode === '일반편지'} />
+          </div>
+        </div>
 
-        {/* 4. Caution / etiquette banner */}
-        {mode === '경조사' && (
-          <CautionBanner
-            primaryKeyword={primaryKeyword}
-            selectedSubKeywords={selectedSubKeywords}
-          />
-        )}
-
-        {/* 5. Generate CTA button */}
+        {/* 4. Generate CTA button */}
         <div className="pt-2 font-sans">
           <button
             type="button"

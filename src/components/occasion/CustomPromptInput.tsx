@@ -11,7 +11,7 @@ export const CustomPromptInput: React.FC<CustomPromptInputProps> = ({
   onChangeCustomInstruction,
 }) => {
   return (
-    <div className="bg-white rounded-2xl px-4 sm:px-5 py-7 sm:py-9 space-y-3 font-sans">
+    <div className="space-y-3 font-sans">
       <div className="flex items-center justify-between">
         <div className="text-xs font-bold text-[#3D2B31]/60 uppercase tracking-wider flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full bg-brand-700"></span>

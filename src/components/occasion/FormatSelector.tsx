@@ -47,7 +47,7 @@ export const FormatSelector: React.FC<FormatSelectorProps> = ({
   ];
 
   return (
-    <div className="bg-white rounded-2xl px-4 sm:px-5 py-7 sm:py-9 space-y-4">
+    <div className="space-y-4">
       <div className="flex items-center justify-between border-b border-[#3D2B31]/10 pb-3">
         <div className="text-xs font-sans font-bold text-[#3D2B31] uppercase tracking-wider flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-brand-700"></span>

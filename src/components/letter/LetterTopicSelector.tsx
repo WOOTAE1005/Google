@@ -14,7 +14,7 @@ export const LetterTopicSelector: React.FC<LetterTopicSelectorProps> = ({
   const topics = getPrimaryKeywords('편지');
 
   return (
-    <div className="space-y-2.5 bg-white rounded-2xl px-4 sm:px-6 py-7 sm:py-10">
+    <div className="space-y-2.5">
       <div className="text-xs font-sans font-bold text-[#3D2B31]/60 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
         <span className="w-2 h-2 rounded-full bg-brand-700"></span>
         어떤 편지인가요 (선택)

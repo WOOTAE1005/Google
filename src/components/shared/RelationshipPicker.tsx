@@ -29,7 +29,6 @@ const RELATION_TYPES: RelationType[] = [
 ];
 
 const TONE_PREFERENCES: TonePreference[] = [
-  '격식체 (정중하고 정제된)',
   '다정한 (따뜻하고 진심어린)',
   '유머러스 (재치있고 밝은)',
   '깊은 위로 (진중하고 담백한)',
@@ -52,7 +51,7 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
   const [newName, setNewName] = useState('');
   const [newType, setNewType] = useState<RelationType>('직장상사');
   const [newCloseness, setNewCloseness] = useState(3);
-  const [newTone, setNewTone] = useState<TonePreference>('격식체 (정중하고 정제된)');
+  const [newTone, setNewTone] = useState<TonePreference>('다정한 (따뜻하고 진심어린)');
   const [newNoteInput, setNewNoteInput] = useState('');
   const [newNotes, setNewNotes] = useState<string[]>([]);
 
@@ -110,7 +109,7 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
     setNewName('');
     setNewType('직장상사');
     setNewCloseness(3);
-    setNewTone('격식체 (정중하고 정제된)');
+    setNewTone('다정한 (따뜻하고 진심어린)');
     setNewNotes([]);
     setNewNoteInput('');
   };

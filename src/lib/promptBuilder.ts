@@ -46,15 +46,21 @@ export function buildPrompt(input: BuildPromptInput): string {
 - 기억 및 관계 맥락: ${input.relationship.memoryNotes && input.relationship.memoryNotes.length > 0 ? input.relationship.memoryNotes.join(', ') : '특이사항 없음'}
 `;
 
-  const keywordFragments = `
+  const keywordFragments = input.primaryKeyword
+    ? `
 [상황 및 선택 키워드]
 - 분류: ${input.category}
 - 주요 상황: ${input.primaryKeyword.keywordLabel} (${input.primaryKeyword.promptFragment})
 - 세부 옵션: ${input.subKeywords.map((k) => `• ${k.keywordLabel}: ${k.promptFragment}`).join('\n')}
+`
+    : `
+[상황 및 선택 키워드]
+- 분류: ${input.category}
+- 별도로 선택된 주제 키워드 없음 — 아래 [사용자 추가 요청사항]에 적힌 내용만을 근거로 자연스러운 편지를 작성하세요.
 `;
 
   const cautionNotes = [
-    input.primaryKeyword.cautionNote,
+    input.primaryKeyword?.cautionNote,
     ...input.subKeywords.map((k) => k.cautionNote),
   ]
     .filter(Boolean)

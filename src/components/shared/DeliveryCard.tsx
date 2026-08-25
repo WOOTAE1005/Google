@@ -39,7 +39,7 @@ import {
 interface DeliveryCardProps {
   relationship: Relationship;
   category: LetterCategory;
-  primaryKeyword: PromptKeyword;
+  primaryKeyword: PromptKeyword | null;
   format: MessageFormat;
   messageContent: string;
 }

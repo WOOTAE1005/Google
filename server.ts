@@ -38,8 +38,13 @@ function getGenAI(): GoogleGenAI {
 app.post('/api/generate-message', async (req, res) => {
   try {
     const input = req.body as BuildPromptInput;
-    if (!input || !input.relationship || !input.primaryKeyword) {
+    if (!input || !input.relationship) {
       return res.status(400).json({ error: '잘못된 요청 파라미터입니다.' });
+    }
+    // primaryKeyword is optional in 일반편지 mode, but there must be *something*
+    // to generate from — either a topic keyword or a custom instruction.
+    if (!input.primaryKeyword && !input.customInstruction?.trim()) {
+      return res.status(400).json({ error: '편지 주제를 선택하거나 추가 요청사항을 입력해주세요.' });
     }
 
     const promptText = buildPrompt(input);

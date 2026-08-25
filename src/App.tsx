@@ -52,10 +52,9 @@ export default function App() {
   const [format, setFormat] = useState<MessageFormat>('카톡메시지');
   const [customInstruction, setCustomInstruction] = useState<string>('');
 
-  // 4. Letter topic state (일반편지 mode)
-  const [letterTopic, setLetterTopic] = useState<PromptKeyword>(
-    () => getPrimaryKeywords('편지')[0]
-  );
+  // 4. Letter topic state (일반편지 mode) — no topic pre-selected; a letter can
+  // be generated from customInstruction alone if the user skips this entirely.
+  const [letterTopic, setLetterTopic] = useState<PromptKeyword | null>(null);
 
   // 5. Generation & Candidates state
   const [isGenerating, setIsGenerating] = useState(false);
@@ -134,12 +133,15 @@ export default function App() {
     }
   };
 
-  // Mode Change — reset in-progress results so a stale 경조사/편지 mix isn't shown,
-  // and default the format to what that mode is usually used for (still user-editable).
+  // Mode Change — reset in-progress results *and* the free-text instruction so
+  // leftover text written for one mode can't silently get applied to the other
+  // (previously customInstruction survived a mode switch and got reused under
+  // the new mode's defaults, producing a mismatched result).
   const handleSelectMode = (nextMode: AppMode) => {
     if (nextMode === mode) return;
     setMode(nextMode);
     setFormat(nextMode === '일반편지' ? '편지' : '카톡메시지');
+    setCustomInstruction('');
     setCandidates([]);
     setSelectedCandidate(null);
     setErrorMessage(null);
@@ -150,9 +152,11 @@ export default function App() {
   // `format` itself is shared across both modes: FormatSelector is shown in both,
   // with 일반편지 additionally offering the long-form '편지' option.
   const activeCategory: LetterCategory = mode === '경조사' ? category : '편지';
-  const activePrimaryKeyword: PromptKeyword = mode === '경조사' ? primaryKeyword : letterTopic;
+  const activePrimaryKeyword: PromptKeyword | null = mode === '경조사' ? primaryKeyword : letterTopic;
   const activeSubKeywords: PromptKeyword[] = mode === '경조사' ? selectedSubKeywords : [];
   const activeFormat: MessageFormat = format;
+  // 일반편지 mode only: a topic chip OR free-text instruction is required.
+  const canGenerate = mode === '경조사' || Boolean(letterTopic) || customInstruction.trim().length > 0;
 
   // Generate Message API Call
   const handleGenerateMessage = async (overrideInstruction?: string) => {
@@ -160,6 +164,7 @@ export default function App() {
       setIsRelationshipPickerOpen(true);
       return;
     }
+    if (!canGenerate) return;
 
     setIsGenerating(true);
     setErrorMessage(null);
@@ -191,7 +196,7 @@ export default function App() {
 
         trackGeneration({
           category: activeCategory,
-          primaryKeywordLabel: activePrimaryKeyword.keywordLabel,
+          primaryKeywordLabel: activePrimaryKeyword?.keywordLabel ?? '자유 주제',
           format: activeFormat,
           customInstruction: activeInstruction,
         });
@@ -202,7 +207,7 @@ export default function App() {
           relationshipName: selectedRelationship.name,
           relationType: selectedRelationship.relationType,
           category: activeCategory,
-          primaryKeywordLabel: activePrimaryKeyword.keywordLabel,
+          primaryKeywordLabel: activePrimaryKeyword?.keywordLabel ?? '자유 주제',
           subKeywordLabels: activeSubKeywords.map((s) => s.keywordLabel),
           format: activeFormat,
           selectedText: data.candidates[0].content,
@@ -321,7 +326,7 @@ export default function App() {
         <div className="pt-2 font-sans">
           <button
             type="button"
-            disabled={isGenerating}
+            disabled={isGenerating || !canGenerate}
             onClick={() => handleGenerateMessage()}
             className="w-full py-4.5 rounded-2xl bg-[#3D2B31] hover:bg-[#2a1d22] text-[#FFFDFB] font-bold text-base sm:text-lg shadow-xl shadow-[#3D2B31]/15 hover:shadow-2xl hover:shadow-[#3D2B31]/25 flex items-center justify-center gap-2.5 transition-all disabled:opacity-50 cursor-pointer"
           >

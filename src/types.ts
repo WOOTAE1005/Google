@@ -35,7 +35,9 @@ export interface PromptKeyword {
 export interface BuildPromptInput {
   relationship: Relationship;
   category: LetterCategory;
-  primaryKeyword: PromptKeyword;
+  // Optional in 일반편지 mode — a letter can be generated from customInstruction
+  // alone, with no topic chip selected.
+  primaryKeyword: PromptKeyword | null;
   subKeywords: PromptKeyword[];
   format: MessageFormat;
   customInstruction?: string;

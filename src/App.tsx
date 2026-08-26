@@ -366,6 +366,8 @@ export default function App() {
         onOpenHistory={() => setIsHistoryOpen(true)}
         onOpenEtiquette={() => setIsEtiquetteOpen(true)}
         historyCount={historyRecords.length}
+        isCloudSyncEnabled={isCloudSyncEnabled}
+        authUser={user}
       />
 
       {/* Main Container */}

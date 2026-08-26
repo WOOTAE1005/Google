@@ -1,5 +1,6 @@
 import React from 'react';
-import { History, UserCheck, BookOpen } from 'lucide-react';
+import type { User as FirebaseUser } from 'firebase/auth';
+import { History, UserCheck, BookOpen, LogIn, CloudUpload } from 'lucide-react';
 import { Relationship } from '../../types';
 
 interface HeaderProps {
@@ -8,6 +9,11 @@ interface HeaderProps {
   onOpenHistory: () => void;
   onOpenEtiquette?: () => void;
   historyCount: number;
+  // 로그인은 "수신자/관계 설정 변경" 모달 안의 이메일 링크 폼으로 이뤄지지만,
+  // 관계 등록이 선택사항이 되면서 그 모달이 더 이상 자동으로 열리지 않아
+  // 로그인 진입점이 안 보이는 문제가 생겼다 — 헤더에 별도 버튼으로 노출.
+  isCloudSyncEnabled?: boolean;
+  authUser?: FirebaseUser | null;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -16,6 +22,8 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenHistory,
   onOpenEtiquette,
   historyCount,
+  isCloudSyncEnabled,
+  authUser,
 }) => {
   return (
     <header className="sticky top-0 z-30 bg-[#FFFAFA]/95 backdrop-blur-md border-b border-[#3D2B31]/10 text-[#3D2B31] shadow-2xs font-serif">
@@ -58,6 +66,28 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
           </button>
+
+          {/* Login / Cloud Sync Status — 관계 등록 모달 안의 이메일 링크
+              폼으로 진입시키는 별도 버튼. 로그인 여부에 따라 라벨만 다르게
+              보여주고, 실제 로그인/로그아웃 UI는 그 모달 안에 그대로 있다. */}
+          {isCloudSyncEnabled && (
+            <button
+              onClick={onOpenRelationshipPicker}
+              className={`flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl border text-xs shadow-2xs transition-all cursor-pointer ${
+                authUser
+                  ? 'bg-brand-50/80 border-brand-300/80 text-brand-900'
+                  : 'bg-white hover:bg-[#FBE4E8] border-[#3D2B31]/15 text-[#3D2B31]'
+              }`}
+              title={authUser ? `${authUser.email}로 로그인됨` : '로그인 (선택)'}
+            >
+              {authUser ? (
+                <CloudUpload className="w-4 h-4 text-brand-700 shrink-0" />
+              ) : (
+                <LogIn className="w-4 h-4 text-[#3D2B31]/60 shrink-0" />
+              )}
+              <span className="hidden sm:inline">{authUser ? '로그인됨' : '로그인'}</span>
+            </button>
+          )}
 
           {/* Etiquette Guide Trigger */}
           {onOpenEtiquette && (

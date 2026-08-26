@@ -8,6 +8,7 @@ import {
   MessageFormat,
   MessageCandidate,
   GeneratedMessageRecord,
+  RelationType,
 } from './types';
 import { useAuth } from './lib/auth';
 import {
@@ -54,6 +55,9 @@ export default function App() {
   // 4. Letter topic state (일반편지 mode) — 세부 상황 태그처럼 복수 선택/선택
   // 해제가 가능한 목록. 아무것도 고르지 않아도 customInstruction만으로 생성 가능.
   const [letterTopics, setLetterTopics] = useState<PromptKeyword[]>([]);
+  // "이 편지가 그려야 할 대상 성격" — 실제 등록된 수신자 관계와는 별개의
+  // 선택 사항. 수신자를 등록 안 했거나 다른 맥락으로 쓰고 싶을 때를 위함.
+  const [letterAudienceType, setLetterAudienceType] = useState<RelationType | null>(null);
 
   // 5. Generation & Candidates state
   const [isGenerating, setIsGenerating] = useState(false);
@@ -155,6 +159,11 @@ export default function App() {
     clearStaleResult();
   };
 
+  const handleSelectLetterAudienceType = (type: RelationType | null) => {
+    setLetterAudienceType(type);
+    clearStaleResult();
+  };
+
   // Mode Change — reset in-progress results *and* the free-text instruction so
   // leftover text written for one mode can't silently get applied to the other
   // (previously customInstruction survived a mode switch and got reused under
@@ -164,6 +173,7 @@ export default function App() {
     setMode(nextMode);
     setFormat(nextMode === '일반편지' ? '편지' : '카톡메시지');
     setCustomInstruction('');
+    setLetterAudienceType(null);
     clearStaleResult();
   };
 
@@ -212,6 +222,7 @@ export default function App() {
           subKeywords: activeSubKeywords,
           format: activeFormat,
           customInstruction: activeInstruction,
+          letterAudienceType: mode === '일반편지' ? letterAudienceType : null,
         }),
       });
 
@@ -246,6 +257,7 @@ export default function App() {
           selectedText: data.candidates[0].content,
           candidates: data.candidates,
           createdAt: new Date().toISOString(),
+          letterAudienceType: mode === '일반편지' ? letterAudienceType : null,
         };
 
         const updatedHistory = [newRecord, ...historyRecords];
@@ -286,6 +298,7 @@ export default function App() {
       const matchedPrimary = allTopics.find((k) => k.keywordLabel === rec.primaryKeywordLabel);
       const matchedRest = allTopics.filter((k) => rec.subKeywordLabels.includes(k.keywordLabel));
       setLetterTopics(matchedPrimary ? [matchedPrimary, ...matchedRest] : matchedRest);
+      setLetterAudienceType(rec.letterAudienceType ?? null);
     } else {
       setMode('경조사');
       setCategory(rec.category);
@@ -389,7 +402,12 @@ export default function App() {
               onToggleSubKeyword={handleToggleSubKeyword}
             />
           ) : (
-            <LetterTopicSelector selectedTopics={letterTopics} onToggleTopic={handleToggleLetterTopic} />
+            <LetterTopicSelector
+              audienceType={letterAudienceType}
+              onSelectAudienceType={handleSelectLetterAudienceType}
+              selectedTopics={letterTopics}
+              onToggleTopic={handleToggleLetterTopic}
+            />
           )}
 
           <div className="pt-9 border-t border-stone-200/70">

@@ -56,17 +56,25 @@ export function buildPrompt(input: BuildPromptInput): string {
       )
     : [];
 
+  // 일반편지에서 대분류/중분류로 고른 "이 편지가 그려야 할 대상 성격" — 실제
+  // 등록된 relationship.relationType과는 별개 신호. 수신자를 등록하지 않고
+  // 편지만 쓰거나, 등록된 관계와 다른 맥락으로 쓰고 싶을 때를 위한 값이라
+  // 명시돼 있으면 실제 관계 정보보다 이쪽을 우선 참고하도록 안내한다.
+  const audienceNote = input.letterAudienceType
+    ? `- 이 편지가 그려야 할 대상 성격: ${input.letterAudienceType} (위 [상대방 및 관계 정보]의 관계 분류와 다르다면, 이 편지 작성 시에는 이 항목을 우선 참고하세요)\n`
+    : '';
+
   const keywordFragments =
     input.category === '편지'
       ? letterTopics.length > 0
         ? `
 [상황 및 선택 키워드]
-- 선택된 편지 주제 (${letterTopics.length}개): ${letterTopics.map((k) => `${k.keywordLabel}(${k.promptFragment})`).join(', ')}
+${audienceNote}- 선택된 편지 주제 (${letterTopics.length}개): ${letterTopics.map((k) => `${k.keywordLabel}(${k.promptFragment})`).join(', ')}
 - 여러 주제가 선택된 경우, 하나의 편지 안에 그 정서들을 자연스럽게 함께 녹여내세요.
 `
         : `
 [상황 및 선택 키워드]
-- 별도로 선택된 주제 키워드 없음 — 아래 [사용자 추가 요청사항]에 적힌 내용만을 근거로 자연스러운 편지를 작성하세요.
+${audienceNote}- 별도로 선택된 주제 키워드 없음 — 아래 [사용자 추가 요청사항]에 적힌 내용만을 근거로 자연스러운 편지를 작성하세요.
 `
       : input.primaryKeyword
       ? `

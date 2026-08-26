@@ -66,6 +66,10 @@ export interface BuildPromptInput {
   subKeywords: PromptKeyword[];
   format: MessageFormat;
   customInstruction?: string;
+  // 일반편지 전용 — 대분류/중분류로 고른 "이 편지가 그려야 할 대상 성격".
+  // 실제 등록된 relationship.relationType과 다를 수 있다 (수신자를 등록하지
+  // 않았거나, 등록된 관계와 다른 맥락으로 편지를 쓰고 싶을 때를 위한 값).
+  letterAudienceType?: RelationType | null;
 }
 
 export interface MessageCandidate {
@@ -89,6 +93,7 @@ export interface GeneratedMessageRecord {
   selectedText: string;
   candidates: MessageCandidate[];
   createdAt: string;
+  letterAudienceType?: RelationType | null;
 }
 
 export type CardLayoutStyleId = 'traditional_frame' | 'envelope_slit' | 'minimal_editorial' | 'curved_arch' | 'seal_pendant';

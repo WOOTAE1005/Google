@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { User as FirebaseUser } from 'firebase/auth';
 import { Relationship, RelationType, TonePreference } from '../../types';
+import { RELATION_GROUPS } from '../../lib/relationTypes';
 import { User, Plus, Check, Star, X, Tag, Trash2, Mail, LogOut, CloudUpload } from 'lucide-react';
 
 interface RelationshipPickerProps {
@@ -16,17 +17,6 @@ interface RelationshipPickerProps {
   onSignInWithMagicLink?: (email: string) => Promise<void>;
   onSignOut?: () => Promise<void>;
 }
-
-// 관계 유형 대분류 → 세부 유형 2단 선택. 저장되는 값(RelationType)은 항상
-// 세부 유형(leaf) 하나 — 대분류는 이 화면에서 고르기 편하게 묶어주는 역할만 한다.
-// 연인처럼 세부 유형이 하나뿐인 그룹은 대분류 버튼을 누르는 순간 바로 확정된다.
-const RELATION_GROUPS: { label: string; types: RelationType[] }[] = [
-  { label: '가족', types: ['어머니', '아버지', '형제', '자매'] },
-  { label: '연인', types: ['연인'] },
-  { label: '지인', types: ['친구', '선생님', '교수님', '선배', '후배'] },
-  { label: '직장', types: ['직장상사', '직장동료', '직장후배'] },
-  { label: '기타', types: ['친척', '기타'] },
-];
 
 const TONE_PREFERENCES: TonePreference[] = [
   '다정한 (따뜻하고 진심어린)',

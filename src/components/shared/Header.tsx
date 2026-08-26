@@ -9,9 +9,9 @@ interface HeaderProps {
   onOpenHistory: () => void;
   onOpenEtiquette?: () => void;
   historyCount: number;
-  // 로그인은 "수신자/관계 설정 변경" 모달 안의 이메일 링크 폼으로 이뤄지지만,
-  // 관계 등록이 선택사항이 되면서 그 모달이 더 이상 자동으로 열리지 않아
-  // 로그인 진입점이 안 보이는 문제가 생겼다 — 헤더에 별도 버튼으로 노출.
+  // 로그인은 수신자 선택과 완전히 분리된 전용 모달(LoginModal)로 연다 —
+  // 예전엔 관계 선택 모달 안에 로그인 폼이 섞여 있어 헷갈렸다.
+  onOpenLogin: () => void;
   isCloudSyncEnabled?: boolean;
   authUser?: FirebaseUser | null;
 }
@@ -22,6 +22,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenHistory,
   onOpenEtiquette,
   historyCount,
+  onOpenLogin,
   isCloudSyncEnabled,
   authUser,
 }) => {
@@ -67,12 +68,11 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           </button>
 
-          {/* Login / Cloud Sync Status — 관계 등록 모달 안의 이메일 링크
-              폼으로 진입시키는 별도 버튼. 로그인 여부에 따라 라벨만 다르게
-              보여주고, 실제 로그인/로그아웃 UI는 그 모달 안에 그대로 있다. */}
+          {/* Login / Cloud Sync Status — 수신자 선택과 별개인 전용 로그인
+              모달을 연다. 로그인 여부에 따라 라벨만 다르게 보여준다. */}
           {isCloudSyncEnabled && (
             <button
-              onClick={onOpenRelationshipPicker}
+              onClick={onOpenLogin}
               className={`flex items-center gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl border text-xs shadow-2xs transition-all cursor-pointer ${
                 authUser
                   ? 'bg-brand-50/80 border-brand-300/80 text-brand-900'

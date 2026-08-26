@@ -23,6 +23,7 @@ import { RELATION_GROUPS, findRelationGroup } from './lib/relationTypes';
 import { trackGeneration } from './lib/analytics';
 import { Header } from './components/shared/Header';
 import { RelationshipPicker } from './components/shared/RelationshipPicker';
+import { LoginModal } from './components/shared/LoginModal';
 import { KeywordSelector } from './components/occasion/KeywordSelector';
 import { LetterTopicSelector } from './components/letter/LetterTopicSelector';
 import { FormatSelector } from './components/occasion/FormatSelector';
@@ -40,6 +41,7 @@ export default function App() {
   const [relationships, setRelationships] = useState<Relationship[]>([]);
   const [selectedRelationship, setSelectedRelationship] = useState<Relationship | null>(null);
   const [isRelationshipPickerOpen, setIsRelationshipPickerOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   // 2. Mode: 경조사 (occasion) vs 일반편지 (general letter, not tied to an occasion)
   const [mode, setMode] = useState<AppMode>('경조사');
@@ -366,6 +368,7 @@ export default function App() {
         onOpenHistory={() => setIsHistoryOpen(true)}
         onOpenEtiquette={() => setIsEtiquetteOpen(true)}
         historyCount={historyRecords.length}
+        onOpenLogin={() => setIsLoginModalOpen(true)}
         isCloudSyncEnabled={isCloudSyncEnabled}
         authUser={user}
       />
@@ -512,7 +515,12 @@ export default function App() {
         onSelectRelationship={setSelectedRelationship}
         onSaveRelationship={handleSaveRelationship}
         onDeleteRelationship={handleDeleteRelationship}
-        isCloudSyncEnabled={isCloudSyncEnabled}
+      />
+
+      {/* Login Modal — 수신자 선택과 분리된 별도 화면 */}
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
         authUser={user}
         onSignInWithMagicLink={signInWithMagicLink}
         onSignOut={signOut}

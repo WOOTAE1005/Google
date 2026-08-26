@@ -19,6 +19,16 @@ const TONE_PREFERENCES: TonePreference[] = [
   '깊은 위로 (진중하고 담백한)',
 ];
 
+// 친밀도 1~5단계를 각각 다른 문구로 — 이전엔 1·2단계, 3·4단계가 같은
+// 문구를 공유해 5단계인데도 실질적으로 3종류로만 구분됐음.
+const CLOSENESS_LABELS: Record<number, string> = {
+  1: '매우 격식있는 사이',
+  2: '예의를 갖추는 사이',
+  3: '적당히 편한 사이',
+  4: '친근하고 편안한 사이',
+  5: '매우 가깝고 허물없는 사이',
+};
+
 export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
   isOpen,
   onClose,
@@ -276,13 +286,7 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
                     친밀도
                   </label>
                   <span className="text-xs font-bold text-brand-800">
-                    {newCloseness} / 5 단계 (
-                    {newCloseness <= 2
-                      ? '격식/공적인 사이'
-                      : newCloseness <= 4
-                      ? '친근한 사이'
-                      : '절친/매우 가까움'}
-                    )
+                    {newCloseness} / 5 단계 ({CLOSENESS_LABELS[newCloseness]})
                   </span>
                 </div>
                 <div className="flex items-center gap-2">

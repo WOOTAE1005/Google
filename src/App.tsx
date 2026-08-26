@@ -19,6 +19,7 @@ import {
   migrateLocalDataToCloudIfEmpty,
 } from './lib/cloudSync';
 import { getPrimaryKeywords, getSubKeywords } from './lib/keywords';
+import { RELATION_GROUPS, findRelationGroup } from './lib/relationTypes';
 import { trackGeneration } from './lib/analytics';
 import { Header } from './components/shared/Header';
 import { RelationshipPicker } from './components/shared/RelationshipPicker';
@@ -57,6 +58,9 @@ export default function App() {
   const [letterTopics, setLetterTopics] = useState<PromptKeyword[]>([]);
   // "이 편지가 그려야 할 대상 성격" — 실제 등록된 수신자 관계와는 별개의
   // 선택 사항. 수신자를 등록 안 했거나 다른 맥락으로 쓰고 싶을 때를 위함.
+  // 경조사의 category/primaryKeyword와 동일하게 대분류(그룹)와 중분류(구체
+  // 유형)를 별도 상태로 둔다 — 세부 유형만 해제해도 대분류 선택은 남도록.
+  const [letterAudienceGroup, setLetterAudienceGroup] = useState<string | null>(null);
   const [letterAudienceType, setLetterAudienceType] = useState<RelationType | null>(null);
 
   // 5. Generation & Candidates state
@@ -159,8 +163,19 @@ export default function App() {
     clearStaleResult();
   };
 
+  // 세부 대상(leaf)만 토글 — 대분류(letterAudienceGroup)는 건드리지 않는다.
+  // 경조사에서 primaryKeyword를 해제해도 category가 남는 것과 동일한 패턴.
   const handleSelectLetterAudienceType = (type: RelationType | null) => {
     setLetterAudienceType(type);
+    clearStaleResult();
+  };
+
+  // 대분류(그룹) 변경 — 이미 선택된 그룹을 다시 누르면 대분류/세부 대상 모두
+  // 해제. 새 그룹을 고르면 그 그룹의 첫 세부 유형을 자동 선택.
+  const handleSelectLetterAudienceGroup = (groupLabel: string | null) => {
+    setLetterAudienceGroup(groupLabel);
+    const group = groupLabel ? RELATION_GROUPS.find((g) => g.label === groupLabel) : undefined;
+    setLetterAudienceType(group ? group.types[0] : null);
     clearStaleResult();
   };
 
@@ -173,6 +188,7 @@ export default function App() {
     setMode(nextMode);
     setFormat(nextMode === '일반편지' ? '편지' : '카톡메시지');
     setCustomInstruction('');
+    setLetterAudienceGroup(null);
     setLetterAudienceType(null);
     clearStaleResult();
   };
@@ -298,7 +314,9 @@ export default function App() {
       const matchedPrimary = allTopics.find((k) => k.keywordLabel === rec.primaryKeywordLabel);
       const matchedRest = allTopics.filter((k) => rec.subKeywordLabels.includes(k.keywordLabel));
       setLetterTopics(matchedPrimary ? [matchedPrimary, ...matchedRest] : matchedRest);
-      setLetterAudienceType(rec.letterAudienceType ?? null);
+      const restoredAudienceType = rec.letterAudienceType ?? null;
+      setLetterAudienceType(restoredAudienceType);
+      setLetterAudienceGroup(findRelationGroup(restoredAudienceType)?.label ?? null);
     } else {
       setMode('경조사');
       setCategory(rec.category);
@@ -403,6 +421,8 @@ export default function App() {
             />
           ) : (
             <LetterTopicSelector
+              audienceGroup={letterAudienceGroup}
+              onSelectAudienceGroup={handleSelectLetterAudienceGroup}
               audienceType={letterAudienceType}
               onSelectAudienceType={handleSelectLetterAudienceType}
               selectedTopics={letterTopics}

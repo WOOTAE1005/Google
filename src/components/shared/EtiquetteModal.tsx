@@ -17,7 +17,7 @@ export const EtiquetteModal: React.FC<EtiquetteModalProps> = ({ isOpen, onClose 
     { title: '결혼 (신부 측)', kanji: '祝華婚', hangeul: '축화혼', desc: '신부 측에 축의금을 전달할 때 아름다운 결혼을 축하하는 표기' },
     { title: '부고 / 상가', kanji: '謹弔', hangeul: '근조', desc: '삼가 조의를 표할 때 쓰이는 보편적인 부의금 봉투 표기' },
     { title: '부고 / 상가', kanji: '賻儀', hangeul: '부의', desc: '상가에 내는 돈이나 물품 봉투에 적는 전통 표기' },
-    { title: '돌 / 환갑 / 칠순', kanji: '祝壽福', hangeul: '축수복', desc: '장수와 복을 기원하는 축하 봉투 표기' },
+    { title: '환갑 / 칠순 / 팔순', kanji: '祝壽宴', hangeul: '축수연', desc: '장수를 축하하는 잔치라는 뜻으로 환갑·칠순 등에 두루 쓰는 표기 (돌잔치는 통상 한글로 "축 첫돌"이라 씀)' },
     { title: '개업 / 이전', kanji: '祝發展', hangeul: '축발전', desc: '사업의 무궁한 발전을 기원할 때 적는 표기' },
   ];
 
@@ -190,7 +190,7 @@ export const EtiquetteModal: React.FC<EtiquetteModalProps> = ({ isOpen, onClose 
                 </div>
                 <p className="text-stone-700 text-xs leading-relaxed">
                   음양오행설에서 홀수(3, 5, 7)는 긍정적인 '양(陽)'의 기운을 뜻하여 경조사금은 주로 홀수 단위로 맞춥니다.<br />
-                  10만원, 20만원, 30만원은 10이 3과 7이 합쳐진 완벽한 숫자로 여겨져 홀수로 간주합니다.
+                  다만 10만원부터는 10을 홀짝 구분을 넘어선 완성된 숫자로 여겨, 10만원·20만원·30만원처럼 10만원 단위로 맞추는 것도 관행적으로 자연스럽게 받아들여집니다.
                 </p>
               </div>
 

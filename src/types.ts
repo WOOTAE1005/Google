@@ -58,7 +58,9 @@ export interface PromptKeyword {
 }
 
 export interface BuildPromptInput {
-  relationship: Relationship;
+  // 2026-08-26 — 수신자 등록을 완전한 선택사항으로 바꾸면서 nullable화.
+  // 없으면 promptBuilder가 관계 정보 없이 무난한 톤으로 작성하도록 안내한다.
+  relationship: Relationship | null;
   category: LetterCategory;
   // Optional in 일반편지 mode — a letter can be generated from customInstruction
   // alone, with no topic chip selected.
@@ -84,8 +86,8 @@ export interface MessageCandidate {
 
 export interface GeneratedMessageRecord {
   id: string;
-  relationshipName: string;
-  relationType: RelationType;
+  relationshipName: string | null;
+  relationType: RelationType | null;
   category: LetterCategory;
   primaryKeywordLabel: string;
   subKeywordLabels: string[];

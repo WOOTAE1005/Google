@@ -37,13 +37,21 @@ Format Rule [편지]:
 export function buildPrompt(input: BuildPromptInput): string {
   const basePersona = `당신은 한국 문화의 경조사 예법과 어휘의 품격에 매우 정통한 메시지 작성 전문가입니다.`;
 
-  const relationContext = `
+  // 수신자 등록은 선택사항 — 등록하지 않았다면 특정 인물 정보 없이, 아래
+  // 상황/주제/추가 요청사항만으로 무난하고 부담 없는 톤을 스스로 판단하도록
+  // 안내한다 (letterAudienceType이 있다면 그쪽이 대상 성격의 유일한 단서가 됨).
+  const relationContext = input.relationship
+    ? `
 [상대방 및 관계 정보]
 - 호칭/이름: ${input.relationship.name}
 - 관계 분류: ${input.relationship.relationType}
 - 친밀도: ${input.relationship.closeness} / 5 점 (1: 격식있는 원거리, 5: 매우 친밀함)
 - 선호 톤앤매너: ${input.relationship.tonePreference}
 - 기억 및 관계 맥락: ${input.relationship.memoryNotes && input.relationship.memoryNotes.length > 0 ? input.relationship.memoryNotes.join(', ') : '특이사항 없음'}
+`
+    : `
+[상대방 및 관계 정보]
+- 별도로 등록된 수신자 정보 없음 — 특정 이름이나 호칭을 지어내지 말고, 아래 상황/주제/추가 요청사항만을 근거로 무난하고 부담 없이 통용될 수 있는 톤으로 작성하세요.
 `;
 
   // 일반편지(category === '편지')는 대분류/주요항목/세부태그 2단 구조가 없는

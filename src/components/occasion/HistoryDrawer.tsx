@@ -74,7 +74,7 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
                           rec.category === '경사' ? 'bg-brand-500' : 'bg-slate-700'
                         }`}
                       />
-                      <span>To. {rec.relationshipName}</span>
+                      <span>To. {rec.relationshipName ?? '받는 분'}</span>
                       <span className="text-[10px] px-1.5 py-0.2 rounded bg-stone-100 text-stone-700 border border-stone-200">
                         {rec.primaryKeywordLabel}
                       </span>

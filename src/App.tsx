@@ -90,7 +90,10 @@ export default function App() {
       ]);
       if (cancelled) return;
       setRelationships(loadedRels);
-      setSelectedRelationship(loadedRels[0] ?? null);
+      // 2026-08-26 — 관계 등록이 완전한 선택사항이 되면서, 저장된 첫 번째
+      // 관계(비로그인 시 예시 데이터 포함)를 자동으로 골라주지 않는다.
+      // 수신자는 사용자가 직접 선택하거나, 아예 선택하지 않고 생성해도 된다.
+      setSelectedRelationship(null);
       setHistoryRecords(loadedHistory);
     })();
 
@@ -111,7 +114,9 @@ export default function App() {
     setRelationships(updated);
     persistRelationships(user?.uid ?? null, updated);
     if (selectedRelationship?.id === id) {
-      setSelectedRelationship(updated[0] || null);
+      // 삭제된 관계 대신 다른 걸 임의로 골라주지 않는다 — 사용자가 다시
+      // 명시적으로 선택하거나, 선택 없이 그대로 생성을 진행할 수 있다.
+      setSelectedRelationship(null);
     }
   };
 
@@ -214,12 +219,9 @@ export default function App() {
       ? Boolean(primaryKeyword) || customInstruction.trim().length > 0
       : letterTopics.length > 0 || customInstruction.trim().length > 0;
 
-  // Generate Message API Call
+  // Generate Message API Call — 수신자 등록은 선택사항이라 selectedRelationship이
+  // 없어도 생성을 막지 않는다 (promptBuilder가 관계 정보 없이 처리).
   const handleGenerateMessage = async (overrideInstruction?: string) => {
-    if (!selectedRelationship) {
-      setIsRelationshipPickerOpen(true);
-      return;
-    }
     if (!canGenerate) return;
 
     setIsGenerating(true);
@@ -264,8 +266,8 @@ export default function App() {
         // Save to History
         const newRecord: GeneratedMessageRecord = {
           id: `hist-${Date.now()}`,
-          relationshipName: selectedRelationship.name,
-          relationType: selectedRelationship.relationType,
+          relationshipName: selectedRelationship?.name ?? null,
+          relationType: selectedRelationship?.relationType ?? null,
           category: activeCategory,
           primaryKeywordLabel: activePrimaryKeyword?.keywordLabel ?? '자유 주제',
           subKeywordLabels: activeSubKeywords.map((s) => s.keywordLabel),
@@ -303,10 +305,13 @@ export default function App() {
   const handleSelectHistoryRecord = (rec: GeneratedMessageRecord) => {
     if (!rec.candidates || rec.candidates.length === 0) return;
 
-    const matchedRelationship = relationships.find((r) => r.name === rec.relationshipName);
-    if (matchedRelationship) {
-      setSelectedRelationship(matchedRelationship);
-    }
+    // rec.relationshipName이 null(수신자 없이 생성)이거나, 그 이름의 관계가
+    // 그새 삭제됐다면 명시적으로 비운다 — 화면에 남아있던 다른 관계가 이
+    // 기록의 실제 맥락인 것처럼 잘못 표시되지 않도록.
+    const matchedRelationship = rec.relationshipName
+      ? relationships.find((r) => r.name === rec.relationshipName) ?? null
+      : null;
+    setSelectedRelationship(matchedRelationship);
 
     if (rec.category === '편지') {
       setMode('일반편지');
@@ -487,7 +492,7 @@ export default function App() {
         {/* 7. Delivery card & KakaoTalk preview */}
         {selectedCandidate && (
           <DeliveryCard
-            relationship={selectedRelationship!}
+            relationship={selectedRelationship}
             category={activeCategory}
             primaryKeyword={activePrimaryKeyword}
             format={activeFormat}

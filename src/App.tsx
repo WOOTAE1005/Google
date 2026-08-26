@@ -575,6 +575,11 @@ export default function App() {
           persistHistory(user?.uid ?? null, []);
         }}
         onSelectRecord={handleSelectHistoryRecord}
+        onDeleteRecord={(id) => {
+          const updated = historyRecords.filter((r) => r.id !== id);
+          setHistoryRecords(updated);
+          persistHistory(user?.uid ?? null, updated);
+        }}
       />
 
       {/* Etiquette Guide Modal */}

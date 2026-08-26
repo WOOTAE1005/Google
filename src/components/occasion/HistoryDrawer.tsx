@@ -8,6 +8,7 @@ interface HistoryDrawerProps {
   historyRecords: GeneratedMessageRecord[];
   onClearHistory: () => void;
   onSelectRecord: (record: GeneratedMessageRecord) => void;
+  onDeleteRecord: (id: string) => void;
 }
 
 export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
@@ -16,6 +17,7 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
   historyRecords,
   onClearHistory,
   onSelectRecord,
+  onDeleteRecord,
 }) => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -91,25 +93,38 @@ export const HistoryDrawer: React.FC<HistoryDrawerProps> = ({
 
                   <div className="flex items-center justify-between text-[11px] pt-1 text-stone-500">
                     <span>형태: {rec.format}</span>
-                    <button
-                      type="button"
-                      onClick={(e) => handleCopy(rec.id, rec.selectedText, e)}
-                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1 transition-colors cursor-pointer ${
-                        isCopied
-                          ? 'bg-emerald-600 text-white'
-                          : 'bg-stone-100 hover:bg-stone-200 text-stone-700'
-                      }`}
-                    >
-                      {isCopied ? (
-                        <>
-                          <Check className="w-3 h-3 stroke-[3]" /> 복사됨
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3 h-3" /> 복사
-                        </>
-                      )}
-                    </button>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={(e) => handleCopy(rec.id, rec.selectedText, e)}
+                        className={`px-2.5 py-1 rounded-lg text-[11px] font-bold flex items-center gap-1 transition-colors cursor-pointer ${
+                          isCopied
+                            ? 'bg-emerald-600 text-white'
+                            : 'bg-stone-100 hover:bg-stone-200 text-stone-700'
+                        }`}
+                      >
+                        {isCopied ? (
+                          <>
+                            <Check className="w-3 h-3 stroke-[3]" /> 복사됨
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-3 h-3" /> 복사
+                          </>
+                        )}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onDeleteRecord(rec.id);
+                        }}
+                        className="p-1.5 rounded-lg bg-stone-100 hover:bg-red-100 text-stone-500 hover:text-red-600 transition-colors cursor-pointer"
+                        title="이 기록 삭제"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               );

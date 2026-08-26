@@ -89,7 +89,7 @@ export const EtiquetteModal: React.FC<EtiquetteModalProps> = ({ isOpen, onClose 
                 : 'text-stone-600 hover:text-stone-900'
             }`}
           >
-            📲 카톡/모바일 송금
+            📲 카카오톡/모바일 송금
           </button>
         </div>
 

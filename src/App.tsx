@@ -52,7 +52,7 @@ export default function App() {
     () => getPrimaryKeywords('경사')[0] ?? null
   );
   const [selectedSubKeywords, setSelectedSubKeywords] = useState<PromptKeyword[]>([]);
-  const [format, setFormat] = useState<MessageFormat>('카톡메시지');
+  const [format, setFormat] = useState<MessageFormat>('카카오톡메시지');
   const [customInstruction, setCustomInstruction] = useState<string>('');
 
   // 4. Letter topic state (일반편지 mode) — 세부 상황 태그처럼 복수 선택/선택
@@ -193,7 +193,7 @@ export default function App() {
   const handleSelectMode = (nextMode: AppMode) => {
     if (nextMode === mode) return;
     setMode(nextMode);
-    setFormat(nextMode === '일반편지' ? '편지' : '카톡메시지');
+    setFormat(nextMode === '일반편지' ? '편지' : '카카오톡메시지');
     setCustomInstruction('');
     setLetterAudienceGroup(null);
     setLetterAudienceType(null);
@@ -222,10 +222,10 @@ export default function App() {
       : letterTopics.length > 0 || customInstruction.trim().length > 0;
 
   // 생성 버튼 라벨을 위에서 고른 작성 형태에 맞춰 바꿔준다 — "편지 짓기"로
-  // 고정돼 있으면 문자/카톡을 고르고도 편지를 쓰는 것처럼 보일 수 있음.
+  // 고정돼 있으면 문자/카카오톡을 고르고도 편지를 쓰는 것처럼 보일 수 있음.
   const GENERATE_BUTTON_LABEL: Record<MessageFormat, string> = {
     문자: '문자 작성',
-    카톡메시지: '카톡 메시지 작성',
+    카카오톡메시지: '카카오톡 메시지 작성',
     편지: '편지 작성',
   };
   const generateButtonLabel = GENERATE_BUTTON_LABEL[format];
@@ -411,7 +411,7 @@ export default function App() {
           </h2>
           <p className="text-xs sm:text-sm text-[#3D2B31]/70 font-sans max-w-xl leading-relaxed">
             {mode === '경조사'
-              ? '관계, 상황, 톤을 고르면 문자·카톡 메시지·편지 형태로 세 가지 안을 만들어 드립니다.'
+              ? '관계, 상황, 톤을 고르면 문자·카카오톡 메시지·편지 형태로 세 가지 안을 만들어 드립니다.'
               : '관계와 편지 주제, 톤을 고르면 사연이 담긴 편지 세 가지 안을 만들어 드립니다.'}
           </p>
         </section>

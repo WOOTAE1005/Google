@@ -22,8 +22,8 @@ export const FormatSelector: React.FC<FormatSelectorProps> = ({
       icon: <MessageSquare className="w-4 h-4" />,
     },
     {
-      id: '카톡메시지',
-      label: '카톡 메시지',
+      id: '카카오톡메시지',
+      label: '카카오톡 메시지',
       icon: <Send className="w-4 h-4" />,
     },
     {

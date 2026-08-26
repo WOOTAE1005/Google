@@ -498,7 +498,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
             }`}
           >
             <Smartphone className="w-3.5 h-3.5 text-brand-200" />
-            카톡 메시지 창
+            카카오톡 메시지 창
           </button>
         </div>
       </div>
@@ -859,7 +859,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
       <div className="pt-4 border-t border-stone-200 space-y-3">
         <div className="text-center text-xs text-stone-700 font-bold flex items-center justify-center gap-1.5">
           <ImageIcon className="w-4 h-4 text-brand-700" />
-          <span>카드 이미지 전송 & 공유 옵션 (카톡 / 문자 / 공유)</span>
+          <span>카드 이미지 전송 & 공유 옵션 (카카오톡 / 문자 / 공유)</span>
         </div>
 
         {/* Primary Row: Card Image Actions */}
@@ -897,7 +897,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
             ) : (
               <Copy className="w-4 h-4 text-brand-300" />
             )}
-            {imageCopied ? '카드 이미지 복사 완료!' : '📋 카드 이미지 복사 (카톡 붙여넣기)'}
+            {imageCopied ? '카드 이미지 복사 완료!' : '📋 카드 이미지 복사 (카카오톡 붙여넣기)'}
           </button>
 
           <button
@@ -932,7 +932,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
             className="px-3 py-1.5 rounded-lg bg-stone-100 hover:bg-stone-200 text-stone-700 text-[11px] font-medium flex items-center gap-1 transition-colors cursor-pointer"
           >
             {copiedShareText ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Send className="w-3.5 h-3.5" />}
-            {copiedShareText ? '카톡 문구 복사됨' : '카톡 전체 포맷 복사'}
+            {copiedShareText ? '카카오톡 문구 복사됨' : '카카오톡 전체 포맷 복사'}
           </button>
 
           <button

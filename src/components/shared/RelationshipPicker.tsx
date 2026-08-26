@@ -17,15 +17,15 @@ interface RelationshipPickerProps {
   onSignOut?: () => Promise<void>;
 }
 
-const RELATION_TYPES: RelationType[] = [
-  '가족',
-  '친척',
-  '친구',
-  '직장상사',
-  '직장동료',
-  '직장후배',
-  '지인',
-  '기타',
+// 관계 유형 대분류 → 세부 유형 2단 선택. 저장되는 값(RelationType)은 항상
+// 세부 유형(leaf) 하나 — 대분류는 이 화면에서 고르기 편하게 묶어주는 역할만 한다.
+// 연인처럼 세부 유형이 하나뿐인 그룹은 대분류 버튼을 누르는 순간 바로 확정된다.
+const RELATION_GROUPS: { label: string; types: RelationType[] }[] = [
+  { label: '가족', types: ['어머니', '아버지', '형제', '자매'] },
+  { label: '연인', types: ['연인'] },
+  { label: '지인', types: ['친구', '선생님', '교수님', '선배', '후배'] },
+  { label: '직장', types: ['직장상사', '직장동료', '직장후배'] },
+  { label: '기타', types: ['친척', '기타'] },
 ];
 
 const TONE_PREFERENCES: TonePreference[] = [
@@ -302,27 +302,54 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
                 />
               </div>
 
-              {/* Relation Type */}
+              {/* Relation Type — 대분류 먼저 고르고, 세부 유형이 여럿인 그룹만
+                  아래에 세부 버튼이 펼쳐진다 (경조사 대분류/주요 항목과 동일한 패턴). */}
               <div>
                 <label className="block text-xs font-semibold text-stone-700 mb-1.5">
                   관계 유형
                 </label>
-                <div className="grid grid-cols-4 gap-2">
-                  {RELATION_TYPES.map((type) => (
-                    <button
-                      type="button"
-                      key={type}
-                      onClick={() => setNewType(type)}
-                      className={`py-2 text-xs rounded-xl border font-medium transition-all cursor-pointer ${
-                        newType === type
-                          ? 'bg-brand-600 border-brand-600 text-white font-bold'
-                          : 'bg-stone-50 border-stone-200 text-stone-600 hover:bg-stone-100'
-                      }`}
-                    >
-                      {type}
-                    </button>
-                  ))}
+                <div className="grid grid-cols-5 gap-2">
+                  {RELATION_GROUPS.map((group) => {
+                    const isActiveGroup = group.types.includes(newType);
+                    return (
+                      <button
+                        type="button"
+                        key={group.label}
+                        onClick={() => setNewType(group.types[0])}
+                        className={`py-2 text-xs rounded-xl border font-medium transition-all cursor-pointer ${
+                          isActiveGroup
+                            ? 'bg-brand-600 border-brand-600 text-white font-bold'
+                            : 'bg-stone-50 border-stone-200 text-stone-600 hover:bg-stone-100'
+                        }`}
+                      >
+                        {group.label}
+                      </button>
+                    );
+                  })}
                 </div>
+
+                {(() => {
+                  const activeGroup = RELATION_GROUPS.find((g) => g.types.includes(newType));
+                  if (!activeGroup || activeGroup.types.length <= 1) return null;
+                  return (
+                    <div className="grid grid-cols-5 gap-2 mt-2">
+                      {activeGroup.types.map((type) => (
+                        <button
+                          type="button"
+                          key={type}
+                          onClick={() => setNewType(type)}
+                          className={`py-1.5 text-[11px] rounded-lg border font-medium transition-all cursor-pointer ${
+                            newType === type
+                              ? 'bg-brand-100 border-brand-400 text-brand-900 font-bold'
+                              : 'bg-white border-stone-200 text-stone-500 hover:bg-stone-50'
+                          }`}
+                        >
+                          {type}
+                        </button>
+                      ))}
+                    </div>
+                  );
+                })()}
               </div>
 
               {/* Closeness Rating */}

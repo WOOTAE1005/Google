@@ -31,7 +31,7 @@ export const INITIAL_RELATIONSHIPS: Relationship[] = [
   {
     id: 'rel-4',
     name: '최현우 파트너사 대표님',
-    relationType: '지인',
+    relationType: '기타',
     closeness: 2,
     tonePreference: '다정한 (따뜻하고 진심어린)',
     memoryNotes: ['비즈니스 파트너', '예우와 격식 중시'],

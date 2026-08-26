@@ -8,7 +8,27 @@ export type LetterCategory = OccasionCategory | '편지';
 
 export type AppMode = '경조사' | '일반편지';
 
-export type RelationType = '가족' | '친척' | '친구' | '직장동료' | '직장상사' | '직장후배' | '지인' | '기타';
+// 2026-08-26 — 가족/지인/직장을 대분류로 묶고 그 안에서 구체적인 유형을 고르는
+// 2단 선택 UI(RelationshipPicker)로 개편하면서, 실제로 저장되는 값은 항상
+// "말단(leaf)" 유형이 되도록 정리함. 대분류-세부유형 매핑은 UI 쪽
+// (RelationshipPicker.tsx의 RELATION_GROUPS)에서만 관리하고, 이 타입 자체는
+// 그룹 구조를 모른다 — promptBuilder에는 이 값 그대로 문자열로 들어감.
+export type RelationType =
+  | '어머니'
+  | '아버지'
+  | '형제'
+  | '자매'
+  | '연인'
+  | '친구'
+  | '선생님'
+  | '교수님'
+  | '선배'
+  | '후배'
+  | '직장상사'
+  | '직장동료'
+  | '직장후배'
+  | '친척'
+  | '기타';
 
 // '격식체' was dropped 2026-08-25 — closeness (1~2점 = "격식있는 원거리") already
 // covers that end of the spectrum, so keeping a separate formal-tone option

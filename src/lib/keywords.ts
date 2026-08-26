@@ -267,6 +267,13 @@ export const PROMPT_KEYWORDS: PromptKeyword[] = [
     keywordLabel: '안부 편지',
     promptFragment: '특별한 용건 없이 오랜만에 안부를 묻고 서로의 근황을 다정하게 나누는 편지를 씁니다.',
   },
+  {
+    id: 'k-letter-love',
+    category: '편지',
+    keywordType: 'primary',
+    keywordLabel: '사랑 편지',
+    promptFragment: '평소에 표현하지 못했던 사랑하는 마음을 진솔하게 고백하며, 상대방에 대한 애정과 소중함을 담아 전합니다.',
+  },
 ];
 
 export function getPrimaryKeywords(category: LetterCategory): PromptKeyword[] {

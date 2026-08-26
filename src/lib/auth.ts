@@ -8,6 +8,7 @@ import {
   User,
 } from 'firebase/auth';
 import { auth, isCloudSyncEnabled, EMAIL_FOR_SIGN_IN_KEY } from './firebase';
+import { clearLocalCache } from './cloudSync';
 
 interface UseAuthResult {
   user: User | null;
@@ -63,6 +64,10 @@ export function useAuth(): UseAuthResult {
   const signOut = async () => {
     if (!auth) return;
     await firebaseSignOut(auth);
+    // 방금 로그아웃한 사용자의 캐시가 같은 탭에서 이어지는 게스트 사용에
+    // 그대로 노출되지 않도록 즉시 비운다 (sessionStorage는 탭을 닫아야
+    // 자동으로 지워지므로, 로그아웃 시점엔 별도로 지워줘야 함).
+    clearLocalCache();
   };
 
   return { user, isLoading, isCloudSyncEnabled, signInWithMagicLink, signOut };

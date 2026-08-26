@@ -9,13 +9,19 @@ import {
 } from 'firebase/firestore';
 import { Relationship, GeneratedMessageRecord } from '../types';
 import { db } from './firebase';
-import { getStoredRelationships, saveRelationships as saveLocalRelationships } from './relationships';
+import {
+  getStoredRelationships,
+  saveRelationships as saveLocalRelationships,
+  clearStoredRelationships,
+} from './relationships';
 
 const LOCAL_HISTORY_KEY = 'gyeongjosa_history_v1';
 
+// relationships.ts와 동일한 이유로 sessionStorage 사용 — 공용 기기에서 다음
+// 사람에게 이전 사람의 생성 기록이 새지 않도록 탭을 닫으면 사라지게 함.
 function getLocalHistory(): GeneratedMessageRecord[] {
   try {
-    const raw = localStorage.getItem(LOCAL_HISTORY_KEY);
+    const raw = sessionStorage.getItem(LOCAL_HISTORY_KEY);
     return raw ? JSON.parse(raw) : [];
   } catch (e) {
     console.error('Failed to load history from local storage', e);
@@ -25,9 +31,20 @@ function getLocalHistory(): GeneratedMessageRecord[] {
 
 function saveLocalHistory(records: GeneratedMessageRecord[]): void {
   try {
-    localStorage.setItem(LOCAL_HISTORY_KEY, JSON.stringify(records));
+    sessionStorage.setItem(LOCAL_HISTORY_KEY, JSON.stringify(records));
   } catch (e) {
     console.error('Failed to save history to local storage', e);
+  }
+}
+
+// 로그아웃 직후 호출 — sessionStorage는 탭을 닫아야 지워지므로, 같은 탭에서
+// 곧바로 게스트로 이어서 쓰는 경우까지 대비해 로그아웃 시점에 명시적으로 비운다.
+export function clearLocalCache(): void {
+  clearStoredRelationships();
+  try {
+    sessionStorage.removeItem(LOCAL_HISTORY_KEY);
+  } catch (e) {
+    console.error('Failed to clear history from local storage', e);
   }
 }
 

@@ -41,12 +41,17 @@ export const INITIAL_RELATIONSHIPS: Relationship[] = [
 
 const LOCAL_STORAGE_KEY = 'gyeongjosa_relationships_v1';
 
+// 2026-08-26 — localStorage 대신 sessionStorage 사용. 로그인 없이 쓰는 경우
+// 이 캐시가 영구 보존되면 같은 기기를 다음에 쓰는 사람(공용 PC 등)에게 이전
+// 사람의 수신자 정보가 그대로 노출됨 — 탭/브라우저를 닫으면 자동으로 사라지는
+// sessionStorage로 바꿔 그 문제를 해결. 로그인 사용자는 어차피 Firestore가
+// 진짜 저장소라 영향 없음.
 export function getStoredRelationships(): Relationship[] {
   if (typeof window === 'undefined') return INITIAL_RELATIONSHIPS;
   try {
-    const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const raw = sessionStorage.getItem(LOCAL_STORAGE_KEY);
     if (!raw) {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(INITIAL_RELATIONSHIPS));
+      sessionStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(INITIAL_RELATIONSHIPS));
       return INITIAL_RELATIONSHIPS;
     }
     const parsed = JSON.parse(raw);
@@ -60,8 +65,19 @@ export function getStoredRelationships(): Relationship[] {
 export function saveRelationships(relationships: Relationship[]): void {
   if (typeof window === 'undefined') return;
   try {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(relationships));
+    sessionStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(relationships));
   } catch (e) {
     console.error('Failed to save relationships to local storage', e);
+  }
+}
+
+// 로그아웃 직후 호출 — 방금 로그아웃한 사용자의 캐시가 같은 탭에서 다음
+// 게스트 사용에 그대로 이어지지 않도록 명시적으로 비운다.
+export function clearStoredRelationships(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    sessionStorage.removeItem(LOCAL_STORAGE_KEY);
+  } catch (e) {
+    console.error('Failed to clear relationships from local storage', e);
   }
 }

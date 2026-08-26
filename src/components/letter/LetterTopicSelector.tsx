@@ -34,7 +34,7 @@ export const LetterTopicSelector: React.FC<LetterTopicSelectorProps> = ({
           고르지 않아도 괜찮아요 — 등록된 수신자 관계를 그대로 참고해서 써드려요. 대상을 고르면 그에 맞는 편지 주제를 이어서 고를 수 있어요.
         </p>
 
-        <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 font-sans">
+        <div className="grid grid-cols-3 sm:grid-cols-5 gap-2.5 font-sans">
           {RELATION_GROUPS.map((group) => {
             const isActiveGroup = audienceType ? group.types.includes(audienceType) : false;
             return (
@@ -42,33 +42,32 @@ export const LetterTopicSelector: React.FC<LetterTopicSelectorProps> = ({
                 type="button"
                 key={group.label}
                 onClick={() => onSelectAudienceType(isActiveGroup ? null : group.types[0])}
-                className={`py-2.5 text-xs rounded-xl border font-medium transition-all cursor-pointer ${
+                className={`p-3 rounded-xl border text-center transition-all flex flex-col items-center justify-center gap-1 cursor-pointer ${
                   isActiveGroup
                     ? 'bg-[#3D2B31] border-[#3D2B31] text-[#FFFAFA] font-bold shadow-2xs'
                     : 'bg-[#FFFAFA] border-[#3D2B31]/10 text-[#3D2B31] hover:bg-[#FBE4E8] hover:border-[#3D2B31]/20'
                 }`}
               >
-                {group.label}
+                <span className="text-sm font-serif">{group.label}</span>
               </button>
             );
           })}
         </div>
 
         {activeGroup && activeGroup.types.length > 1 && (
-          <div className="grid grid-cols-3 sm:grid-cols-5 gap-2 font-sans mt-2">
+          <div className="grid grid-cols-3 sm:grid-cols-5 gap-2.5 font-sans mt-2.5">
             {activeGroup.types.map((type) => (
               <button
                 type="button"
                 key={type}
                 onClick={() => onSelectAudienceType(audienceType === type ? null : type)}
-                className={`py-2 text-[11px] rounded-lg border font-medium transition-all cursor-pointer flex items-center justify-center gap-1 ${
+                className={`p-3 rounded-xl border text-center transition-all flex flex-col items-center justify-center gap-1 cursor-pointer ${
                   audienceType === type
-                    ? 'bg-brand-100 border-brand-400 text-brand-900 font-bold'
-                    : 'bg-white border-stone-200 text-stone-500 hover:bg-stone-50'
+                    ? 'bg-stone-800 border-stone-800 text-white font-bold shadow-2xs'
+                    : 'bg-[#FFFAFA] border-[#3D2B31]/10 text-[#3D2B31] hover:bg-[#FBE4E8] hover:border-[#3D2B31]/20'
                 }`}
               >
-                {audienceType === type && <Check className="w-3 h-3 stroke-[3]" />}
-                {type}
+                <span className="text-sm font-serif">{type}</span>
               </button>
             ))}
           </div>
@@ -93,7 +92,7 @@ export const LetterTopicSelector: React.FC<LetterTopicSelectorProps> = ({
             고르지 않아도 괜찮아요 — 아래 추가 요청사항만으로도 편지를 지을 수 있어요.
           </p>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 font-sans">
+          <div className="flex flex-wrap gap-2 font-sans">
             {topics.map((t) => {
               const isSelected = selectedTopics.some((s) => s.id === t.id);
               return (
@@ -101,13 +100,14 @@ export const LetterTopicSelector: React.FC<LetterTopicSelectorProps> = ({
                   type="button"
                   key={t.id}
                   onClick={() => onToggleTopic(t)}
-                  className={`p-3 rounded-xl border text-center transition-all flex flex-col items-center justify-center gap-1 cursor-pointer ${
+                  className={`px-3.5 py-2 rounded-xl border text-xs transition-all flex items-center gap-1.5 cursor-pointer ${
                     isSelected
-                      ? 'bg-[#3D2B31] border-[#3D2B31] text-[#FFFAFA] font-bold shadow-2xs'
-                      : 'bg-[#FFFAFA] border-[#3D2B31]/10 text-[#3D2B31] hover:bg-[#FBE4E8] hover:border-[#3D2B31]/20'
+                      ? 'bg-[#3D2B31] text-[#FFFAFA] border-[#3D2B31] font-bold shadow-2xs'
+                      : 'bg-[#FFFAFA] border-[#3D2B31]/10 text-[#3D2B31] hover:bg-[#FBE4E8]'
                   }`}
                 >
-                  <span className="text-sm font-serif">{t.keywordLabel}</span>
+                  {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                  {t.keywordLabel}
                 </button>
               );
             })}

@@ -65,8 +65,10 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
         </div>
       </div>
 
-      {/* Candidate Cards Grid — the recommended pick (안 1) gets a wider, dark card to stand out */}
-      <div className="grid grid-cols-1 md:grid-cols-[1.15fr_1fr_1fr] gap-4">
+      {/* Candidate Cards Grid — 안 1/2/3 모두 같은 색으로 시작하고, 선택했을 때만
+          강조색이 들어간다 (이전엔 안 1이 항상 어두운 카드로 고정돼 있어서
+          아직 아무것도 선택 안 한 상태에서도 이미 뭔가 골라진 것처럼 보였음). */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {candidates.map((cand) => {
           const isSelected = selectedCandidateId === cand.id;
           const isEditing = editingId === cand.id;
@@ -78,43 +80,37 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
               key={cand.id}
               onClick={() => onSelectCandidate(cand)}
               className={`relative rounded-2xl p-4 sm:p-5 flex flex-col justify-between transition-all cursor-pointer ${
-                isRecommended
-                  ? `md:-translate-y-1 bg-[#3D2B31] text-[#FFFAFA] ${isSelected ? 'ring-2 ring-brand-400/70' : 'ring-1 ring-white/10'}`
-                  : isSelected
-                    ? 'bg-brand-100/60 border border-[#3D2B31] shadow-sm ring-2 ring-[#3D2B31]/20'
-                    : 'bg-white border border-[#3D2B31]/15 hover:bg-[#FFFAFA] hover:border-[#3D2B31]/30 hover:-translate-y-0.5 hover:shadow-sm'
+                isSelected
+                  ? 'bg-brand-100/60 border border-[#3D2B31] shadow-sm ring-2 ring-[#3D2B31]/20'
+                  : 'bg-white border border-[#3D2B31]/15 hover:bg-[#FFFAFA] hover:border-[#3D2B31]/30 hover:-translate-y-0.5 hover:shadow-sm'
               }`}
             >
               {/* Top Meta Bar */}
               <div>
                 <div className="flex items-center justify-between mb-3 font-sans">
                   <div className="flex items-center gap-2">
-                    <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
-                      isRecommended ? 'bg-brand-400 text-[#3D2B31]' : 'bg-[#3D2B31] text-[#FFFAFA]'
-                    }`}>
+                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#3D2B31] text-[#FFFAFA]">
                       안 {cand.variantIndex}
                     </span>
                     {isRecommended && (
-                      <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-white/10 text-brand-300">
+                      <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-brand-100 text-brand-800">
                         추천
                       </span>
                     )}
-                    <span className={`text-xs font-bold font-display ${isRecommended ? 'text-[#FFFAFA]' : 'text-[#3D2B31]'}`}>
+                    <span className="text-xs font-bold font-display text-[#3D2B31]">
                       {cand.title}
                     </span>
                   </div>
                   {isSelected && (
-                    <div className={`flex items-center gap-1 text-xs font-bold ${isRecommended ? 'text-brand-300' : 'text-brand-800'}`}>
-                      <CheckCircle2 className={`w-4 h-4 ${isRecommended ? 'text-brand-300' : 'text-brand-700'}`} />
+                    <div className="flex items-center gap-1 text-xs font-bold text-brand-800">
+                      <CheckCircle2 className="w-4 h-4 text-brand-700" />
                       선택됨
                     </div>
                   )}
                 </div>
 
                 {/* Tone tag */}
-                <div className={`inline-block text-[10px] font-sans px-2 py-0.5 rounded-md font-medium mb-3 border ${
-                  isRecommended ? 'bg-white/10 text-[#FFFAFA]/80 border-white/10' : 'bg-[#FFFAFA] text-[#3D2B31]/80 border-[#3D2B31]/10'
-                }`}>
+                <div className="inline-block text-[10px] font-sans px-2 py-0.5 rounded-md font-medium mb-3 border bg-[#FFFAFA] text-[#3D2B31]/80 border-[#3D2B31]/10">
                   어조: {cand.toneTag}
                 </div>
 
@@ -127,44 +123,34 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                         onUpdateCandidateContent(cand.id, e.target.value)
                       }
                       rows={5}
-                      className={`w-full p-3 rounded-xl text-xs sm:text-sm leading-relaxed focus:outline-none shadow-xs font-display ${
-                        isRecommended ? 'bg-white/10 border border-white/20 text-[#FFFAFA]' : 'bg-white border border-[#3D2B31] text-[#3D2B31]'
-                      }`}
+                      className="w-full p-3 rounded-xl text-xs sm:text-sm leading-relaxed focus:outline-none shadow-xs font-display bg-white border border-[#3D2B31] text-[#3D2B31]"
                     />
                     <button
                       type="button"
                       onClick={() => setEditingId(null)}
-                      className={`w-full py-1.5 rounded-xl text-xs font-sans font-medium cursor-pointer ${
-                        isRecommended ? 'bg-brand-400 hover:bg-brand-300 text-[#3D2B31]' : 'bg-[#3D2B31] hover:bg-[#2a1d22] text-[#FFFAFA]'
-                      }`}
+                      className="w-full py-1.5 rounded-xl text-xs font-sans font-medium cursor-pointer bg-[#3D2B31] hover:bg-[#2a1d22] text-[#FFFAFA]"
                     >
                       수정 완료
                     </button>
                   </div>
                 ) : (
-                  <p className={`text-xs sm:text-sm leading-relaxed font-display whitespace-pre-wrap mb-4 p-3.5 rounded-xl border min-h-[110px] ${
-                    isRecommended ? 'bg-white/5 border-white/10 text-[#FFFAFA]' : 'bg-[#FFFAFA]/80 border-[#3D2B31]/10 text-[#3D2B31]'
-                  }`}>
+                  <p className="text-xs sm:text-sm leading-relaxed font-display whitespace-pre-wrap mb-4 p-3.5 rounded-xl border min-h-[110px] bg-[#FFFAFA]/80 border-[#3D2B31]/10 text-[#3D2B31]">
                     "{cand.content}"
                   </p>
                 )}
 
                 {/* Etiquette Tip */}
                 {cand.etiquetteTip && (
-                  <div className={`flex items-start gap-1.5 text-[11px] font-sans p-2.5 rounded-xl border mb-4 ${
-                    isRecommended ? 'bg-brand-400/10 border-brand-400/30 text-brand-100' : 'bg-brand-100/50 border-brand-300/60 text-[#3D2B31]/80'
-                  }`}>
-                    <Lightbulb className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${isRecommended ? 'text-brand-300' : 'text-brand-800'}`} />
+                  <div className="flex items-start gap-1.5 text-[11px] font-sans p-2.5 rounded-xl border mb-4 bg-brand-100/50 border-brand-300/60 text-[#3D2B31]/80">
+                    <Lightbulb className="w-3.5 h-3.5 shrink-0 mt-0.5 text-brand-800" />
                     <span>{cand.etiquetteTip}</span>
                   </div>
                 )}
               </div>
 
               {/* Bottom Actions */}
-              <div className={`pt-3 border-t flex items-center justify-between gap-2 font-sans ${
-                isRecommended ? 'border-white/10' : 'border-[#3D2B31]/10'
-              }`}>
-                <div className={`text-[10px] font-mono ${isRecommended ? 'text-[#FFFAFA]/50' : 'text-[#3D2B31]/50'}`}>
+              <div className="pt-3 border-t flex items-center justify-between gap-2 font-sans border-[#3D2B31]/10">
+                <div className="text-[10px] font-mono text-[#3D2B31]/50">
                   {cand.content.length}자
                 </div>
 
@@ -175,11 +161,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                       e.stopPropagation();
                       setEditingId(isEditing ? null : cand.id);
                     }}
-                    className={`p-1.5 rounded-lg text-xs flex items-center gap-1 transition-colors cursor-pointer border ${
-                      isRecommended
-                        ? 'bg-white/10 hover:bg-white/20 text-[#FFFAFA] border-white/10'
-                        : 'bg-[#FFFAFA] hover:bg-stone-200 text-[#3D2B31] border-[#3D2B31]/10'
-                    }`}
+                    className="p-1.5 rounded-lg text-xs flex items-center gap-1 transition-colors cursor-pointer border bg-[#FFFAFA] hover:bg-stone-200 text-[#3D2B31] border-[#3D2B31]/10"
                     title="직접 수정"
                   >
                     <Edit3 className="w-3.5 h-3.5" />
@@ -191,9 +173,7 @@ export const MessageCandidates: React.FC<MessageCandidatesProps> = ({
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
                       isCopied
                         ? 'bg-emerald-700 text-white'
-                        : isRecommended
-                          ? 'bg-brand-400 hover:bg-brand-300 text-[#3D2B31] shadow-xs'
-                          : 'bg-[#3D2B31] hover:bg-[#2a1d22] text-[#FFFAFA] shadow-xs'
+                        : 'bg-[#3D2B31] hover:bg-[#2a1d22] text-[#FFFAFA] shadow-xs'
                     }`}
                   >
                     {isCopied ? (

@@ -1,12 +1,12 @@
 import React from 'react';
 import { MessageFormat } from '../../types';
-import { Mail, MessageSquare, Send, FileText, Check } from 'lucide-react';
+import { MessageSquare, Send, FileText, Check } from 'lucide-react';
 
 interface FormatSelectorProps {
   format: MessageFormat;
   onSelectFormat: (fmt: MessageFormat) => void;
-  // 일반편지 모드에서는 짧은 형식(봉투/문자/카톡)뿐 아니라 긴 "편지" 형식도
-  // 선택지로 열어준다 — 경조사 모드는 기존 3종만 유지.
+  // 일반편지 모드에서는 짧은 형식(문자/카톡)뿐 아니라 긴 "편지" 형식도
+  // 선택지로 열어준다 — 경조사 모드는 기존 2종만 유지.
   allowLetterFormat?: boolean;
 }
 
@@ -20,11 +20,6 @@ export const FormatSelector: React.FC<FormatSelectorProps> = ({
     label: string;
     icon: React.ReactNode;
   }[] = [
-    {
-      id: '봉투문구',
-      label: '봉투 문구',
-      icon: <Mail className="w-4 h-4" />,
-    },
     {
       id: '문자',
       label: '문자 (SMS/LMS)',
@@ -59,7 +54,7 @@ export const FormatSelector: React.FC<FormatSelectorProps> = ({
       </div>
 
       {/* Format Selection Cards */}
-      <div className={`grid grid-cols-1 sm:grid-cols-2 ${allowLetterFormat ? 'md:grid-cols-4' : 'md:grid-cols-3'} gap-3 font-sans`}>
+      <div className={`grid grid-cols-1 sm:grid-cols-2 ${allowLetterFormat ? 'md:grid-cols-3' : ''} gap-3 font-sans`}>
         {formats.map((fmt) => {
           const isSelected = format === fmt.id;
           return (

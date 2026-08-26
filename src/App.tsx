@@ -386,7 +386,7 @@ export default function App() {
           </h2>
           <p className="text-xs sm:text-sm text-[#3D2B31]/70 font-sans max-w-xl leading-relaxed">
             {mode === '경조사'
-              ? '관계, 상황, 톤을 고르면 봉투 문구·문자·카톡 메시지 세 가지 안을 만들어 드립니다.'
+              ? '관계, 상황, 톤을 고르면 문자·카톡 메시지 형태로 세 가지 안을 만들어 드립니다.'
               : '관계와 편지 주제, 톤을 고르면 사연이 담긴 편지 세 가지 안을 만들어 드립니다.'}
           </p>
         </section>

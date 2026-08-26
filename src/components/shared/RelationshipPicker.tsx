@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Relationship, RelationType, TonePreference } from '../../types';
 import { RELATION_GROUPS } from '../../lib/relationTypes';
-import { User, Plus, Check, Star, X, Tag, Trash2 } from 'lucide-react';
+import { User, Plus, Check, Star, X, Tag, Trash2, Pencil } from 'lucide-react';
 
 interface RelationshipPickerProps {
   isOpen: boolean;
@@ -39,6 +39,8 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
   onDeleteRelationship,
 }) => {
   const [isCreating, setIsCreating] = useState(false);
+  // null이면 새로 등록하는 중, id가 있으면 그 관계를 수정하는 중.
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [newName, setNewName] = useState('');
   const [newType, setNewType] = useState<RelationType>('직장상사');
   const [newCloseness, setNewCloseness] = useState(3);
@@ -47,6 +49,17 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
   const [newNotes, setNewNotes] = useState<string[]>([]);
 
   if (!isOpen) return null;
+
+  const handleStartEdit = (rel: Relationship) => {
+    setEditingId(rel.id);
+    setNewName(rel.name);
+    setNewType(rel.relationType);
+    setNewCloseness(rel.closeness);
+    setNewTone(rel.tonePreference);
+    setNewNotes(rel.memoryNotes ?? []);
+    setNewNoteInput('');
+    setIsCreating(true);
+  };
 
   const handleAddNote = () => {
     if (!newNoteInput.trim()) return;
@@ -64,23 +77,26 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
     e.preventDefault();
     if (!newName.trim()) return;
 
-    const newRel: Relationship = {
-      id: `rel-${Date.now()}`,
+    // 수정 중이면 기존 id/createdAt을 그대로 유지하고, 새로 등록이면 새로 발급.
+    const editingRel = editingId ? relationships.find((r) => r.id === editingId) : undefined;
+    const rel: Relationship = {
+      id: editingId ?? `rel-${Date.now()}`,
       name: newName.trim(),
       relationType: newType,
       closeness: newCloseness,
       tonePreference: newTone,
       memoryNotes: newNotes,
-      createdAt: new Date().toISOString(),
+      createdAt: editingRel?.createdAt ?? new Date().toISOString(),
     };
 
-    onSaveRelationship(newRel);
-    onSelectRelationship(newRel);
+    onSaveRelationship(rel);
+    onSelectRelationship(rel);
     setIsCreating(false);
     resetForm();
   };
 
   const resetForm = () => {
+    setEditingId(null);
     setNewName('');
     setNewType('직장상사');
     setNewCloseness(3);
@@ -97,7 +113,7 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
           <div className="flex items-center gap-2">
             <User className="w-5 h-5 text-brand-700" />
             <h2 className="font-bold text-base sm:text-lg text-stone-900">
-              {isCreating ? '새 수신자(관계) 추가' : '수신 대상 선택'}
+              {isCreating ? (editingId ? '관계 정보 수정' : '새 수신자(관계) 추가') : '수신 대상 선택'}
             </h2>
           </div>
           <button
@@ -191,6 +207,16 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
+                            handleStartEdit(rel);
+                          }}
+                          className="p-1.5 rounded-lg text-stone-400 hover:text-brand-700 hover:bg-stone-200 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer shrink-0"
+                          title="수정"
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
                             onDeleteRelationship(rel.id);
                           }}
                           className="p-1.5 rounded-lg text-stone-400 hover:text-red-600 hover:bg-stone-200 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer shrink-0"
@@ -205,7 +231,10 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
               </div>
 
               <button
-                onClick={() => setIsCreating(true)}
+                onClick={() => {
+                  resetForm();
+                  setIsCreating(true);
+                }}
                 className="w-full py-3 rounded-2xl border border-dashed border-brand-400 text-brand-800 hover:bg-brand-50 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors mt-4 cursor-pointer"
               >
                 <Plus className="w-4 h-4 text-brand-700" />
@@ -388,7 +417,10 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
               <div className="flex items-center gap-2 pt-2 border-t border-stone-200">
                 <button
                   type="button"
-                  onClick={() => setIsCreating(false)}
+                  onClick={() => {
+                    setIsCreating(false);
+                    resetForm();
+                  }}
                   className="flex-1 py-2.5 rounded-xl bg-stone-100 text-stone-700 text-xs font-semibold hover:bg-stone-200 transition-colors cursor-pointer"
                 >
                   취소
@@ -397,7 +429,7 @@ export const RelationshipPicker: React.FC<RelationshipPickerProps> = ({
                   type="submit"
                   className="flex-1 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold transition-colors cursor-pointer shadow-xs"
                 >
-                  프로필 저장 및 선택
+                  {editingId ? '수정 완료' : '프로필 저장 및 선택'}
                 </button>
               </div>
             </form>

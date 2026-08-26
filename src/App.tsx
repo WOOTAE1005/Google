@@ -104,11 +104,19 @@ export default function App() {
     };
   }, [user, authLoading]);
 
-  // Save relationships when modified
-  const handleSaveRelationship = (newRel: Relationship) => {
-    const updated = [newRel, ...relationships];
+  // 새 관계 등록과 기존 관계 수정을 겸함 — 같은 id가 이미 있으면 그 자리에서
+  // 교체하고, 없으면 새로 맨 앞에 추가한다. 지금 선택돼있는 관계를 수정한
+  // 경우 selectedRelationship도 최신 내용으로 갱신해야 화면에 반영된다.
+  const handleSaveRelationship = (rel: Relationship) => {
+    const exists = relationships.some((r) => r.id === rel.id);
+    const updated = exists
+      ? relationships.map((r) => (r.id === rel.id ? rel : r))
+      : [rel, ...relationships];
     setRelationships(updated);
     persistRelationships(user?.uid ?? null, updated);
+    if (selectedRelationship?.id === rel.id) {
+      setSelectedRelationship(rel);
+    }
   };
 
   const handleDeleteRelationship = (id: string) => {

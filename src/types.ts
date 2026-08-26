@@ -35,7 +35,7 @@ export type RelationType =
 // duplicated it and could contradict a high closeness score.
 export type TonePreference = '다정한 (따뜻하고 진심어린)' | '유머러스 (재치있고 밝은)' | '깊은 위로 (진중하고 담백한)';
 
-export type MessageFormat = '봉투문구' | '문자' | '카톡메시지' | '편지';
+export type MessageFormat = '문자' | '카톡메시지' | '편지';
 
 export interface Relationship {
   id: string;

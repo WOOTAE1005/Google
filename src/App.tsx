@@ -221,6 +221,15 @@ export default function App() {
       ? Boolean(primaryKeyword) || customInstruction.trim().length > 0
       : letterTopics.length > 0 || customInstruction.trim().length > 0;
 
+  // 생성 버튼 라벨을 위에서 고른 작성 형태에 맞춰 바꿔준다 — "편지 짓기"로
+  // 고정돼 있으면 문자/카톡을 고르고도 편지를 쓰는 것처럼 보일 수 있음.
+  const GENERATE_BUTTON_LABEL: Record<MessageFormat, string> = {
+    문자: '문자 작성',
+    카톡메시지: '카톡 메시지 작성',
+    편지: '편지 작성',
+  };
+  const generateButtonLabel = GENERATE_BUTTON_LABEL[format];
+
   // Generate Message API Call — 수신자 등록은 선택사항이라 selectedRelationship이
   // 없어도 생성을 막지 않는다 (promptBuilder가 관계 정보 없이 처리).
   const handleGenerateMessage = async (overrideInstruction?: string) => {
@@ -468,7 +477,7 @@ export default function App() {
             ) : (
               <>
                 <Sparkles className="w-5 h-5 text-brand-300 stroke-[2.5]" />
-                <span className="font-serif font-bold tracking-wide">편지 짓기</span>
+                <span className="font-serif font-bold tracking-wide">{generateButtonLabel}</span>
                 <ArrowRight className="w-5 h-5 text-brand-300 stroke-[2.5]" />
               </>
             )}

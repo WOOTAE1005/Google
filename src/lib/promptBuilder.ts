@@ -2,13 +2,6 @@ import { BuildPromptInput, MessageFormat } from '../types';
 
 export function getFormatRule(format: MessageFormat): string {
   switch (format) {
-    case '봉투문구':
-      return `
-Format Rule [봉투문구]:
-- 경조사 봉투 또는 카드에 기재할 짧고 품격 있는 10~25자 내외의 정제된 표제어입니다.
-- 전통 한자 표기(예: 祝 結婚, 祝 昇進, 謹弔 등)나 현대적인 세련된 문구를 조합하세요.
-- 불필요한 서론/결론 없이 대표 문구 중심으로 3가지 안을 다채롭게 제시하세요.
-`;
     case '문자':
       return `
 Format Rule [문자 (SMS/LMS)]:

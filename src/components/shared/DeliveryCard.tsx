@@ -320,16 +320,22 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
     setTimeout(() => setCopiedShareText(false), 2500);
   };
 
+  // 카드가 mx-auto로 가운데 정렬돼 있어서, html-to-image에 width/height를
+  // 명시하지 않으면 캡처 시 실제 렌더 폭과 어긋나 좌우가 잘리는 문제가 있었음
+  // (특히 스크롤된 상태에서 더 잘 발생). getBoundingClientRect()로 캡처
+  // 직전 실제 크기를 읽어 모든 캡처 호출에 명시적으로 넘겨준다.
+  const getCardCaptureOptions = () => {
+    const rect = cardRef.current!.getBoundingClientRect();
+    return { pixelRatio: 2, cacheBust: true, width: rect.width, height: rect.height };
+  };
+
   // Image Export Handlers
   const handleDownloadCardImage = async () => {
     if (!cardRef.current) return;
     trackCardPreference(selectedLayoutId, selectedPaletteId);
     setIsGeneratingImage(true);
     try {
-      const dataUrl = await toPng(cardRef.current, {
-        pixelRatio: 2,
-        cacheBust: true,
-      });
+      const dataUrl = await toPng(cardRef.current, getCardCaptureOptions());
       const link = document.createElement('a');
       link.download = `${displayName}_${category}_감성_카드.png`;
       link.href = dataUrl;
@@ -349,10 +355,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
     trackCardPreference(selectedLayoutId, selectedPaletteId);
     setIsGeneratingImage(true);
     try {
-      const blob = await toBlob(cardRef.current, {
-        pixelRatio: 2,
-        cacheBust: true,
-      });
+      const blob = await toBlob(cardRef.current, getCardCaptureOptions());
       if (!blob) throw new Error('Blob creation failed');
 
       if (navigator.clipboard && window.ClipboardItem) {
@@ -378,10 +381,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
     trackCardPreference(selectedLayoutId, selectedPaletteId);
     setIsGeneratingImage(true);
     try {
-      const blob = await toBlob(cardRef.current, {
-        pixelRatio: 2,
-        cacheBust: true,
-      });
+      const blob = await toBlob(cardRef.current, getCardCaptureOptions());
       if (!blob) throw new Error('Blob creation failed');
 
       const file = new File([blob], `${displayName}_${category}_카드.png`, {
@@ -421,7 +421,7 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
         return;
       }
 
-      const blob = await toBlob(cardRef.current, { pixelRatio: 2, cacheBust: true });
+      const blob = await toBlob(cardRef.current, getCardCaptureOptions());
       if (!blob) throw new Error('Blob creation failed');
 
       const linkUrl = window.location.href;

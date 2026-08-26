@@ -51,9 +51,9 @@ export default function App() {
   const [format, setFormat] = useState<MessageFormat>('카톡메시지');
   const [customInstruction, setCustomInstruction] = useState<string>('');
 
-  // 4. Letter topic state (일반편지 mode) — no topic pre-selected; a letter can
-  // be generated from customInstruction alone if the user skips this entirely.
-  const [letterTopic, setLetterTopic] = useState<PromptKeyword | null>(null);
+  // 4. Letter topic state (일반편지 mode) — 세부 상황 태그처럼 복수 선택/선택
+  // 해제가 가능한 목록. 아무것도 고르지 않아도 customInstruction만으로 생성 가능.
+  const [letterTopics, setLetterTopics] = useState<PromptKeyword[]>([]);
 
   // 5. Generation & Candidates state
   const [isGenerating, setIsGenerating] = useState(false);
@@ -145,8 +145,13 @@ export default function App() {
     clearStaleResult();
   };
 
-  const handleSelectLetterTopic = (topic: PromptKeyword | null) => {
-    setLetterTopic(topic);
+  // 세부 상황 태그와 동일한 다중 토글 패턴 — 이미 선택된 주제를 다시 누르면 제거.
+  const handleToggleLetterTopic = (topic: PromptKeyword) => {
+    setLetterTopics((prev) =>
+      prev.some((t) => t.id === topic.id)
+        ? prev.filter((t) => t.id !== topic.id)
+        : [...prev, topic]
+    );
     clearStaleResult();
   };
 
@@ -166,9 +171,14 @@ export default function App() {
   // standalone letter topic — so generation/history/DeliveryCard share one source.
   // `format` itself is shared across both modes: FormatSelector is shown in both,
   // with 일반편지 additionally offering the long-form '편지' option.
+  // 일반편지 모드는 복수 선택된 주제들 중 첫 번째를 primaryKeyword, 나머지를
+  // subKeywords 자리에 실어 promptBuilder에 그대로 전달한다 (경조사의 주요
+  // 항목/세부 태그 2단 구조와 달리 편지 주제는 단일 계층이라 자연스럽게 맞아떨어짐).
   const activeCategory: LetterCategory = mode === '경조사' ? category : '편지';
-  const activePrimaryKeyword: PromptKeyword | null = mode === '경조사' ? primaryKeyword : letterTopic;
-  const activeSubKeywords: PromptKeyword[] = mode === '경조사' ? selectedSubKeywords : [];
+  const activePrimaryKeyword: PromptKeyword | null =
+    mode === '경조사' ? primaryKeyword : letterTopics[0] ?? null;
+  const activeSubKeywords: PromptKeyword[] =
+    mode === '경조사' ? selectedSubKeywords : letterTopics.slice(1);
   const activeFormat: MessageFormat = format;
   // 두 모드 모두: 키워드/주제 칩을 골랐거나, 자유 요청사항을 적었거나 — 둘 중
   // 하나는 있어야 생성 가능 (경조사도 대분류/주요 항목을 전부 해제할 수 있게 되면서
@@ -176,7 +186,7 @@ export default function App() {
   const canGenerate =
     mode === '경조사'
       ? Boolean(primaryKeyword) || customInstruction.trim().length > 0
-      : Boolean(letterTopic) || customInstruction.trim().length > 0;
+      : letterTopics.length > 0 || customInstruction.trim().length > 0;
 
   // Generate Message API Call
   const handleGenerateMessage = async (overrideInstruction?: string) => {
@@ -272,8 +282,10 @@ export default function App() {
 
     if (rec.category === '편지') {
       setMode('일반편지');
-      const matchedTopic = getPrimaryKeywords('편지').find((k) => k.keywordLabel === rec.primaryKeywordLabel);
-      setLetterTopic(matchedTopic ?? null);
+      const allTopics = getPrimaryKeywords('편지');
+      const matchedPrimary = allTopics.find((k) => k.keywordLabel === rec.primaryKeywordLabel);
+      const matchedRest = allTopics.filter((k) => rec.subKeywordLabels.includes(k.keywordLabel));
+      setLetterTopics(matchedPrimary ? [matchedPrimary, ...matchedRest] : matchedRest);
     } else {
       setMode('경조사');
       setCategory(rec.category);
@@ -377,7 +389,7 @@ export default function App() {
               onToggleSubKeyword={handleToggleSubKeyword}
             />
           ) : (
-            <LetterTopicSelector topic={letterTopic} onSelectTopic={handleSelectLetterTopic} />
+            <LetterTopicSelector selectedTopics={letterTopics} onToggleTopic={handleToggleLetterTopic} />
           )}
 
           <div className="pt-9 border-t border-stone-200/70">

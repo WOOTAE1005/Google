@@ -46,20 +46,42 @@ export function buildPrompt(input: BuildPromptInput): string {
 - 기억 및 관계 맥락: ${input.relationship.memoryNotes && input.relationship.memoryNotes.length > 0 ? input.relationship.memoryNotes.join(', ') : '특이사항 없음'}
 `;
 
-  const keywordFragments = input.primaryKeyword
-    ? `
+  // 일반편지(category === '편지')는 대분류/주요항목/세부태그 2단 구조가 없는
+  // 단일 계층 목록이라, primaryKeyword+subKeywords를 "선택된 편지 주제들"
+  // 하나로 합쳐 나열한다 (App.tsx가 복수 선택된 주제 중 첫 번째를
+  // primaryKeyword, 나머지를 subKeywords 자리에 실어 보냄).
+  const letterTopics = input.category === '편지'
+    ? [input.primaryKeyword, ...input.subKeywords].filter(
+        (k): k is NonNullable<typeof k> => Boolean(k)
+      )
+    : [];
+
+  const keywordFragments =
+    input.category === '편지'
+      ? letterTopics.length > 0
+        ? `
+[상황 및 선택 키워드]
+- 선택된 편지 주제 (${letterTopics.length}개): ${letterTopics.map((k) => `${k.keywordLabel}(${k.promptFragment})`).join(', ')}
+- 여러 주제가 선택된 경우, 하나의 편지 안에 그 정서들을 자연스럽게 함께 녹여내세요.
+`
+        : `
+[상황 및 선택 키워드]
+- 별도로 선택된 주제 키워드 없음 — 아래 [사용자 추가 요청사항]에 적힌 내용만을 근거로 자연스러운 편지를 작성하세요.
+`
+      : input.primaryKeyword
+      ? `
 [상황 및 선택 키워드]
 - 분류: ${input.category}
 - 주요 상황: ${input.primaryKeyword.keywordLabel} (${input.primaryKeyword.promptFragment})
 - 세부 옵션: ${input.subKeywords.map((k) => `• ${k.keywordLabel}: ${k.promptFragment}`).join('\n')}
 `
-    : input.category !== '미지정'
-    ? `
+      : input.category !== '미지정'
+      ? `
 [상황 및 선택 키워드]
 - 분류: ${input.category}
 - 별도로 선택된 주제 키워드 없음 — 아래 [사용자 추가 요청사항]에 적힌 내용만을 근거로 자연스러운 편지를 작성하세요.
 `
-    : `
+      : `
 [상황 및 선택 키워드]
 - 별도로 선택된 대분류/주제 키워드 없음 — 아래 [사용자 추가 요청사항]에 적힌 내용만을 근거로, 경사(축하)인지 조사(위로)인지부터 스스로 판단하여 상황에 맞는 자연스러운 메시지를 작성하세요.
 `;

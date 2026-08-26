@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Relationship,
   OccasionCategory,
@@ -32,7 +32,7 @@ import { MessageCandidates } from './components/occasion/MessageCandidates';
 import { DeliveryCard } from './components/shared/DeliveryCard';
 import { HistoryDrawer } from './components/occasion/HistoryDrawer';
 import { EtiquetteModal } from './components/shared/EtiquetteModal';
-import { Sparkles, ArrowRight, RefreshCw, Check } from 'lucide-react';
+import { Sparkles, ArrowRight, RefreshCw, Check, Square } from 'lucide-react';
 
 export default function App() {
   const { user, isLoading: authLoading, isCloudSyncEnabled, signInWithMagicLink, signOut } = useAuth();
@@ -230,6 +230,14 @@ export default function App() {
   };
   const generateButtonLabel = GENERATE_BUTTON_LABEL[format];
 
+  // 진행 중인 생성 요청을 중지할 수 있도록 컨트롤러를 보관 — 요청마다 새로
+  // 만들고, 중지 버튼은 이걸 abort()만 호출한다.
+  const generationAbortRef = useRef<AbortController | null>(null);
+
+  const handleStopGeneration = () => {
+    generationAbortRef.current?.abort();
+  };
+
   // Generate Message API Call — 수신자 등록은 선택사항이라 selectedRelationship이
   // 없어도 생성을 막지 않는다 (promptBuilder가 관계 정보 없이 처리).
   const handleGenerateMessage = async (overrideInstruction?: string) => {
@@ -239,11 +247,14 @@ export default function App() {
     setErrorMessage(null);
 
     const activeInstruction = overrideInstruction ?? customInstruction;
+    const abortController = new AbortController();
+    generationAbortRef.current = abortController;
 
     try {
       const response = await fetch('/api/generate-message', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        signal: abortController.signal,
         body: JSON.stringify({
           relationship: selectedRelationship,
           category: activeCategory,
@@ -296,6 +307,11 @@ export default function App() {
         throw new Error('AI가 생성한 결과가 비어 있습니다. 잠시 후 다시 시도해주세요.');
       }
     } catch (err: any) {
+      // 사용자가 직접 중지 버튼을 눌러 abort()한 경우 — 에러가 아니라 정상
+      // 취소이므로 에러 문구 없이 조용히 넘어간다 (finally에서 로딩 상태 해제).
+      if (err?.name === 'AbortError') {
+        return;
+      }
       console.error('Failed to generate message:', err);
       // TypeError here means fetch() itself never got a response (offline,
       // DNS/CORS failure, server not running) — distinguish that from a
@@ -461,18 +477,24 @@ export default function App() {
           </div>
         </div>
 
-        {/* 4. Generate CTA button */}
+        {/* 4. Generate CTA button — 생성 중에는 같은 버튼이 중지 버튼으로 바뀐다
+            (클릭 가능 상태 유지, disabled 아님). */}
         <div className="pt-2 font-sans">
           <button
             type="button"
-            disabled={isGenerating || !canGenerate}
-            onClick={() => handleGenerateMessage()}
-            className="w-full py-4.5 rounded-2xl bg-[#3D2B31] hover:bg-[#2a1d22] text-[#FFFDFB] font-bold text-base sm:text-lg shadow-xl shadow-[#3D2B31]/15 hover:shadow-2xl hover:shadow-[#3D2B31]/25 flex items-center justify-center gap-2.5 transition-all disabled:opacity-50 cursor-pointer"
+            disabled={!isGenerating && !canGenerate}
+            onClick={() => (isGenerating ? handleStopGeneration() : handleGenerateMessage())}
+            className={`w-full py-4.5 rounded-2xl font-bold text-base sm:text-lg shadow-xl hover:shadow-2xl flex items-center justify-center gap-2.5 transition-all disabled:opacity-50 cursor-pointer ${
+              isGenerating
+                ? 'bg-stone-600 hover:bg-stone-700 text-[#FFFDFB] shadow-stone-600/15 hover:shadow-stone-600/25'
+                : 'bg-[#3D2B31] hover:bg-[#2a1d22] text-[#FFFDFB] shadow-[#3D2B31]/15 hover:shadow-[#3D2B31]/25'
+            }`}
           >
             {isGenerating ? (
               <>
                 <RefreshCw className="w-5 h-5 animate-spin text-brand-300" />
-                <span>생성 중...</span>
+                <span>생성 중... (클릭 시 중지)</span>
+                <Square className="w-4 h-4 text-brand-300 fill-brand-300" />
               </>
             ) : (
               <>

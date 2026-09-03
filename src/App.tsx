@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import {
   Relationship,
   OccasionCategory,
@@ -22,17 +22,33 @@ import { getPrimaryKeywords, getSubKeywords } from './lib/keywords';
 import { RELATION_GROUPS, findRelationGroup } from './lib/relationTypes';
 import { trackGeneration } from './lib/analytics';
 import { Header } from './components/shared/Header';
-import { RelationshipPicker } from './components/shared/RelationshipPicker';
-import { LoginModal } from './components/shared/LoginModal';
 import { KeywordSelector } from './components/occasion/KeywordSelector';
 import { LetterTopicSelector } from './components/letter/LetterTopicSelector';
 import { FormatSelector } from './components/occasion/FormatSelector';
 import { CustomPromptInput } from './components/occasion/CustomPromptInput';
 import { MessageCandidates } from './components/occasion/MessageCandidates';
-import { DeliveryCard } from './components/shared/DeliveryCard';
-import { HistoryDrawer } from './components/occasion/HistoryDrawer';
-import { EtiquetteModal } from './components/shared/EtiquetteModal';
 import { Sparkles, ArrowRight, RefreshCw, Check, Square } from 'lucide-react';
+
+// 초기 화면에 항상 필요한 게 아니라 모달/카드로 조건부 렌더링되는 무거운
+// 컴포넌트들 — 특히 DeliveryCard는 motion/html-to-image/firebase storage
+// 업로드까지 딸려있어서 번들이 커짐. React.lazy로 분리해서 처음 로딩 시엔
+// 안 받아오고, 실제로 열거나(모달) 카드가 뜰 때(생성 이후)만 받아오게 함 —
+// 프로덕션 빌드에서 메인 청크가 1.17MB(gzip 317KB)로 경고 나오던 걸 완화.
+const RelationshipPicker = lazy(() =>
+  import('./components/shared/RelationshipPicker').then((m) => ({ default: m.RelationshipPicker }))
+);
+const LoginModal = lazy(() =>
+  import('./components/shared/LoginModal').then((m) => ({ default: m.LoginModal }))
+);
+const HistoryDrawer = lazy(() =>
+  import('./components/occasion/HistoryDrawer').then((m) => ({ default: m.HistoryDrawer }))
+);
+const EtiquetteModal = lazy(() =>
+  import('./components/shared/EtiquetteModal').then((m) => ({ default: m.EtiquetteModal }))
+);
+const DeliveryCard = lazy(() =>
+  import('./components/shared/DeliveryCard').then((m) => ({ default: m.DeliveryCard }))
+);
 
 export default function App() {
   const { user, isLoading: authLoading, isCloudSyncEnabled, signInWithMagicLink, signOut } = useAuth();
@@ -535,58 +551,68 @@ export default function App() {
 
         {/* 7. Delivery card & KakaoTalk preview */}
         {selectedCandidate && (
-          <DeliveryCard
-            relationship={selectedRelationship}
-            category={activeCategory}
-            primaryKeyword={activePrimaryKeyword}
-            format={activeFormat}
-            messageContent={selectedCandidate.content}
-          />
+          <Suspense fallback={null}>
+            <DeliveryCard
+              relationship={selectedRelationship}
+              category={activeCategory}
+              primaryKeyword={activePrimaryKeyword}
+              format={activeFormat}
+              messageContent={selectedCandidate.content}
+            />
+          </Suspense>
         )}
       </main>
 
       {/* Relationship Picker Modal */}
-      <RelationshipPicker
-        isOpen={isRelationshipPickerOpen}
-        onClose={() => setIsRelationshipPickerOpen(false)}
-        relationships={relationships}
-        selectedRelationship={selectedRelationship}
-        onSelectRelationship={setSelectedRelationship}
-        onSaveRelationship={handleSaveRelationship}
-        onDeleteRelationship={handleDeleteRelationship}
-      />
+      <Suspense fallback={null}>
+        <RelationshipPicker
+          isOpen={isRelationshipPickerOpen}
+          onClose={() => setIsRelationshipPickerOpen(false)}
+          relationships={relationships}
+          selectedRelationship={selectedRelationship}
+          onSelectRelationship={setSelectedRelationship}
+          onSaveRelationship={handleSaveRelationship}
+          onDeleteRelationship={handleDeleteRelationship}
+        />
+      </Suspense>
 
       {/* Login Modal — 수신자 선택과 분리된 별도 화면 */}
-      <LoginModal
-        isOpen={isLoginModalOpen}
-        onClose={() => setIsLoginModalOpen(false)}
-        authUser={user}
-        onSignInWithMagicLink={signInWithMagicLink}
-        onSignOut={signOut}
-      />
+      <Suspense fallback={null}>
+        <LoginModal
+          isOpen={isLoginModalOpen}
+          onClose={() => setIsLoginModalOpen(false)}
+          authUser={user}
+          onSignInWithMagicLink={signInWithMagicLink}
+          onSignOut={signOut}
+        />
+      </Suspense>
 
       {/* History Drawer */}
-      <HistoryDrawer
-        isOpen={isHistoryOpen}
-        onClose={() => setIsHistoryOpen(false)}
-        historyRecords={historyRecords}
-        onClearHistory={() => {
-          setHistoryRecords([]);
-          persistHistory(user?.uid ?? null, []);
-        }}
-        onSelectRecord={handleSelectHistoryRecord}
-        onDeleteRecord={(id) => {
-          const updated = historyRecords.filter((r) => r.id !== id);
-          setHistoryRecords(updated);
-          persistHistory(user?.uid ?? null, updated);
-        }}
-      />
+      <Suspense fallback={null}>
+        <HistoryDrawer
+          isOpen={isHistoryOpen}
+          onClose={() => setIsHistoryOpen(false)}
+          historyRecords={historyRecords}
+          onClearHistory={() => {
+            setHistoryRecords([]);
+            persistHistory(user?.uid ?? null, []);
+          }}
+          onSelectRecord={handleSelectHistoryRecord}
+          onDeleteRecord={(id) => {
+            const updated = historyRecords.filter((r) => r.id !== id);
+            setHistoryRecords(updated);
+            persistHistory(user?.uid ?? null, updated);
+          }}
+        />
+      </Suspense>
 
       {/* Etiquette Guide Modal */}
-      <EtiquetteModal
-        isOpen={isEtiquetteOpen}
-        onClose={() => setIsEtiquetteOpen(false)}
-      />
+      <Suspense fallback={null}>
+        <EtiquetteModal
+          isOpen={isEtiquetteOpen}
+          onClose={() => setIsEtiquetteOpen(false)}
+        />
+      </Suspense>
     </div>
   );
 }

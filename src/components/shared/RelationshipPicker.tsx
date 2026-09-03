@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Relationship, RelationType, TonePreference } from '../../types';
 import { RELATION_GROUPS } from '../../lib/relationTypes';
-import { User, Plus, Check, Star, X, Tag, Trash2, Pencil } from 'lucide-react';
+import { User, Plus, Check, Star, X, Trash2, Pencil } from 'lucide-react';
 
 interface RelationshipPickerProps {
   isOpen: boolean;

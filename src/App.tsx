@@ -555,7 +555,6 @@ export default function App() {
             <DeliveryCard
               relationship={selectedRelationship}
               category={activeCategory}
-              primaryKeyword={activePrimaryKeyword}
               format={activeFormat}
               messageContent={selectedCandidate.content}
             />

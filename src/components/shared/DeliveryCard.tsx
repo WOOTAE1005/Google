@@ -5,7 +5,6 @@ import {
   Relationship,
   LetterCategory,
   MessageFormat,
-  PromptKeyword,
   CardLayoutStyleId,
   CardLayoutStyleConfig,
   CardColorPaletteId,
@@ -39,7 +38,6 @@ import {
 interface DeliveryCardProps {
   relationship: Relationship | null;
   category: LetterCategory;
-  primaryKeyword: PromptKeyword | null;
   format: MessageFormat;
   messageContent: string;
 }
@@ -280,7 +278,6 @@ const COLOR_PALETTES: CardColorPaletteConfig[] = [
 export const DeliveryCard: React.FC<DeliveryCardProps> = ({
   relationship,
   category,
-  primaryKeyword,
   format,
   messageContent,
 }) => {
@@ -441,8 +438,6 @@ export const DeliveryCard: React.FC<DeliveryCardProps> = ({
     const encoded = encodeURIComponent(messageContent);
     window.location.href = `sms:?body=${encoded}`;
   };
-
-  const isCelebration = category === '경사';
 
   return (
     <div
